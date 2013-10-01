@@ -4,14 +4,31 @@
 #include "HunterView.h"
      
 struct hunterView {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    int hello;
+    Round round;
+    PlayerID currentPlayer;
+    Player players[NUM_PLAYERS];
 };
+
+struct player {
+    int score;
+    int health;
+    LocationID location;
+};
+
+typedef struct player *Player;
      
 
 HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     HunterView hunterView = malloc( sizeof( struct hunterView ) );
-    hunterView->hello = 42;
+    hunterView->round = 1;
+    hunterView->currentPlayer = 0;
+    int i;
+    for (i = 0; i < NUM_PLAYERS; i++) {
+        hunterView->players[i]->score = 0;
+        hunterView->players[i]->health = 0;
+        hunterView->players[i]->score = 0;
+        hunterView->players[i]->location = 0;
+    }
     return hunterView;
 }
      
