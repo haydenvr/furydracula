@@ -24,23 +24,23 @@ void disposeHunterView( HunterView toBeDeleted ) {
 }
 
 Round getRound (HunterView currentView) {
-
+	return currentView->round;
 }
 
 PlayerID getCurrentPlayer (HunterView currentView) {
-
+	return currentView->currentPlayer;
 }
 
 int getScore(HunterView currentView) {
-
+	return currentView->score;
 }
 
 int getHealth(HunterView currentView, PlayerID) {
-
+	return currentView->health[PlayerID];
 }
 
 LocationID getLocation(HunterView currentView, PlayerID) {
-
+	return currentView->location[PlayerID];
 }
 
 void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_SIZE]) {
@@ -49,6 +49,6 @@ void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_
 
 LocationID * connectedLocations(HunterView currentView, int * numLocations, LocationID from, 
                               PlayerID player, Round round, int road, int rail, int sea) {
-
-
+	//this should come from graph file. 
+}
 
