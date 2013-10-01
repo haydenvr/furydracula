@@ -22,3 +22,33 @@ void disposeHunterView( HunterView toBeDeleted ) {
     //COMPLETE THIS IMPLEMENTATION
     free( toBeDeleted );
 }
+
+Round getRound (HunterView currentView) {
+
+}
+
+PlayerID getCurrentPlayer (HunterView currentView) {
+
+}
+
+int getScore(HunterView currentView) {
+
+}
+
+int getHealth(HunterView currentView, PlayerID) {
+
+}
+
+LocationID getLocation(HunterView currentView, PlayerID) {
+
+}
+
+void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_SIZE]) {
+
+}
+
+LocationID * connectedLocations(HunterView currentView, int * numLocations, LocationID from, 
+                              PlayerID player, Round round, int road, int rail, int sea) {
+
+
+
