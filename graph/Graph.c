@@ -22,6 +22,7 @@ struct GraphRep {
 static void makeMap(Graph g);
 static void addLink(Graph g, Location start, Location end, Transport type);
 
+Vlist adjacencies[NUM_MAP_LOCATIONS](Graph g, 
 
 Graph newGraph() { 
     int i; 
