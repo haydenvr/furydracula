@@ -2,15 +2,16 @@
 #include <assert.h>
 #include "game.h"
 #include "HunterView.h"
+#include "graph/Graph.h"
      
 struct hunterView {
+	int score;
     Round round;
     PlayerID currentPlayer;
     Player players[NUM_PLAYERS];
 };
 
 struct player {
-    int score;
     int health;
     LocationID location;
 };
@@ -53,11 +54,11 @@ int getScore(HunterView currentView) {
 }
 
 int getHealth(HunterView currentView, PlayerID) {
-	return currentView->health[PlayerID];
+	return currentView->players[PlayerID]->health;
 }
 
 LocationID getLocation(HunterView currentView, PlayerID) {
-	return currentView->location[PlayerID];
+	return currentView->players[PlayerID]->location;
 }
 
 void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_SIZE]) {
