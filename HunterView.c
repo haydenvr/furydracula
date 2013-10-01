@@ -9,6 +9,8 @@ struct hunterView {
     Round round;
     PlayerID currentPlayer;
     Player players[NUM_PLAYERS];
+    char *pastPlays;
+    playerMessage messages[];
 };
 
 struct player {
@@ -23,13 +25,14 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     HunterView hunterView = malloc( sizeof( struct hunterView ) );
     hunterView->round = 1;
     hunterView->currentPlayer = 0;
+    hunterView->pastPlays = pastPlays;
+    hunterView->messages = messages;
     int i;
     for (i = 0; i < NUM_PLAYERS; i++) {
         hunterView->players[i]->score = 0;
         hunterView->players[i]->health = 0;
         hunterView->players[i]->location = 0;
     }
-    //NEED TO IMPLEMENT PASTPLAYS AND MESSAGES
     return hunterView;
 }
      
