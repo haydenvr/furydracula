@@ -21,6 +21,6 @@ int main(int argc, char * argv[]) {
 	disposeHunterView(hv);
 	printf("passed\n");
 
-	return 0;
+	return 1;
 }
 
