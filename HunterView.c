@@ -26,9 +26,9 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     for (i = 0; i < NUM_PLAYERS; i++) {
         hunterView->players[i]->score = 0;
         hunterView->players[i]->health = 0;
-        hunterView->players[i]->score = 0;
         hunterView->players[i]->location = 0;
     }
+    //NEED TO IMPLEMENT PASTPLAYS AND MESSAGES
     return hunterView;
 }
      
