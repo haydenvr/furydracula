@@ -36,7 +36,8 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 // this function frees all memory previously allocated for the HunterView
 // toBeDeleted. toBeDeleted should not be accessed after the call.
 void disposeHunterView( HunterView toBeDeleted ) {
-    //COMPLETE THIS IMPLEMENTATION
+    int i;
+    for (i = 0; i < NUM_PLAYERS; i++) free(toBeDeleted->players[i]);
     free( toBeDeleted );
 }
 
