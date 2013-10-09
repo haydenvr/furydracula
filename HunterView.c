@@ -36,12 +36,15 @@ struct player {
 // You are free to ignore messages if you wish.
 HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     HunterView hunterView = malloc( sizeof( struct hunterView ) );
-    hunterView->round = 0;
+    hunterView->round = 1;
     hunterView->currentPlayer = 0;
     hunterView->pastPlays = pastPlays;
 	hunterView->score = 0;
-    int i;
+    int i, j;
 	for (i = 0; i < MESSAGE_SIZE; i++) {
+		for (j = 0; j < MESSAGE_SIZE; j++){
+			hunterView->messages[i][j] = messages[i][j];
+		}
 	}
     for (i = 0; i < NUM_PLAYERS; i++) {
         hunterView->players[i]->health = 0;
@@ -54,8 +57,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 // this function frees all memory previously allocated for the HunterView
 // toBeDeleted. toBeDeleted should not be accessed after the call.
 void disposeHunterView( HunterView toBeDeleted ) {
-    int i;
-    for (i = 0; i < NUM_PLAYERS; i++) free(toBeDeleted->players[i]);
     free( toBeDeleted );
 }
 
@@ -74,6 +75,7 @@ Round getRound (HunterView currentView) {
 //   MINA_HARKER    (3): Mina Harker's turn
 //   DRACULA        (4): Dracula's turn
 PlayerID getCurrentPlayer (HunterView currentView) {
+	assert(player >= 0 && player <= 4);
 	return currentView->currentPlayer;
 }
 
