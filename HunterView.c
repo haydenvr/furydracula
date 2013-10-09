@@ -87,16 +87,20 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 			char a[] = {pastPlays[i], pastPlays[i+1]};
 			
 			while (z < NUM_LOCATIONS && (locations[z][0] != a[0] || locations[z][1] != a[1])) z++;
-
-			//set location array
+            
+            //maturing vampires
+            if (hunterView->vampire[TRAIL_SIZE - 1]) hunterView->score -= SCORE_LOSS_VAMPIRE_MATURES;
+            
+			//move array along 1
 		    for (j = TRAIL_SIZE - 1; j > 0; j--) {
 		        hunterView->players[player]->location[j] = hunterView->players[player]->location[j-1];
                 hunterView->vampire[j] = hunterView->vampire[j-1];
                 hunterView->trap[j] = hunterView->trap[j-1];
             }
+            
+            //set location array
 		    hunterView->players[player]->location[0] = z;
-		    hunterView->vampire[0] = 0;
-            hunterView->trap[0] = 0;
+            
 			if ((z == hunterView->players[player]->location[1]) && 
 			(player != PLAYER_DRACULA) && isInCity(player,hunterView)) {
 				hunterView->players[player]->health += LIFE_GAIN_REST;
@@ -107,19 +111,23 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 			    hunterView->players[player]->health += LIFE_GAIN_CASTLE_DRACULA;
 			
 			i += 2;
+		    hunterView->vampire[0] = 0;
+            hunterView->trap[0] = 0;
 			if (player == PLAYER_DRACULA) {
 					if (pastPlays[i] == 'T') {
 						hunterView->trap[0] = 1;
 					}
 					i++;
 					if (pastPlays[i] == 'V') {
-						//vampire placed (affects location)						
-						hunterView->vampire[0] = 1;						
+                        //vampire placed
+						hunterView->vampire[0] = 1;
+						
 					}
 					i++;
 					if (pastPlays[i] == 'M') {
 						//trap has left trail (already handled?)
 					} else if (pastPlays[i] == 'V') {
+                        //vampire matures
 						hunterView->score -= SCORE_LOSS_VAMPIRE_MATURES;
 					}
 					i++;
