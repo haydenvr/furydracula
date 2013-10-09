@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include "game.h"
 #include "HunterView.h"
 #include "graph/Graph.h"
@@ -39,21 +40,40 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     HunterView hunterView = malloc( sizeof( struct hunterView ) );
 	//printf("the length of string is %lu\n",sizeof(*pastPlays));
 	int i = 0;
-	int round = 0;
-	int gotPlayer = FALSE;
+	int player;
+	char *locations[] = {
+	"AL", "AM", "AT", "BA", "BI", "BE", "BR", "BO", "BU", "BC", 
+	"BD", "CA", "CG", "CD", "CF", "CO", "CN", "DU", "ED", "FL",
+	"FR", "GA", "GW", "GE", "GO", "GR", "HA", "JM", "KL", "LE",
+	"LI", "LS", "LV", "LO", "MA", "MN", "MR", "MI", "MU", "NA",
+	"NP", "NU", "PA", "PL", "PR", "RO", "SA", "SN", "SR", "SJ",
+	"SO", "ST", "SW", "SZ", "TO", "VA", "VR", "VE", "VI", "ZA",
+	"ZU",
+	"NS", "EC", "IS", "AO", "BB", "MS", "TS", "IO", "AS", "BS",	
+	"C?", "S?", "HI", "D1", "D2", "D3", "D4", "D5", "TP"
+	};
 	while (pastPlays[i] != '\0') {
-		if (gotPlayer == TRUE) {
-			//this character should represent their location
-		} else {
-			//ignore the dots in the pastPlays
-			if (pastPlays[i] != '.') {
-				//this char should represent a character
-				//check player
-				gotPlayer = TRUE;
+			//this character should represent the player name
+			if (pastPlays[i] == 'G') player = PLAYER_LORD_GODALMING;
+			else if (pastPlays[i] == 'S') player = PLAYER_DR_SEWARD;
+			else if (pastPlays[i] == 'H') player = PLAYER_VAN_HELSING;
+			else if (pastPlays[i] == 'M') player = PLAYER_MINA_HARKER;
+			else if (pastPlays[i] == 'D') player = PLAYER_DRACULA;
+			else {
+				perror("Something is wrong with pastPlays\n");
+				abort();
 			}
-		}
-		round++;		
-		i++;
+			i++;
+			int z = 0;
+			char *a = astrcat(pastPlays[i], pastPlays[i+1])
+			while (z < NUM_LOCATIONS && !strcmp(locations[z],)) z++;
+			hunterView->players[player]->location = z;
+			i += 2;
+			i+= 5; //test purposes
+			printf("%d\n",player);
+		//}
+		//round++;		
+		//i++;
 	}
 	i = (i+1)/8;
 	printf("the size is %d",i);
