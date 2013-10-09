@@ -90,7 +90,7 @@ int main() {
 	assert(seen[CONSTANTA] && seen[BUCHAREST] && seen[KLAUSENBURG] && seen[CASTLE_DRACULA]);
 	assert(size == 5);
         free(edges);
-	
+	printf("Test for self passed!\nNow testing Sea connections\n");
 	//Checking Ionian seas
         edges = connectedLocations(hv, &size,IONIAN_SEA, PLAYER_LORD_GODALMING, 0 , 0, 0, 1);
 	memset(seen, 0, MAX_LOCATION*sizeof(int));
@@ -101,13 +101,20 @@ int main() {
         assert(seen[ATHENS] && seen[VALONA] && seen[SALONICA]);
         assert(size == 7);
         free(edges);
-
+	printf("Test for sea connections passed!\nNow testing rail connections\n");
 	edges = connectedLocations(hv, &size,ATHENS,PLAYER_LORD_GODALMING,0,0,1,0);
         assert(size == 1);
         assert(edges[0] == ATHENS);
         free(edges);
-        printf("passed\n");
-        disposeHunterView(hv);
+        
+	printf("Test for rail connection to self passed!\nNow testing rail connections Barcelona\n");
+	edges = connectedLocations(hv, &size,BARCELONA,PLAYER_LORD_GODALMING,1,0,1,0);
+	for (i=0; i < size; i++) printf("you can get to %d\n",edges[i]);
+    assert(size == 3);
+    //assert(edges[0] == ATHENS);
+    free(edges);
+	printf("Test for rail connections passed!\nCongrats, all tests passed!\n");
+    disposeHunterView(hv);
 	return 0;
 }
 

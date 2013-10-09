@@ -94,4 +94,5 @@ typedef int LocationID;
 #define NUM_LOCATIONS     80
 #define NUM_MAP_LOCATIONS 71
 
+
 #endif

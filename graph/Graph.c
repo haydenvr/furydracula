@@ -147,6 +147,7 @@ int numE(Graph g, Transport type){
 //returns 1 if there is an edge from start to end of the given type
 //gives 0 otherwise
 int isAdjacent(Graph g, Location start, Location end, Transport type){
+	if (start == end) return 1;
     VList tmp = g->connections[start];
     for (; tmp != NULL; tmp = tmp->next) if (tmp->v == end && (tmp->type == type || type == ANY)) return 1;
     return 0;
