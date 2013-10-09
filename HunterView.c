@@ -21,8 +21,9 @@ struct player {
     LocationID location[TRAIL_SIZE];
 };
 
-static int isAtSea(PlayerID player, HunterView hunterView);
-static int isInCity(PlayerID player, HunterView hunterView);
+static int isAtSea(LocationID location, HunterView hunterView);
+static int isInCity(LocationID location, HunterView hunterView);
+static int doubledBack (LocationID location, HunterView hunterView);
 
 // newHunterView creates a new hunter view to summarise the current state of
 // the game.
@@ -84,10 +85,10 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 			while (z < NUM_LOCATIONS && (locations[z][0] != a[0] || locations[z][1] != a[1])) z++;
 
 			//set location array
-			for (j = TRAIL_SIZE - 1; j > 0; j--) 
-			    hunterView->players[player]->location[j] = hunterView->players[player]->location[j-1];
-			hunterView->players[player]->location[0] = z;
-			
+		    for (j = TRAIL_SIZE - 1; j > 0; j--) 
+		        hunterView->players[player]->location[j] = hunterView->players[player]->location[j-1];
+		    hunterView->players[player]->location[0] = z;
+			doubledBack (z, hunterView); //DELETE
 			//if player is resting in city, his health will raise by 3 (but not above 9)
 			if ((z == hunterView->players[player]->location[1])&&(player != PLAYER_DRACULA)&&isInCity(player,hunterView)) {
 				hunterView->players[player]->health += 3;
@@ -114,7 +115,10 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 					i++;
 					hunterView->score--;
 					//dracula loses 2 health if he is at Sea
-					if (isAtSea(PLAYER_DRACULA, hunterView)) hunterView->players[PLAYER_DRACULA]->health -= 2;
+					if (isAtSea(hunterView->players[player]->location[0], hunterView) || 
+					    isAtSea(hunterView->players[player]->
+					    location[doubledBack (hunterView->players[player]->location[0], hunterView)], hunterView)) 
+					    hunterView->players[player]->health -= 2;
 			} else {
 				int l = 0;
 				while (l < 3) {
@@ -265,15 +269,20 @@ void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_
 LocationID * connectedLocations(HunterView currentView, int * numLocations, LocationID from, 
                               PlayerID player, Round round, int road, int rail, int sea) {
 	//this should come from graph file. 
+	//TODO
 	return NULL;
 }
 
-static int isAtSea(PlayerID player, HunterView hunterView) {
-	return (((hunterView->players[player]->location[0] >= NORTH_SEA)&&(hunterView->players[player]->location[0] <= BLACK_SEA))
-	||(hunterView->players[player]->location[0] == SEA_UNKNOWN ));
+static int isAtSea(LocationID location, HunterView hunterView) {
+	return (((location >= NORTH_SEA)&&(location <= BLACK_SEA))||(location == SEA_UNKNOWN ));
 }
 
-static int isInCity(PlayerID player, HunterView hunterView) {
-	return (((hunterView->players[player]->location[0] >= ALICANTE)&&(hunterView->players[player]->location[0] <= ZURICH))
-	||(hunterView->players[player]->location[0] == CITY_UNKNOWN ));
+static int isInCity(LocationID location, HunterView hunterView) {
+	return (((location >= ALICANTE)&&(location <= ZURICH))||(location == CITY_UNKNOWN ));
+}
+
+static int doubledBack (LocationID location, HunterView hunterView) {
+    if ((location >= DOUBLE_BACK_1)&&(location <= DOUBLE_BACK_5)) 
+        return location - DOUBLE_BACK_1 + 1;
+    else return 0;
 }
