@@ -3,7 +3,7 @@
 #include <assert.h>
 #include "game.h"
 #include "HunterView.h"
-//#include "graph/Graph.h"
+#include "graph/Graph.h"
 
 typedef struct player *Player;
      
@@ -13,7 +13,7 @@ struct hunterView {
     PlayerID currentPlayer;
     Player players[NUM_PLAYERS];
     char *pastPlays;
-    playerMessage messages[MESSAGE_SIZE];
+    playerMessage messages[];
 };
 
 struct player {
@@ -51,8 +51,9 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 			
 		}
 	}
-    for (i = 0; i < NUM_PLAYERS-1; i++) {
-        hunterView->players[i]->health = 0;
+    for (i = 0; i < NUM_PLAYERS; i++) {
+        hunterView->players[i] = malloc (sizeof (struct player));
+		hunterView->players[i]->health = 0;
         hunterView->players[i]->location = 0;
     }
     return hunterView;
@@ -80,7 +81,7 @@ Round getRound (HunterView currentView) {
 //   MINA_HARKER    (3): Mina Harker's turn
 //   DRACULA        (4): Dracula's turn
 PlayerID getCurrentPlayer (HunterView currentView) {
-	assert(currentView->currentPlayer >= 0 && currentView->currentPlayer <= 4);
+	assert(player >= 0 && player <= 4);
 	return currentView->currentPlayer;
 }
 
