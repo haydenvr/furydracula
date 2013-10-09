@@ -40,7 +40,18 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 	//printf("the length of string is %lu\n",sizeof(*pastPlays));
 	int i = 0;
 	int round = 0;
+	int gotPlayer = FALSE;
 	while (pastPlays[i] != '\0') {
+		if (gotPlayer == TRUE) {
+			//this character should represent their location
+		} else {
+			//ignore the dots in the pastPlays
+			if (pastPlays[i] != '.') {
+				//this char should represent a character
+				//check player
+				gotPlayer = TRUE;
+			}
+		}
 		round++;		
 		i++;
 	}
