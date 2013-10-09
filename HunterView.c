@@ -39,9 +39,11 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     hunterView->round = 0;
     hunterView->currentPlayer = 0;
     hunterView->pastPlays = pastPlays;
-    //hunterView->messages = NULL; //fix me
-    int i;
 	hunterView->score = 0;
+    int i;
+	for (i = 0; i < MESSAGE_SIZE; i++) {
+		hunterView->messages[i] = messages[i];
+	}
     for (i = 0; i < NUM_PLAYERS; i++) {
         hunterView->players[i]->health = 0;
         hunterView->players[i]->location = 0;
