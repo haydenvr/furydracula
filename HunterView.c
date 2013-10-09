@@ -13,7 +13,7 @@ struct hunterView {
     PlayerID currentPlayer;
     Player players[NUM_PLAYERS];
     char *pastPlays;
-    playerMessage messages[];
+    playerMessage messages[MESSAGE_SIZE];
 };
 
 struct player {
@@ -37,24 +37,24 @@ struct player {
 // You are free to ignore messages if you wish.
 HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     HunterView hunterView = malloc( sizeof( struct hunterView ) );
-    hunterView->round = 1;
+    hunterView->round = 0;
     hunterView->currentPlayer = 0;
     hunterView->pastPlays = pastPlays;
-	hunterView->score = 0;
+	hunterView->score = 366;
     int i, j;
-	printf("size is %lu\n",sizeof(hunterView->messages[i])/sizeof(char));
-	for (i = 0; i < MESSAGE_SIZE -1; i++) {
+	int amt_mess = (int) sizeof(messages)/sizeof(playerMessage);
+	for (i = 0; i < amt_mess; i++) {
 		for (j = 0; j < MESSAGE_SIZE-1; j++){
 			if (messages[i][j] == '\0') break;
-			printf("Success!\n");
 			hunterView->messages[i][j] = messages[i][j];
 			
 		}
 	}
     for (i = 0; i < NUM_PLAYERS; i++) {
         hunterView->players[i] = malloc (sizeof (struct player));
-		hunterView->players[i]->health = 0;
-        hunterView->players[i]->location = 0;
+		hunterView->players[i]->health = 9;
+		if (i == 4) hunterView->players[i]->health = 40;
+        hunterView->players[i]->location = -1;
     }
     return hunterView;
 }
