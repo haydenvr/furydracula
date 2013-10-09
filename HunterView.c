@@ -13,7 +13,6 @@ struct hunterView {
     Round round;
     PlayerID currentPlayer;
     Player players[NUM_PLAYERS];
-    char *pastPlays;
     playerMessage messages[MESSAGE_SIZE];
 };
 
@@ -84,15 +83,16 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 			
 			while (z < NUM_LOCATIONS && (locations[z][0] != a[0] || locations[z][1] != a[1])) z++;
 
-			//if player is resting in city, his health will raise by 3 (but not above 9)
-			if ((z == hunterView->players[player]->location)&&(player != PLAYER_DRACULA)&&isInCity(player,hunterView)) {
-				hunterView->players[player]->health += 3;
-				if (hunterView->players[player]->health > 9) hunterView->players[player]->health = 9;
-			}
 			//set location array
 			for (j = TRAIL_SIZE - 1; j > 0; j--) 
 			    hunterView->players[player]->location[j] = hunterView->players[player]->location[j-1];
 			hunterView->players[player]->location[0] = z;
+			
+			//if player is resting in city, his health will raise by 3 (but not above 9)
+			if ((z == hunterView->players[player]->location[1])&&(player != PLAYER_DRACULA)&&isInCity(player,hunterView)) {
+				hunterView->players[player]->health += 3;
+				if (hunterView->players[player]->health > 9) hunterView->players[player]->health = 9;
+			}
 			
 			i += 2;
 			if (player == PLAYER_DRACULA) {
@@ -148,7 +148,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 	i = (i+1)/8;
     hunterView->round = i/5;
     hunterView->currentPlayer = 0;
-    hunterView->pastPlays = pastPlays;
 	
 	int amt_mess = (int) sizeof(messages)/sizeof(playerMessage);
 	for (i = 0; i < amt_mess; i++) {
@@ -222,7 +221,7 @@ int getHealth(HunterView currentView, PlayerID player) {
 //   TELEPORT         if Dracula apparated back to Castle Dracula
 //   LOCATION_UNKNOWN if the round number is 0
 LocationID getLocation(HunterView currentView, PlayerID player) {
-	return currentView->players[player]->location;
+	return currentView->players[player]->location[0];
 }
 
 //Functions that return information about the history of the game
@@ -248,7 +247,7 @@ LocationID getLocation(HunterView currentView, PlayerID player) {
 // then moved to the current location of 29
 void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_SIZE]) {
     int i;
-    for (i = 0; i < TRAIL_SIZE; i++) trail[i] = currentView->player[player]->location[i];
+    for (i = 0; i < TRAIL_SIZE; i++) trail[i] = currentView->players[player]->location[i];
 }
 
 //Functions that query the map to find information about connectivity
@@ -270,11 +269,11 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
 }
 
 static int isAtSea(PlayerID player, HunterView hunterView) {
-	return (((hunterView->players[player]->location >= NORTH_SEA)&&(hunterView->players[player]->location <= BLACK_SEA))
-	||(hunterView->players[player]->location == SEA_UNKNOWN ));
+	return (((hunterView->players[player]->location[0] >= NORTH_SEA)&&(hunterView->players[player]->location[0] <= BLACK_SEA))
+	||(hunterView->players[player]->location[0] == SEA_UNKNOWN ));
 }
 
 static int isInCity(PlayerID player, HunterView hunterView) {
-	return (((hunterView->players[player]->location >= ALICANTE)&&(hunterView->players[player]->location <= ZURICH))
-	||(hunterView->players[player]->location == CITY_UNKNOWN ));
+	return (((hunterView->players[player]->location[0] >= ALICANTE)&&(hunterView->players[player]->location[0] <= ZURICH))
+	||(hunterView->players[player]->location[0] == CITY_UNKNOWN ));
 }
