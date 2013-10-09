@@ -107,14 +107,13 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 					}
 					i++;
 					if (pastPlays[i] == 'V') {
-						hunterView->score -= SCORE_LOSS_VAMPIRE_MATURES;						
-						
+						//vampire placed (affects location)						
 					}
 					i++;
 					if (pastPlays[i] == 'M') {
 						//trap has left trail (affects location)
 					} else if (pastPlays[i] == 'V') {
-						//vampire placed (affects location)
+						hunterView->score -= SCORE_LOSS_VAMPIRE_MATURES;
 					}
 					i++;
 					if (isAtSea(hunterView->players[player]->location[0], hunterView) || 

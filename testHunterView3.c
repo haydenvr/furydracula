@@ -37,18 +37,19 @@ void haydenTestFunc() {
 	disposeHunterView(hv);
 	
         playerMessage messages2[] = {"Hello","Rubbish","Stuff","","Mwahahah"};
-	printf("Test for Dracula trail and basic functions\n");
-	hv = newHunterView("GST.... SAO.... HZU.... MBB.... DC?....", messages2);
+	printf("Testing score loss when vampire matures and running into a trap\n");
+	hv = newHunterView("GSZ.... SRO.... HSNT... MFL.... DC?..V.", messages2);
 	assert(getCurrentPlayer(hv) == PLAYER_LORD_GODALMING);
 	assert(getRound(hv) == 1);
-	assert(getLocation(hv, PLAYER_LORD_GODALMING) == STRASBOURG);
-	assert(getLocation(hv, PLAYER_DR_SEWARD) == ATLANTIC_OCEAN);
-	assert(getLocation(hv, PLAYER_VAN_HELSING) == ZURICH);
-	assert(getLocation(hv, PLAYER_MINA_HARKER) == BAY_OF_BISCAY);
-        assert(getLocation(hv, PLAYER_DRACULA) == CITY_UNKNOWN);
-	assert(getHealth(hv,PLAYER_DRACULA) == GAME_START_BLOOD_POINTS);
-	printf("passed\n");
-        disposeHunterView(hv);
+	assert(getLocation(hv, PLAYER_LORD_GODALMING) == SZEGED);
+	assert(getLocation(hv, PLAYER_DR_SEWARD) == ROME);
+	assert(getLocation(hv, PLAYER_VAN_HELSING) == SANTANDER);
+	assert(getLocation(hv, PLAYER_MINA_HARKER) == FLORENCE);
+    assert(getLocation(hv, PLAYER_DRACULA) == CITY_UNKNOWN);
+	assert(getHealth(hv,PLAYER_VAN_HELSING) == GAME_START_HUNTER_LIFE_POINTS- LIFE_LOSS_TRAP_ENCOUNTER);
+	assert(getScore(hv) == GAME_START_SCORE - SCORE_LOSS_VAMPIRE_MATURES);
+	printf("passed testing vampire matures and trap\n");
+    disposeHunterView(hv);
         
 
 	printf("Test for encountering Dracula and hunter history\n");
