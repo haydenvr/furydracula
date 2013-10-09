@@ -36,7 +36,7 @@ struct player {
 // You are free to ignore messages if you wish.
 HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     HunterView hunterView = malloc( sizeof( struct hunterView ) );
-    hunterView->round = 1;
+    hunterView->round = 0;
     hunterView->currentPlayer = 0;
     hunterView->pastPlays = pastPlays;
     //hunterView->messages = NULL; //fix me
