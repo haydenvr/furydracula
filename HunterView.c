@@ -7,6 +7,7 @@
 #include "graph/Graph.h"
 
 #define CHARS_PER_ROUND 40
+#define CHARS_PER_TURN  8
 
 typedef struct player *Player;
      
@@ -42,8 +43,7 @@ static int doubledBack (LocationID location, HunterView hunterView);
 // The "playerMessage" type is defined in game.h.
 // You are free to ignore messages if you wish.
 HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
-    HunterView hunterView = malloc( sizeof( struct hunterView ) );
-	//printf("the length of string is %lu\n",sizeof(*pastPlays));
+    HunterView hunterView = malloc(sizeof(struct hunterView));
 	int i, j;
 	int player;
 	hunterView->score = GAME_START_SCORE;
@@ -54,12 +54,11 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 	"LI", "LS", "LV", "LO", "MA", "MN", "MR", "MI", "MU", "NA",
 	"NP", "NU", "PA", "PL", "PR", "RO", "SA", "SN", "SR", "SJ",
 	"SO", "ST", "SW", "SZ", "TO", "VA", "VR", "VE", "VI", "ZA",
-	"ZU",
-	"NS", "EC", "IS", "AO", "BB", "MS", "TS", "IO", "AS", "BS",	
-	"C?", "S?", "HI", "D1", "D2", "D3", "D4", "D5", "TP"
+	"ZU", "NS", "EC", "IS", "AO", "BB", "MS", "TS", "IO", "AS", 
+	"BS", "C?", "S?", "HI", "D1", "D2", "D3", "D4", "D5", "TP"
 	};
 	for (i = 0; i < NUM_PLAYERS; i++) {
-        hunterView->players[i] = malloc (sizeof (struct player));
+        hunterView->players[i] = malloc(sizeof(struct player));
 		hunterView->players[i]->health = GAME_START_HUNTER_LIFE_POINTS;
 		if (i == 4) hunterView->players[i]->health = GAME_START_BLOOD_POINTS;
 	    for (j = 0; j < TRAIL_SIZE; j++) {
@@ -108,7 +107,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 					}
 					i++;
 					if (pastPlays[i] == 'V') {
-						//vampire has matured lose 13 points
 						hunterView->score -= SCORE_LOSS_VAMPIRE_MATURES;						
 						
 					}
@@ -119,22 +117,19 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 						//vampire placed (affects location)
 					}
 					i++;
-					hunterView->score -= SCORE_LOSS_DRACULA_TURN;
-					//dracula loses 2 health if he is at Sea
 					if (isAtSea(hunterView->players[player]->location[0], hunterView) || 
-					    isAtSea(hunterView->players[player]->
-					    location[doubledBack (hunterView->players[player]->location[0], hunterView)], hunterView)) 
+					isAtSea(hunterView->players[player]->
+					location[doubledBack (hunterView->players[player]->location[0], hunterView)], hunterView)) 
 					    hunterView->players[player]->health -= LIFE_LOSS_SEA;
+					hunterView->score -= SCORE_LOSS_DRACULA_TURN;
 			} else {
 				int l = 0;
 				while (l < 3) {
 					if (pastPlays[i] == 'T') {
-						//trap encountered (lose 2 health, and trap disarmed)
 						hunterView->players[player]->health -= LIFE_LOSS_TRAP_ENCOUNTER;
 					} else if (pastPlays[i] == 'V') {
 						//immature vampire encountered (slay vampire)
 					} else if (pastPlays[i] == 'D') {
-						//dracula was encountered (drac loses 10 health, hunter 4)
 						hunterView->players[PLAYER_DRACULA]->health -= LIFE_LOSS_HUNTER_ENCOUNTER;
 						hunterView->players[player]->health -= LIFE_LOSS_DRACULA_ENCOUNTER;
 						if (hunterView->players[PLAYER_DRACULA]->health < 0) hunterView->players[PLAYER_DRACULA]->health = 0;
@@ -144,20 +139,18 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 				}
 				if (hunterView->players[player]->health <= 0) {
 					//teleport to hospital
-					//game score decreases by 6
-					//health of player needs to be restored to 9
 					hunterView->score -= SCORE_LOSS_HUNTER_HOSPITAL;
 					hunterView->players[player]->health = GAME_START_HUNTER_LIFE_POINTS;
 				}
 			}
 			i++; //to skip trailing dot
 			if (pastPlays[i] == ' ') i++;
-			//do something when run out of health
+			//TODO something when run dracula out of health?
 			//still need to consider locations and traps/immaturevamps
 	}
 	if (hunterView->score < 0) hunterView->score = 0;
-    hunterView->round = (i+1)/CHARS_PER_ROUND;
-    hunterView->currentPlayer = 0;
+    hunterView->round = (i + 1) / CHARS_PER_ROUND; //auto rounds down to remove incomplete rounds
+    hunterView->currentPlayer = ((i + 1) / CHARS_PER_TURN) % NUM_PLAYERS;
 	
 	int amt_mess = (int) sizeof(messages)/sizeof(playerMessage);
 	for (i = 0; i < amt_mess; i++) {
@@ -192,7 +185,7 @@ Round getRound (HunterView currentView) {
 //   MINA_HARKER    (3): Mina Harker's turn
 //   DRACULA        (4): Dracula's turn
 PlayerID getCurrentPlayer (HunterView currentView) {
-	assert(currentView->currentPlayer >= 0 && currentView->currentPlayer <= 4);
+	assert(currentView->currentPlayer >= PLAYER_LORD_GODALMING && currentView->currentPlayer <= PLAYER_DRACULA);
 	return currentView->currentPlayer;
 }
 
@@ -207,7 +200,7 @@ int getScore(HunterView currentView) {
 // 'player' specifies which players's life/blood points to return
 //    and must be a value in the interval [0...4] (see 'player' type)
 int getHealth(HunterView currentView, PlayerID player) {
-	assert(player >= 0 && player <= 4);
+	assert(player >= PLAYER_LORD_GODALMING && player <= PLAYER_DRACULA);
 	return currentView->players[player]->health;
 }
 
@@ -290,5 +283,5 @@ static int isInCity(LocationID location, HunterView hunterView) {
 static int doubledBack (LocationID location, HunterView hunterView) {
     if ((location >= DOUBLE_BACK_1)&&(location <= DOUBLE_BACK_5)) 
         return location - DOUBLE_BACK_1 + 1;
-    else return 0;
+    else return FALSE;
 }
