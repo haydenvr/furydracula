@@ -36,13 +36,15 @@ struct player {
 // You are free to ignore messages if you wish.
 HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     HunterView hunterView = malloc( sizeof( struct hunterView ) );
-    hunterView->round = 0;
+    hunterView->round = 1;
     hunterView->currentPlayer = 0;
     hunterView->pastPlays = pastPlays;
 	hunterView->score = 0;
-    int i;
+    int i, j;
 	for (i = 0; i < MESSAGE_SIZE; i++) {
-		hunterView->messages[i] = messages[i];
+		for (j = 0; j < MESSAGE_SIZE; j++){
+			hunterView->messages[i][j] = messages[i][j];
+		}
 	}
     for (i = 0; i < NUM_PLAYERS; i++) {
         hunterView->players[i]->health = 0;
