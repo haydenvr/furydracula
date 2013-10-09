@@ -37,11 +37,20 @@ struct player {
 // You are free to ignore messages if you wish.
 HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     HunterView hunterView = malloc( sizeof( struct hunterView ) );
-    hunterView->round = 0;
+	//printf("the length of string is %lu\n",sizeof(*pastPlays));
+	int i = 0;
+	int round = 0;
+	while (pastPlays[i] != '\0') {
+		round++;		
+		i++;
+	}
+	i = (i+1)/8;
+	printf("the size is %d",i);
+    hunterView->round = i/5;
     hunterView->currentPlayer = 0;
     hunterView->pastPlays = pastPlays;
 	hunterView->score = 366;
-    int i, j;
+    int j;
 	int amt_mess = (int) sizeof(messages)/sizeof(playerMessage);
 	for (i = 0; i < amt_mess; i++) {
 		for (j = 0; j < MESSAGE_SIZE-1; j++){
