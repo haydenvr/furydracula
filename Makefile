@@ -14,5 +14,5 @@ graphT:
 	$(CC) $(CFLAGS) -o testGraph HunterView.c testHunterView2.c graph/Graph.c
 
 clean:
-	rm -rf testHunterView testHunterView2 testGraph
+	rm -rf testHunterView testHunterView2 testHunterView3 testGraph
 
