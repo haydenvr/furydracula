@@ -17,6 +17,7 @@ struct hunterView {
     PlayerID currentPlayer;
     Player players[NUM_PLAYERS];
     playerMessage messages[MESSAGE_SIZE];
+    char vampire[TRAIL_SIZE];
 };
 
 struct player {
@@ -63,6 +64,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 		if (i == 4) hunterView->players[i]->health = GAME_START_BLOOD_POINTS;
 	    for (j = 0; j < TRAIL_SIZE; j++) {
             hunterView->players[i]->location[j] = -1;
+		    hunterView->vampire[i] = '\0';
         }
     }
 	i = 0;
@@ -86,11 +88,12 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 			while (z < NUM_LOCATIONS && (locations[z][0] != a[0] || locations[z][1] != a[1])) z++;
 
 			//set location array
-		    for (j = TRAIL_SIZE - 1; j > 0; j--) 
+		    for (j = TRAIL_SIZE - 1; j > 0; j--) {
 		        hunterView->players[player]->location[j] = hunterView->players[player]->location[j-1];
+                hunterView->vampire[j] = hunterView->vampire[j-1];
+            }
 		    hunterView->players[player]->location[0] = z;
-			doubledBack (z, hunterView); //DELETE
-			//if player is resting in city, his health will raise by 3 (but not above 9)
+		    hunterView->vampire[0] = '\0';
 			if ((z == hunterView->players[player]->location[1]) && 
 			(player != PLAYER_DRACULA) && isInCity(player,hunterView)) {
 				hunterView->players[player]->health += LIFE_GAIN_REST;
@@ -103,18 +106,18 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 			i += 2;
 			if (player == PLAYER_DRACULA) {
 					if (pastPlays[i] == 'T') {
-						//trap has been placed (affects location)
+						hunterView->vampire[0] = 'T';
 					}
 					i++;
 					if (pastPlays[i] == 'V') {
-						hunterView->score -= SCORE_LOSS_VAMPIRE_MATURES;						
+						hunterView->vampire[0] = 'V';						
 						
 					}
 					i++;
 					if (pastPlays[i] == 'M') {
-						//trap has left trail (affects location)
+						//trap has left trail (already handled?)
 					} else if (pastPlays[i] == 'V') {
-						//vampire placed (affects location)
+						hunterView->score -= SCORE_LOSS_VAMPIRE_MATURES;
 					}
 					i++;
 					if (isAtSea(hunterView->players[player]->location[0], hunterView) || 
