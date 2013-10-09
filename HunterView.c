@@ -2,7 +2,7 @@
 #include <assert.h>
 #include "game.h"
 #include "HunterView.h"
-#include "graph/Graph.h"
+//#include "graph/Graph.h"
 
 typedef struct player *Player;
      
@@ -12,7 +12,7 @@ struct hunterView {
     PlayerID currentPlayer;
     Player players[NUM_PLAYERS];
     char *pastPlays;
-    playerMessage messages[];
+    playerMessage messages[MESSAGE_SIZE];
 };
 
 struct player {
@@ -42,7 +42,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 	hunterView->score = 0;
     int i;
 	for (i = 0; i < MESSAGE_SIZE; i++) {
-		hunterView->messages[i] = messages[i];
 	}
     for (i = 0; i < NUM_PLAYERS; i++) {
         hunterView->players[i]->health = 0;
