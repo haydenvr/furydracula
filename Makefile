@@ -7,9 +7,9 @@ test1:
 test2: 
 	$(CC) $(CFLAGS) -o testHunterView2 HunterView.c testHunterView2.c
 
-graph:
-	$(CC) $(CFLAGS) -o testHunterView2 HunterView.c testHunterView2.c graph/Graph.c
+graphT:
+	$(CC) $(CFLAGS) -o testGraph HunterView.c testHunterView2.c graph/Graph.c
 
 clean:
-	rm -rf testHunterView
+	rm -rf testHunterView testHunterView2 testGraph
 

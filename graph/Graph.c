@@ -51,7 +51,8 @@ Graph newGraph() {
     }
      
     g->nE[ROAD] = 0;
-    g->nE[SEA] = 0; 
+    g->nE[RAIL] = 0; 	
+	g->nE[SEA] = 0;
     makeMap(g);
     return g; 
 } 
@@ -113,7 +114,9 @@ void showGraph(Graph g) {
             printf("%d-%d ",i,n->v); 
             if(n->type == ROAD){
                 printf("L ");
-            } else if(n->type == SEA){
+            } else if (n->type == RAIL) {
+				printf("R ");
+			}else if(n->type == SEA){
                 printf("S ");
             } else {
                 printf("ERROR NO SUCH TYPE");
@@ -135,7 +138,7 @@ int numE(Graph g, Transport type){
     assert(g != NULL);
     assert(type >= 0 && type <= ANY);
     if(type == ANY){
-        return g->nE[ROAD] + g->nE[SEA];
+        return g->nE[ROAD] + g->nE[SEA] + g->nE[RAIL];
     } else {
         return g->nE[type];
     }

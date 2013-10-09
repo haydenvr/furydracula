@@ -4,6 +4,7 @@
 #define ROAD 0
 #define RAIL 1
 #define SEA 2
+#define ANY 3
 #define NUM_TRANSPORT 3
 
 
