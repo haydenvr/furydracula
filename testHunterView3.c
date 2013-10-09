@@ -47,7 +47,7 @@ void haydenTestFunc() {
 	assert(getLocation(hv, PLAYER_MINA_HARKER) == FLORENCE);
     assert(getLocation(hv, PLAYER_DRACULA) == CITY_UNKNOWN);
 	assert(getHealth(hv,PLAYER_VAN_HELSING) == GAME_START_HUNTER_LIFE_POINTS- LIFE_LOSS_TRAP_ENCOUNTER);
-	assert(getScore(hv) == GAME_START_SCORE - SCORE_LOSS_VAMPIRE_MATURES);
+	assert(getScore(hv) == GAME_START_SCORE - SCORE_LOSS_VAMPIRE_MATURES - SCORE_LOSS_DRACULA_TURN);
 	printf("passed testing vampire matures and trap\n");
     disposeHunterView(hv);
         
