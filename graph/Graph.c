@@ -4,13 +4,14 @@
 #include "Graph.h"
 #include "../cities.h"
 
+
 typedef struct vNode *VList;
 typedef struct QueueRep *Queue;
 typedef int Item;
 
 struct vNode { 
     Location v;     //ALICANTE etc
-    Transport type; //LAND, SEA, ANY
+    Transport type; //ROAD, SEA, ANY
     VList next; 
 };  
 
@@ -38,6 +39,7 @@ static void QueueJoin(Queue,Item); // add item on queue
 static Item QueueLeave(Queue); // remove item from queue
 static int QueueIsEmpty(Queue); // check for no items
 
+#include "../connections_v1.1.h"
 
 Graph newGraph() { 
     int i; 
@@ -48,7 +50,7 @@ Graph newGraph() {
         g->connections[i] = NULL;  
     }
      
-    g->nE[LAND] = 0;
+    g->nE[ROAD] = 0;
     g->nE[SEA] = 0; 
     makeMap(g);
     return g; 
@@ -96,45 +98,20 @@ static void addLink(Graph g, Location start, Location end, Transport type){
     }
 }
 
-static void makeMap(Graph g){
-   addLink(g, ALICANTE, GRANADA, LAND);
-   addLink(g, ALICANTE, MADRID, LAND);
-   addLink(g, ALICANTE, SARAGOSSA, LAND);
-   addLink(g, BARCELONA, SARAGOSSA, LAND);
-   addLink(g, BARCELONA, TOULOUSE, LAND);  
-   addLink(g, BORDEAUX, SARAGOSSA, LAND);
-   addLink(g, BORDEAUX, TOULOUSE, LAND); 
-   addLink(g, CADIZ, GRANADA, LAND);
-   addLink(g, CADIZ, LISBON, LAND);
-   addLink(g, CADIZ, MADRID, LAND);
-   addLink(g, GRANADA, MADRID, LAND);
-   addLink(g, LISBON, MADRID, LAND);
-   addLink(g, LISBON, SANTANDER, LAND);
-   addLink(g, MADRID, SANTANDER, LAND);
-   addLink(g, MADRID, SARAGOSSA, LAND); 
-   addLink(g, SANTANDER, SARAGOSSA, LAND);
-   addLink(g, SARAGOSSA, TOULOUSE, LAND); 
-  
-   addLink(g, ALICANTE, MEDITERRANEAN_SEA, SEA); 
-   addLink(g, ATLANTIC_OCEAN, BAY_OF_BISCAY, SEA);
-   addLink(g, ATLANTIC_OCEAN, CADIZ, SEA);
-   addLink(g, ATLANTIC_OCEAN, LISBON, SEA);
-   addLink(g, ATLANTIC_OCEAN, MEDITERRANEAN_SEA, SEA);
-   addLink(g, BARCELONA, MEDITERRANEAN_SEA, SEA); 
-   addLink(g, BAY_OF_BISCAY, BORDEAUX, SEA);
-   addLink(g, BAY_OF_BISCAY, SANTANDER, SEA);
-}
+//static void makeMap(Graph g){
+   
+//}
 
 //Useful for debugging
 void showGraph(Graph g) { 
     assert(g != NULL); 
-    printf("V=%d, E=%d + %d\n", g->nV, g->nE[LAND],g->nE[SEA]); 
+    printf("V=%d, E=%d + %d\n", g->nV, g->nE[ROAD],g->nE[SEA]); 
     int i; 
     for (i = 0; i < g->nV; i++) { 
         VList n = g->connections[i]; 
         while (n != NULL) { 
             printf("%d-%d ",i,n->v); 
-            if(n->type == LAND){
+            if(n->type == ROAD){
                 printf("L ");
             } else if(n->type == SEA){
                 printf("S ");
@@ -158,7 +135,7 @@ int numE(Graph g, Transport type){
     assert(g != NULL);
     assert(type >= 0 && type <= ANY);
     if(type == ANY){
-        return g->nE[LAND] + g->nE[SEA];
+        return g->nE[ROAD] + g->nE[SEA];
     } else {
         return g->nE[type];
     }

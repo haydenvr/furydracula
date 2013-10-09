@@ -1,3 +1,6 @@
+#include "graph/Graph.h"
+
+static void makeMap(Graph g){
 	//### ROAD Connections ###
 
 	//ATHENS
@@ -615,3 +618,4 @@
 	addLink(g, EDINBURGH, NORTH_SEA, SEA);
 	addLink(g, AMSTERDAM, NORTH_SEA, SEA);
 	addLink(g, HAMBURG, NORTH_SEA, SEA);
+}

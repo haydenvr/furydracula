@@ -1,10 +1,10 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#define LAND 0
-#define SEA 1
-#define ANY 2
-#define NUM_TRANSPORT 2
+#define ROAD 0
+#define RAIL 1
+#define SEA 2
+#define NUM_TRANSPORT 3
 
 
 // vertices denoted by integers 0..N-1 
