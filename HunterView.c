@@ -43,6 +43,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     int i, j;
 	for (i = 0; i < MESSAGE_SIZE; i++) {
 		for (j = 0; j < MESSAGE_SIZE; j++){
+			if (messages[i][j] == '\0') break;
 			hunterView->messages[i][j] = messages[i][j];
 		}
 	}
