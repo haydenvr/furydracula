@@ -22,6 +22,9 @@ struct player {
     LocationID location;
 };
 
+static int isAtSea(PlayerID player, HunterView hunterView);
+static int isInCity(PlayerID player, HunterView hunterView);
+
 // newHunterView creates a new hunter view to summarise the current state of
 // the game.
 //
@@ -78,6 +81,12 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 			char a[] = {pastPlays[i], pastPlays[i+1]};
 			
 			while (z < NUM_LOCATIONS && (locations[z][0] != a[0] || locations[z][1] != a[1])) z++;
+
+			//if player is resting in city, his health will raise by 3 (but not above 9)
+			if ((z == hunterView->players[player]->location)&&(player != PLAYER_DRACULA)&&isInCity(player,hunterView)) {
+				hunterView->players[player]->health += 3;
+				if (hunterView->players[player]->health > 9) hunterView->players[player]->health = 9;
+			}
 			hunterView->players[player]->location = z;
 			
 			i += 2;
@@ -99,6 +108,8 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 					}
 					i++;
 					hunterView->score--;
+					//dracula loses 2 health if he is at Sea
+					if (isAtSea(PLAYER_DRACULA, hunterView)) hunterView->players[PLAYER_DRACULA]->health -= 2;
 			} else {
 				int l = 0;
 				while (l < 3) {
@@ -114,6 +125,13 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 					}
 					i++;
 					l++;
+				}
+				if (hunterView->players[player]->health <= 0) {
+					//teleport to hospital
+					//game score decreases by 6
+					//health of player needs to be restored to 9
+					hunterView->score -= 6;
+					hunterView->players[player]->health = 9;
 				}
 			}
 			i++; //to skip trailing dot
@@ -246,3 +264,12 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
 	return NULL;
 }
 
+static int isAtSea(PlayerID player, HunterView hunterView) {
+	return (((hunterView->players[player]->location >= NORTH_SEA)&&(hunterView->players[player]->location <= BLACK_SEA))
+	||(hunterView->players[player]->location == SEA_UNKNOWN ));
+}
+
+static int isInCity(PlayerID player, HunterView hunterView) {
+	return (((hunterView->players[player]->location >= ALICANTE)&&(hunterView->players[player]->location <= ZURICH))
+	||(hunterView->players[player]->location == CITY_UNKNOWN ));
+}
