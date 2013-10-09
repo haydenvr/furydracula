@@ -4,6 +4,49 @@
 #include "HunterView.h"
 #include "graph/Graph.h"
 
+#ifndef HUNTER_VIEW_H
+#define HUNTER_VIEW_H
+
+#include "cities.h"
+
+#define FALSE 0
+#define TRUE 1
+
+// Players
+#define PLAYER_LORD_GODALMING   0
+#define PLAYER_DR_SEWARD        1
+#define PLAYER_VAN_HELSING      2
+#define PLAYER_MINA_HARKER      3
+#define PLAYER_DRACULA          4
+
+#define NUM_PLAYERS     5
+
+#define TRAIL_SIZE 6
+
+//Score
+#define GAME_START_SCORE                366
+#define SCORE_LOSS_DRACULA_TURN         1
+#define SCORE_LOSS_HUNTER_HOSPITAL      6
+#define SCORE_LOSS_VAMPIRE_MATURES      13
+
+// Dracula Health
+#define GAME_START_BLOOD_POINTS         40
+#define LIFE_LOSS_HUNTER_ENCOUNTER      10
+#define LIFE_LOSS_SEA                   2
+#define LIFE_GAIN_CASTLE_DRACULA        10
+
+//Hunter Health
+#define GAME_START_HUNTER_LIFE_POINTS   9
+#define LIFE_LOSS_TRAP_ENCOUNTER        2
+#define LIFE_LOSS_DRACULA_ENCOUNTER     4
+#define LIFE_GAIN_REST                  3 
+
+     
+typedef struct hunterView *HunterView;
+     
+typedef int PlayerID;
+typedef int Round;
+
 typedef struct player *Player;
      
 struct hunterView {
@@ -39,9 +82,11 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     hunterView->round = 1;
     hunterView->currentPlayer = 0;
     hunterView->pastPlays = pastPlays;
-    //hunterView->messages = NULL; //fix me
-    int i;
 	hunterView->score = 0;
+    int i;
+	for (i = 0; i < MESSAGE_SIZE; i++) {
+		hunterView->messages[i] = messages[i];
+	}
     for (i = 0; i < NUM_PLAYERS; i++) {
         hunterView->players[i]->health = 0;
         hunterView->players[i]->location = 0;
