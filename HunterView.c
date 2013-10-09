@@ -6,6 +6,8 @@
 #include "HunterView.h"
 #include "graph/Graph.h"
 
+#define CHARS_PER_ROUND 40
+
 typedef struct player *Player;
      
 struct hunterView {
@@ -44,7 +46,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 	//printf("the length of string is %lu\n",sizeof(*pastPlays));
 	int i, j;
 	int player;
-	hunterView->score = 366;
+	hunterView->score = GAME_START_SCORE;
 	char *locations[] = {
 	"AL", "AM", "AT", "BA", "BI", "BE", "BR", "BO", "BU", "BC", 
 	"BD", "CA", "CG", "CD", "CF", "CO", "CN", "DU", "ED", "FL",
@@ -58,8 +60,8 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 	};
 	for (i = 0; i < NUM_PLAYERS; i++) {
         hunterView->players[i] = malloc (sizeof (struct player));
-		hunterView->players[i]->health = 9;
-		if (i == 4) hunterView->players[i]->health = 40;
+		hunterView->players[i]->health = GAME_START_HUNTER_LIFE_POINTS;
+		if (i == 4) hunterView->players[i]->health = GAME_START_BLOOD_POINTS;
 	    for (j = 0; j < TRAIL_SIZE; j++) {
             hunterView->players[i]->location[j] = -1;
         }
@@ -90,10 +92,14 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 		    hunterView->players[player]->location[0] = z;
 			doubledBack (z, hunterView); //DELETE
 			//if player is resting in city, his health will raise by 3 (but not above 9)
-			if ((z == hunterView->players[player]->location[1])&&(player != PLAYER_DRACULA)&&isInCity(player,hunterView)) {
-				hunterView->players[player]->health += 3;
-				if (hunterView->players[player]->health > 9) hunterView->players[player]->health = 9;
+			if ((z == hunterView->players[player]->location[1]) && 
+			(player != PLAYER_DRACULA) && isInCity(player,hunterView)) {
+				hunterView->players[player]->health += LIFE_GAIN_REST;
+				if (hunterView->players[player]->health > GAME_START_HUNTER_LIFE_POINTS) 
+				    hunterView->players[player]->health = GAME_START_HUNTER_LIFE_POINTS;
 			}
+			if ((z == TELEPORT) && (player == PLAYER_DRACULA)) 
+			    hunterView->players[player]->health += LIFE_GAIN_CASTLE_DRACULA;
 			
 			i += 2;
 			if (player == PLAYER_DRACULA) {
@@ -103,34 +109,35 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 					i++;
 					if (pastPlays[i] == 'V') {
 						//vampire has matured lose 13 points
-						hunterView->score -= 13;						
+						hunterView->score -= SCORE_LOSS_VAMPIRE_MATURES;						
 						
 					}
 					i++;
 					if (pastPlays[i] == 'M') {
-						//trap has left trail (nothing happens)
+						//trap has left trail (affects location)
 					} else if (pastPlays[i] == 'V') {
 						//vampire placed (affects location)
 					}
 					i++;
-					hunterView->score--;
+					hunterView->score -= SCORE_LOSS_DRACULA_TURN;
 					//dracula loses 2 health if he is at Sea
 					if (isAtSea(hunterView->players[player]->location[0], hunterView) || 
 					    isAtSea(hunterView->players[player]->
 					    location[doubledBack (hunterView->players[player]->location[0], hunterView)], hunterView)) 
-					    hunterView->players[player]->health -= 2;
+					    hunterView->players[player]->health -= LIFE_LOSS_SEA;
 			} else {
 				int l = 0;
 				while (l < 3) {
 					if (pastPlays[i] == 'T') {
 						//trap encountered (lose 2 health, and trap disarmed)
-						hunterView->players[player]->health -= 2;
+						hunterView->players[player]->health -= LIFE_LOSS_TRAP_ENCOUNTER;
 					} else if (pastPlays[i] == 'V') {
 						//immature vampire encountered (slay vampire)
 					} else if (pastPlays[i] == 'D') {
 						//dracula was encountered (drac loses 10 health, hunter 4)
-						hunterView->players[PLAYER_DRACULA]->health -= 10;
-						hunterView->players[player]->health -= 4;
+						hunterView->players[PLAYER_DRACULA]->health -= LIFE_LOSS_HUNTER_ENCOUNTER;
+						hunterView->players[player]->health -= LIFE_LOSS_DRACULA_ENCOUNTER;
+						if (hunterView->players[PLAYER_DRACULA]->health < 0) hunterView->players[PLAYER_DRACULA]->health = 0;
 					}
 					i++;
 					l++;
@@ -139,8 +146,8 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 					//teleport to hospital
 					//game score decreases by 6
 					//health of player needs to be restored to 9
-					hunterView->score -= 6;
-					hunterView->players[player]->health = 9;
+					hunterView->score -= SCORE_LOSS_HUNTER_HOSPITAL;
+					hunterView->players[player]->health = GAME_START_HUNTER_LIFE_POINTS;
 				}
 			}
 			i++; //to skip trailing dot
@@ -149,8 +156,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 			//still need to consider locations and traps/immaturevamps
 	}
 	if (hunterView->score < 0) hunterView->score = 0;
-	i = (i+1)/8;
-    hunterView->round = i/5;
+    hunterView->round = (i+1)/CHARS_PER_ROUND;
     hunterView->currentPlayer = 0;
 	
 	int amt_mess = (int) sizeof(messages)/sizeof(playerMessage);
