@@ -52,6 +52,13 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 	"NS", "EC", "IS", "AO", "BB", "MS", "TS", "IO", "AS", "BS",	
 	"C?", "S?", "HI", "D1", "D2", "D3", "D4", "D5", "TP"
 	};
+	for (i = 0; i < NUM_PLAYERS; i++) {
+        hunterView->players[i] = malloc (sizeof (struct player));
+		hunterView->players[i]->health = 9;
+		if (i == 4) hunterView->players[i]->health = 40;
+        hunterView->players[i]->location = -1;
+    }
+	i = 0;
 	while (pastPlays[i] != '\0') {
 			//this character should represent the player name
 			if (pastPlays[i] == 'G') player = PLAYER_LORD_GODALMING;
@@ -67,15 +74,14 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 			i++;
 			int z = 0;
 			
-			char *a = pastPlays[i];
-			strcat(&a, &pastPlays[i+1]);
-			printf("HEY ME SUCCESS\n");
-			while (z < NUM_LOCATIONS && !strcmp(locations[z],a)) z++;
+			char a[] = {pastPlays[i], pastPlays[i+1]};
 			
+			while (z < NUM_LOCATIONS && (locations[z][0] != a[0] || locations[z][1] != a[1])) z++;
 			hunterView->players[player]->location = z;
 			
 			i += 2;
-			i+= 5; //test purposes
+			i+= 4; //test purposes
+			if (pastPlays[i] == ' ') i++;
 			printf("%d\n",player);
 		//}
 		//round++;		
@@ -96,12 +102,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 			
 		}
 	}
-    for (i = 0; i < NUM_PLAYERS; i++) {
-        hunterView->players[i] = malloc (sizeof (struct player));
-		hunterView->players[i]->health = 9;
-		if (i == 4) hunterView->players[i]->health = 40;
-        hunterView->players[i]->location = -1;
-    }
     return hunterView;
 }
      
