@@ -41,6 +41,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 	//printf("the length of string is %lu\n",sizeof(*pastPlays));
 	int i = 0;
 	int player;
+	hunterView->score = 366;
 	char *locations[] = {
 	"AL", "AM", "AT", "BA", "BI", "BE", "BR", "BO", "BU", "BC", 
 	"BD", "CA", "CG", "CD", "CF", "CO", "CN", "DU", "ED", "FL",
@@ -80,19 +81,52 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 			hunterView->players[player]->location = z;
 			
 			i += 2;
-			i+= 4; //test purposes
+			if (player == PLAYER_DRACULA) {
+					if (pastPlays[i] == 'T') {
+						//trap has been placed (affects location)
+					}
+					i++;
+					if (pastPlays[i] == 'V') {
+						//vampire has matured lose 13 points
+						hunterView->score -= 13;						
+						
+					}
+					i++;
+					if (pastPlays[i] == 'M') {
+						//trap has left trail (nothing happens)
+					} else if (pastPlays[i] == 'V') {
+						//vampire placed (affects location)
+					}
+					i++;
+					hunterView->score--;
+			} else {
+				int l = 0;
+				while (l < 3) {
+					if (pastPlays[i] == 'T') {
+						//trap encountered (lose 2 health, and trap disarmed)
+						hunterView->players[player]->health -= 2;
+					} else if (pastPlays[i] == 'V') {
+						//immature vampire encountered (slay vampire)
+					} else if (pastPlays[i] == 'D') {
+						//dracula was encountered (drac loses 10 health, hunter 4)
+						hunterView->players[PLAYER_DRACULA]->health -= 10;
+						hunterView->players[player]->health -= 4;
+					}
+					i++;
+					l++;
+				}
+			}
+			i++; //to skip trailing dot
 			if (pastPlays[i] == ' ') i++;
-			printf("%d\n",player);
-		//}
-		//round++;		
-		//i++;
+			//do something when run out of health
+			//still need to consider locations and traps/immaturevamps
 	}
+	if (hunterView->score < 0) hunterView->score = 0;
 	i = (i+1)/8;
-	printf("the size is %d",i);
     hunterView->round = i/5;
     hunterView->currentPlayer = 0;
     hunterView->pastPlays = pastPlays;
-	hunterView->score = 366;
+	
     int j;
 	int amt_mess = (int) sizeof(messages)/sizeof(playerMessage);
 	for (i = 0; i < amt_mess; i++) {
