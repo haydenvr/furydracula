@@ -2,9 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Graph.h"
-#include "cities.h"
+#include "../cities.h"
 
 typedef struct vNode *VList;
+typedef struct QueueRep *Queue;
+typedef int Item;
 
 struct vNode { 
     Location v;     //ALICANTE etc
@@ -18,11 +20,24 @@ struct GraphRep {
     VList connections[NUM_MAP_LOCATIONS]; // array of lists 
 }; 
 
+typedef struct QueueNode {
+	Item value;
+	struct QueueNode *next;
+} QueueNode;
+
+typedef struct QueueRep {
+	QueueNode *head;  // ptr to first node
+	QueueNode *tail;  // ptr to last node
+} QueueRep;
 
 static void makeMap(Graph g);
 static void addLink(Graph g, Location start, Location end, Transport type);
+static Queue newQueue(); // create new empty queue
+static void dropQueue(Queue); // free memory used by queue
+static void QueueJoin(Queue,Item); // add item on queue
+static Item QueueLeave(Queue); // remove item from queue
+static int QueueIsEmpty(Queue); // check for no items
 
-Vlist adjacencies[NUM_MAP_LOCATIONS](Graph g, 
 
 Graph newGraph() { 
     int i; 
@@ -59,19 +74,26 @@ void destroyGraph(Graph g){
 
 
 static void addLink(Graph g, Location start, Location end, Transport type){
-    //TODO IMPLEMENT THIS FOR TASK 1
-	VList new = malloc(sizeof(struct vNode));
-	new->v = end;
-	new->type = type;
-	new->next = NULL;
-	if (g->connections[start] == NULL) {
-		g->connections[start] = new;
-	} else {
-		VList tmp = g->connections[start];
-		while (tmp->next != NULL) tmp = tmp->next;
-		tmp->next = new;
-	}
-	g->nE[type]++;
+    VList newNode = malloc(sizeof(struct vNode));
+    newNode->v = end;
+    newNode->type = type;
+    g->nE[type]++;
+    VList tmp = g->connections[start];
+    if (tmp == NULL) g->connections[start] = newNode;
+    else {
+        for (; tmp->next != NULL; tmp = tmp->next);
+        tmp->next = newNode;
+    }
+    
+    newNode = malloc(sizeof(struct vNode));
+    newNode->v = start;
+    newNode->type = type;
+    tmp = g->connections[end];
+    if (tmp == NULL) g->connections[end] = newNode;
+    else {
+        for (; tmp->next != NULL; tmp = tmp->next);
+        tmp->next = newNode;
+    }
 }
 
 static void makeMap(Graph g){
@@ -144,32 +166,114 @@ int numE(Graph g, Transport type){
 
 //returns 1 if there is an edge from start to end of the given type
 //gives 0 otherwise
-int isAdjacent(Graph g,Location start, Location end, Transport type){
-    //TO IMPLEMENT FOR TASK 2
-	VList tmp = g->connections[start];
-	int found = 0; //NO
-	while (tmp != NULL) {
-		if (type == ANY) type = tmp->type;
-		if ((tmp->v == end)&&(type==tmp->type)) found = 1;
-		tmp = tmp->next;
-	}
-    	return found;
+int isAdjacent(Graph g, Location start, Location end, Transport type){
+    VList tmp = g->connections[start];
+    for (; tmp != NULL; tmp = tmp->next) if (tmp->v == end && (tmp->type == type || type == ANY)) return 1;
+    return 0;
 }
 
+
+static int dist(int st[], int e) {
+    int count = 0;
+    int i = e;
+    while (st[i] != i) {
+        count++;
+        i = st[i];
+    }
+    return count;
+}
 
 //Determines which locations can be reached from the start location
 //in n hops or less with a given transport type
 //If a location can be reached in n hops or less locs[location] is set to 1
 //otherwise it is left as 0
 void canReachInN(Graph g, Location start, Transport type, int n, int locs[]){
-   //IMPLEMENT FOR TASK 3
-	int visited[NUM_MAP_LOCS], i = 0;
-	for (i = 0; i < NUM_MAP_LOCS; i++) {
-		visited[i] = 0;
-	}
-	Queue q = newQueue();
-	QueueJoin(q, start);
-	while (!QueueIsEmpty(q)) {
-		
-	}
+    Queue q = newQueue();
+    int st[NUM_MAP_LOCATIONS];
+    int i, e;
+    VList tmp;
+    for (i = 0; i < NUM_MAP_LOCATIONS; i++) {
+        st[i] = -1; 
+    }
+    st[start] = start;
+    locs[start] = 1;
+    QueueJoin(q, start);
+    while (!QueueIsEmpty(q)) {
+        e = QueueLeave(q);
+        for (tmp = g->connections[e]; tmp != NULL; tmp = tmp->next) {
+            if (st[tmp->v] == -1 && dist(st, e) < n && ((tmp->type == type || type == ANY))) {
+                st[tmp->v] = e;
+                QueueJoin(q, tmp->v);
+                locs[tmp->v] = 1;
+            }  
+        }
+    }
+    dropQueue(q);
 }
+
+//
+//QUEUE IMPLEMENTATION
+//
+
+// create new empty Queue
+static Queue newQueue()
+{
+	Queue q;
+	q = malloc(sizeof(QueueRep));
+	assert(q != NULL);
+	q->head = NULL;
+	q->tail = NULL;
+	return q;
+}
+
+// free memory used by Queue
+static void dropQueue(Queue Q)
+{
+	QueueNode *curr, *next;
+	assert(Q != NULL);
+	// free list nodes
+	curr = Q->head;
+	while (curr != NULL) {
+		next = curr->next;
+		free(curr);
+		curr = next;
+	}
+	// free queue rep
+	free(Q);
+}
+
+// add item at end of Queue 
+static void QueueJoin(Queue Q, Item it)
+{
+	assert(Q != NULL);
+	QueueNode *new = malloc(sizeof(QueueNode));
+	assert(new != NULL);
+	new->value = it;
+	new->next = NULL;
+	if (Q->head == NULL)
+		Q->head = new;
+	if (Q->tail != NULL)
+		Q->tail->next = new;
+	Q->tail = new;
+}
+
+// remove item from front of Queue
+static Item QueueLeave(Queue Q)
+{
+	assert(Q != NULL);
+	assert(Q->head != NULL);
+	Item it = Q->head->value;
+	QueueNode *old = Q->head;
+	Q->head = old->next;
+	if (Q->head == NULL)
+		Q->tail = NULL;
+	free(old);
+	return it;
+}
+
+// check for no items
+static int QueueIsEmpty(Queue Q)
+{
+	return (Q->head == NULL);
+}
+
