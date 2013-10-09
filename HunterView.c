@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include "game.h"
@@ -41,12 +42,16 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     hunterView->pastPlays = pastPlays;
 	hunterView->score = 0;
     int i, j;
-	for (i = 0; i < MESSAGE_SIZE; i++) {
-		for (j = 0; j < MESSAGE_SIZE; j++){
+	printf("size is %lu\n",sizeof(hunterView->messages[i])/sizeof(char));
+	for (i = 0; i < MESSAGE_SIZE -1; i++) {
+		for (j = 0; j < MESSAGE_SIZE-1; j++){
+			if (messages[i][j] == '\0') break;
+			printf("Success!\n");
 			hunterView->messages[i][j] = messages[i][j];
+			
 		}
 	}
-    for (i = 0; i < NUM_PLAYERS; i++) {
+    for (i = 0; i < NUM_PLAYERS-1; i++) {
         hunterView->players[i]->health = 0;
         hunterView->players[i]->location = 0;
     }
