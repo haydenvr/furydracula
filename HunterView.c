@@ -81,7 +81,7 @@ Round getRound (HunterView currentView) {
 //   MINA_HARKER    (3): Mina Harker's turn
 //   DRACULA        (4): Dracula's turn
 PlayerID getCurrentPlayer (HunterView currentView) {
-	assert(player >= 0 && player <= 4);
+	assert(currentView->Player >= 0 && currentView->Player <= 4);
 	return currentView->currentPlayer;
 }
 
