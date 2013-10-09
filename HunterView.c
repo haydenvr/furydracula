@@ -19,7 +19,7 @@ struct hunterView {
 
 struct player {
     int health;
-    LocationID location;
+    LocationID location[TRAIL_SIZE];
 };
 
 static int isAtSea(PlayerID player, HunterView hunterView);
@@ -42,7 +42,7 @@ static int isInCity(PlayerID player, HunterView hunterView);
 HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     HunterView hunterView = malloc( sizeof( struct hunterView ) );
 	//printf("the length of string is %lu\n",sizeof(*pastPlays));
-	int i = 0;
+	int i, j;
 	int player;
 	hunterView->score = 366;
 	char *locations[] = {
@@ -60,7 +60,9 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
         hunterView->players[i] = malloc (sizeof (struct player));
 		hunterView->players[i]->health = 9;
 		if (i == 4) hunterView->players[i]->health = 40;
-        hunterView->players[i]->location = -1;
+	    for (j = 0; j < TRAIL_SIZE; j++) {
+            hunterView->players[i]->location[j] = -1;
+        }
     }
 	i = 0;
 	while (pastPlays[i] != '\0') {
@@ -87,7 +89,10 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 				hunterView->players[player]->health += 3;
 				if (hunterView->players[player]->health > 9) hunterView->players[player]->health = 9;
 			}
-			hunterView->players[player]->location = z;
+			//set location array
+			for (j = TRAIL_SIZE - 1; j > 0; j--) 
+			    hunterView->players[player]->location[j] = hunterView->players[player]->location[j-1];
+			hunterView->players[player]->location[0] = z;
 			
 			i += 2;
 			if (player == PLAYER_DRACULA) {
@@ -145,7 +150,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     hunterView->currentPlayer = 0;
     hunterView->pastPlays = pastPlays;
 	
-    int j;
 	int amt_mess = (int) sizeof(messages)/sizeof(playerMessage);
 	for (i = 0; i < amt_mess; i++) {
 		for (j = 0; j < MESSAGE_SIZE-1; j++){
@@ -243,7 +247,8 @@ LocationID getLocation(HunterView currentView, PlayerID player) {
 // This would mean in the first move the player started on location 182 
 // then moved to the current location of 29
 void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_SIZE]) {
-
+    int i;
+    for (i = 0; i < TRAIL_SIZE; i++) trail[i] = currentView->player[player]->location[i];
 }
 
 //Functions that query the map to find information about connectivity
