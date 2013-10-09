@@ -109,9 +109,7 @@ int main() {
         
 	printf("Test for rail connection to self passed!\nNow testing rail connections Barcelona\n");
 	edges = connectedLocations(hv, &size,BARCELONA,PLAYER_LORD_GODALMING,1,0,1,0);
-	for (i=0; i < size; i++) printf("you can get to %d\n",edges[i]);
     assert(size == 3);
-    //assert(edges[0] == ATHENS);
     free(edges);
 	printf("Test for rail connections passed!\nCongrats, all tests passed!\n");
     disposeHunterView(hv);

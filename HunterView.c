@@ -300,26 +300,6 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
 				found = 1;
 			}
 		}
-		/*
-		if (rail == TRUE) { //note it doesn't matter if found = 1
-			//this is slightly more difficult, as the player may be able to move up to 3 cities
-			//handle 1 cities (assume this is true as rail would be false otherwise)
-			//note we are only going to consider one move in this while loop, further moves are
-			//considered after the while loop
-			
-			LocationID connected_by_rail[NUM_MAP_LOCATIONS];
-			for (j = 0; j < NUM_MAP_LOCATIONS; j++) connected_by_rail[j] = -1;
-			if (isAdjacent(g,from, i, RAIL)) {
-				if (found == 0) {
-					connected[*numLocations] = i; 
-					(*numLocations)++;
-					found = 1;
-				}
-				connected_by_rail[num_rail_con] = i;
-				num_rail_con++;
-				
-			}
-		} */
 		if ((sea == TRUE)&&(found==0)) {
 			if (isAdjacent(g,from, i, SEA)) {
 				connected[*numLocations] = i;
@@ -331,20 +311,20 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
 		i++;
 	}
 	
- 	if (rail == TRUE) { //now we consider being able to move further by train
-	//only do the check for the further cities if the condition of mod 4 is met
-			//check places within two moves
+ 	if (rail == TRUE) { 
+		//now we consider being able to move further by train
+		//only do the check for the further cities if the condition of mod 4 is met
+		//check places within two moves
 		int moves_allowed = round % 4;
 		printf("checking %d moves\n",moves_allowed);
 		LocationID connected_by_rail[NUM_MAP_LOCATIONS];
 		for (i = 0; i < NUM_MAP_LOCATIONS; i++) connected_by_rail[i] = -1;
 		canReachInN(g, from, RAIL, moves_allowed, connected_by_rail);
-		int j = 0;//, num_rail_con = 0;
+		int j = 0;
 		while (j < NUM_MAP_LOCATIONS) {
 			if (locationsFound[j] == 0) {
 				
 				if (connected_by_rail[j] == 1) {
-					printf("connected_by_rail is %d\n",j);
 					connected[*numLocations] = j;
 					(*numLocations)++;
 					locationsFound[j] = 1;
@@ -352,47 +332,11 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
 			}
 			j++;
 		}	
-		/*
-		if (moves_allowed >= 2) {
-			int a = num_rail_con, b = 0;
-			for (b = 0; b < a; b++) {
-				for	(j = 0; j < NUM_MAP_LOCATIONS; j++) {
-					if ((locationsFound[i]==0)&&(isAdjacent(g,connected_by_rail[b], i, RAIL))) {
-						connected[*numLocations] = i;
-						connected_by_rail[num_rail_con] = i;
-						locationsFound[i] = 1;
-						(*numLocations)++;
-						num_rail_con++;
-					}
-				}
-			}
-		}
-		if (moves_allowed == 3) {
-			a = num_rail_con;
-			for (b = b; b < num_rail_con; j++) {
-				for (j = 0; j < NUM_MAP_LOCATIONS; j++) {
-					if (isAdjacent(g,from, i, RAIL)) {
-						connected[*numLocations] = i;
-						connected_by_rail[num_rail_con] = i;
-						(*numLocations)++;
-					}
-				}	
-			}
-		}
-		//it's possible that a city may be added to array before i is set to that cities ID
-		//this is due to the fact that you can move more than one city at a time by rail
-		//the next few lines is to check it
-		int j = 0, num_rail_con = 0;
-		while ((j < NUM_MAP_LOCATIONS)&&(connected[j] != -1)) {
-			if (i == j) found = 1;
-			j++;
-		} */	
 	} 
 	if (locationsFound[from] == 0) {
 		connected[*numLocations] = from;
 		(*numLocations)++; 
 	}
-	printf("the amt of locations is %d\n",*numLocations);
 	return connected;
 }
 
