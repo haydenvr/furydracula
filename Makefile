@@ -1,5 +1,9 @@
-all:
-	gcc -c hunter.c HunterView.c -ljansson
+CC=gcc
+CFLAGS=-Wall -Werror -g
+
+all: 
+	$(CC) $(CFLAGS) -o testHunterView HunterView.c testHunterView.c
 
 clean:
-	rm -rf myPlayer
+	rm -rf testHunterView
+

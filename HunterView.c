@@ -3,6 +3,8 @@
 #include "game.h"
 #include "HunterView.h"
 #include "graph/Graph.h"
+
+typedef struct player *Player;
      
 struct hunterView {
 	int score;
@@ -18,7 +20,7 @@ struct player {
     LocationID location;
 };
 
-typedef struct player *Player;
+
      
 
 HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
@@ -26,10 +28,10 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     hunterView->round = 1;
     hunterView->currentPlayer = 0;
     hunterView->pastPlays = pastPlays;
-    hunterView->messages = messages;
+    //hunterView->messages = NULL; //fix me
     int i;
+	hunterView->score = 0;
     for (i = 0; i < NUM_PLAYERS; i++) {
-        hunterView->players[i]->score = 0;
         hunterView->players[i]->health = 0;
         hunterView->players[i]->location = 0;
     }
@@ -57,12 +59,12 @@ int getScore(HunterView currentView) {
 	return currentView->score;
 }
 
-int getHealth(HunterView currentView, PlayerID) {
-	return currentView->players[PlayerID]->health;
+int getHealth(HunterView currentView, PlayerID player) {
+	return currentView->players[player]->health;
 }
 
-LocationID getLocation(HunterView currentView, PlayerID) {
-	return currentView->players[PlayerID]->location;
+LocationID getLocation(HunterView currentView, PlayerID player) {
+	return currentView->players[player]->location;
 }
 
 void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_SIZE]) {
@@ -72,5 +74,6 @@ void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_
 LocationID * connectedLocations(HunterView currentView, int * numLocations, LocationID from, 
                               PlayerID player, Round round, int road, int rail, int sea) {
 	//this should come from graph file. 
+	return NULL;
 }
 
