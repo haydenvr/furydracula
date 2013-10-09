@@ -63,11 +63,17 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 				perror("Something is wrong with pastPlays\n");
 				abort();
 			}
+			
 			i++;
 			int z = 0;
-			char *a = astrcat(pastPlays[i], pastPlays[i+1])
-			while (z < NUM_LOCATIONS && !strcmp(locations[z],)) z++;
+			
+			char *a = pastPlays[i];
+			strcat(&a, &pastPlays[i+1]);
+			printf("HEY ME SUCCESS\n");
+			while (z < NUM_LOCATIONS && !strcmp(locations[z],a)) z++;
+			
 			hunterView->players[player]->location = z;
+			
 			i += 2;
 			i+= 5; //test purposes
 			printf("%d\n",player);
