@@ -89,7 +89,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 			while (z < NUM_LOCATIONS && (locations[z][0] != a[0] || locations[z][1] != a[1])) z++;
             
             //maturing vampires
-            if (hunterView->vampire[TRAIL_SIZE - 1]) hunterView->score -= SCORE_LOSS_VAMPIRE_MATURES;
+            //if (hunterView->vampire[TRAIL_SIZE - 1]) hunterView->score -= SCORE_LOSS_VAMPIRE_MATURES;
             
 			//move array along 1
 		    for (j = TRAIL_SIZE - 1; j > 0; j--) {
