@@ -140,7 +140,6 @@ void test2() {
         
 	printf("Test for rail connection to self passed!\nNow testing rail connections Barcelona\n");
 	edges = connectedLocations(hv, &size,BARCELONA,PLAYER_LORD_GODALMING,1,0,1,0);
-    printf("%d\n", size);
     assert(size == 3);
     free(edges);
 	printf("Test for rail connections passed!\nCongrats, all tests passed!\n");
@@ -254,38 +253,5 @@ void haydenTestFunc() {
 }
 
 void julianTestFunc() {
-    printf("Test teleport\n");
-	playerMessage messages[] = {};
-    HunterView hv = newHunterView("GSZ.... SRO.... HSNT... MFL.... DTP..V.", messages);
-	assert(getCurrentPlayer(hv) == PLAYER_LORD_GODALMING);
-	assert(getRound(hv) == 1);
-	assert(getLocation(hv, PLAYER_LORD_GODALMING) == SZEGED);
-	assert(getLocation(hv, PLAYER_DR_SEWARD) == ROME);
-	assert(getLocation(hv, PLAYER_VAN_HELSING) == SANTANDER);
-	assert(getLocation(hv, PLAYER_MINA_HARKER) == FLORENCE);
-    assert(getLocation(hv, PLAYER_DRACULA) == TELEPORT);
-	assert(getHealth(hv,PLAYER_VAN_HELSING) == GAME_START_HUNTER_LIFE_POINTS- LIFE_LOSS_TRAP_ENCOUNTER);
-	assert(getScore(hv) == GAME_START_SCORE - SCORE_LOSS_VAMPIRE_MATURES - SCORE_LOSS_DRACULA_TURN);
-	printf("passed test\n");
-    disposeHunterView(hv);
-        
-    printf("Test hide\n");
-    hv = newHunterView("GSZ.... SRO.... HSNT... MFL.... DHI..V.", messages);
-	assert(getCurrentPlayer(hv) == PLAYER_LORD_GODALMING);
-	assert(getRound(hv) == 1);
-	assert(getLocation(hv, PLAYER_LORD_GODALMING) == SZEGED);
-	assert(getLocation(hv, PLAYER_DR_SEWARD) == ROME);
-	assert(getLocation(hv, PLAYER_VAN_HELSING) == SANTANDER);
-	assert(getLocation(hv, PLAYER_MINA_HARKER) == FLORENCE);
-    assert(getLocation(hv, PLAYER_DRACULA) == HIDE);
-	assert(getHealth(hv,PLAYER_VAN_HELSING) == GAME_START_HUNTER_LIFE_POINTS- LIFE_LOSS_TRAP_ENCOUNTER);
-	assert(getScore(hv) == GAME_START_SCORE - SCORE_LOSS_VAMPIRE_MATURES - SCORE_LOSS_DRACULA_TURN);
-	printf("passed test\n");
-    disposeHunterView(hv);
-    
-    printf("Test dispose\n");
-    hv = newHunterView("GSZ.... SRO.... HSNT... MFL.... DHI..V.", messages);
-    assert(hv != NULL);
-    disposeHunterView(hv);
-	printf("passed test\n");
+
 }

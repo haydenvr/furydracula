@@ -24,7 +24,6 @@ struct hunterView {
 struct player {
     int health;
     LocationID location[TRAIL_SIZE];
-    int hospital;
 };
 
 static int isAtSea(LocationID location, HunterView hunterView);
@@ -64,7 +63,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
         hunterView->players[i] = malloc(sizeof(struct player));
 		hunterView->players[i]->health = GAME_START_HUNTER_LIFE_POINTS;
 		if (i == 4) hunterView->players[i]->health = GAME_START_BLOOD_POINTS;
-        hunterView->players[i]->hospital = FALSE;
 	    for (j = 0; j < TRAIL_SIZE; j++) {
             hunterView->players[i]->location[j] = -1;
 		    hunterView->vampire[i] = 0;
@@ -102,9 +100,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
             
             //set location array
 		    hunterView->players[player]->location[0] = z;
-            
-            //remove hospital state
-            if (hunterView->players[player]->hospital) hunterView->players[player]->hospital = FALSE;
             
 			if ((z == hunterView->players[player]->location[1]) && 
 			(player != PLAYER_DRACULA) && isInCity(player,hunterView)) {
@@ -160,7 +155,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 					//teleport to hospital
 					hunterView->score -= SCORE_LOSS_HUNTER_HOSPITAL;
 					hunterView->players[player]->health = GAME_START_HUNTER_LIFE_POINTS;
-                    hunterView->players[player]->hospital = TRUE;
 				}
 			}
 			i++; //to skip trailing dot
@@ -187,7 +181,6 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 // this function frees all memory previously allocated for the HunterView
 // toBeDeleted. toBeDeleted should not be accessed after the call.
 void disposeHunterView( HunterView toBeDeleted ) {
-    assert(toBeDeleted != NULL);
     free( toBeDeleted );
 }
 
@@ -245,8 +238,7 @@ int getHealth(HunterView currentView, PlayerID player) {
 //   TELEPORT         if Dracula apparated back to Castle Dracula
 //   LOCATION_UNKNOWN if the round number is 0
 LocationID getLocation(HunterView currentView, PlayerID player) {
-    if (currentView->players[player]->hospital) return ST_JOSEPH_AND_ST_MARYS;
-    return currentView->players[player]->location[0];
+	return currentView->players[player]->location[0];
 }
 
 //Functions that return information about the history of the game
@@ -295,67 +287,67 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
 	//conditions that need to be considered
 	
 	LocationID to_search = NUM_MAP_LOCATIONS;
-	if (round % 4 == FALSE) rail = FALSE;
+	if (round % 4 == 0) rail = FALSE;
 	if (player == PLAYER_DRACULA) rail = FALSE;
-	if (!sea) to_search = ZURICH + 1; //Zurich is the last city
+	if (sea == FALSE) to_search = ZURICH + 1; //Zurich is the last city
 
 	Graph g = newGraph(); //our graph to check
-	int i;
+	int i = 0;
 	*numLocations = 0;
 	LocationID *connected;//[NUM_MAP_LOCATIONS];
 	connected = malloc(sizeof(LocationID)*NUM_MAP_LOCATIONS);
 	int locationsFound[NUM_MAP_LOCATIONS]; //using this later
 	for (i = 0; i < NUM_MAP_LOCATIONS; i++) {
 		connected[i] = -1;
-		locationsFound[i] = FALSE;
+		locationsFound[i] = 0;
 	}
 	i = 0;
 	int found;
 	while (i < to_search) {
-		found = FALSE;
+		found = 0;
 
-		if (road) {
+		if (road == TRUE) {
 			//don't need to check for duplicates here, all connections will be uninitialized
 			if (isAdjacent(g,from, i, ROAD)) {
 				connected[*numLocations] = i;
 				(*numLocations)++;
-				found = TRUE;
+				found = 1;
 			}
 		}
-		if ((sea)&&(!found)) {
+		if ((sea == TRUE)&&(found==0)) {
 			if (isAdjacent(g,from, i, SEA)) {
 				connected[*numLocations] = i;
 				(*numLocations)++;
-				found = TRUE;
+				found = 1;
 			}
 		}
-		if (found) locationsFound[i] = TRUE; 
+		if (found == TRUE) locationsFound[i] = 1; 
 		i++;
 	}
 	
- 	if (rail) { 
+ 	if (rail == TRUE) { 
 		//now we consider being able to move further by train
 		//only do the check for the further cities if the condition of mod 4 is met
 		//check places within two moves
 		int moves_allowed = round % 4;
-		//printf("checking %d moves\n",moves_allowed);
+		printf("checking %d moves\n",moves_allowed);
 		LocationID connected_by_rail[NUM_MAP_LOCATIONS];
 		for (i = 0; i < NUM_MAP_LOCATIONS; i++) connected_by_rail[i] = -1;
 		canReachInN(g, from, RAIL, moves_allowed, connected_by_rail);
 		int j = 0;
 		while (j < NUM_MAP_LOCATIONS) {
-			if (!locationsFound[j]) {
+			if (locationsFound[j] == 0) {
 				
-				if (connected_by_rail[j]) {
+				if (connected_by_rail[j] == 1) {
 					connected[*numLocations] = j;
 					(*numLocations)++;
-					locationsFound[j] = TRUE;
+					locationsFound[j] = 1;
 				}
 			}
 			j++;
 		}	
 	} 
-	if (!locationsFound[from]) {
+	if (locationsFound[from] == 0) {
 		connected[*numLocations] = from;
 		(*numLocations)++; 
 	}
