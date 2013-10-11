@@ -39,7 +39,7 @@ static void QueueJoin(Queue,Item); // add item on queue
 static Item QueueLeave(Queue); // remove item from queue
 static int QueueIsEmpty(Queue); // check for no items
 
-#include "../connections_v1.1.h"
+#include "../connections_v1.2.h"
 
 Graph newGraph() { 
     int i; 
