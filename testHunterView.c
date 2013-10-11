@@ -178,7 +178,7 @@ void GroupTest1() {
 
 	printf("Test for encountering Dracula and hunter history\n");
         playerMessage messages3[] = {"Hello","Rubbish","Stuff","","Mwahahah","Aha!"};
-	hv = newHunterView("GST.... SAO.... HCD.... MAO.... DGE.... GGED...", messages3);
+	hv = newHunterView("GGA.... SAO.... HCD.... MNS.... DGE.... GGED...", messages3);
 	assert(getLocation(hv,PLAYER_DRACULA) == GENEVA);
 	assert(getHealth(hv, PLAYER_LORD_GODALMING) == 5);
 	assert(getHealth(hv,PLAYER_DRACULA) == 30);
@@ -189,11 +189,15 @@ void GroupTest1() {
         assert(history[1] == UNKNOWN_LOCATION);
         getHistory(hv, PLAYER_LORD_GODALMING,history);
         assert(history[0] == GENEVA);
-        assert(history[1] == STRASBOURG);
+        assert(history[1] == GALATZ);
         assert(history[2] == UNKNOWN_LOCATION);
         getHistory(hv,PLAYER_DR_SEWARD,history);
         assert(history[0] == ATLANTIC_OCEAN);
         assert(history[1] == UNKNOWN_LOCATION);
+		getHistory(hv, PLAYER_MINA_HARKER, history);
+		assert(history[0] == NORTH_SEA);
+		printf("the score is %d\n",getScore(hv));
+		assert(getScore(hv) == GAME_START_SCORE - SCORE_LOSS_DRACULA_TURN);
         printf("passed\n");        
 	disposeHunterView(hv);
 
