@@ -24,6 +24,7 @@ struct hunterView {
 struct player {
     int health;
     LocationID location[TRAIL_SIZE];
+    int hospital;
 };
 
 static int isAtSea(LocationID location, HunterView hunterView);
@@ -63,6 +64,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
         hunterView->players[i] = malloc(sizeof(struct player));
 		hunterView->players[i]->health = GAME_START_HUNTER_LIFE_POINTS;
 		if (i == 4) hunterView->players[i]->health = GAME_START_BLOOD_POINTS;
+        hunterView->players[i]->hospital = FALSE;
 	    for (j = 0; j < TRAIL_SIZE; j++) {
             hunterView->players[i]->location[j] = -1;
 		    hunterView->vampire[i] = 0;
@@ -100,6 +102,9 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
             
             //set location array
 		    hunterView->players[player]->location[0] = z;
+            
+            //remove hospital state
+            if (hunterView->players[player]->hospital) hunterView->players[player]->hospital = FALSE;
             
 			if ((z == hunterView->players[player]->location[1]) && 
 			(player != PLAYER_DRACULA) && isInCity(player,hunterView)) {
@@ -155,6 +160,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 					//teleport to hospital
 					hunterView->score -= SCORE_LOSS_HUNTER_HOSPITAL;
 					hunterView->players[player]->health = GAME_START_HUNTER_LIFE_POINTS;
+                    hunterView->players[player]->hospital = TRUE;
 				}
 			}
 			i++; //to skip trailing dot
@@ -238,7 +244,8 @@ int getHealth(HunterView currentView, PlayerID player) {
 //   TELEPORT         if Dracula apparated back to Castle Dracula
 //   LOCATION_UNKNOWN if the round number is 0
 LocationID getLocation(HunterView currentView, PlayerID player) {
-	return currentView->players[player]->location[0];
+    if (currentView->players[player]->hospital) return ST_JOSEPH_AND_ST_MARYS;
+    return currentView->players[player]->location[0];
 }
 
 //Functions that return information about the history of the game
