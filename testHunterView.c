@@ -219,7 +219,7 @@ void GroupTest1() {
 	int seen[MAX_LOCATION], *edges;
 	hv = newHunterView("", messages);	
 	
-        int size; /*
+        int size; 
 	edges = connectedLocations(hv,&size, GALATZ,PLAYER_LORD_GODALMING,0,1,0,0);
 	memset(seen, 0, MAX_LOCATION*sizeof(int));
 	for (i = 0; i< size ; i++) {
@@ -234,7 +234,7 @@ void GroupTest1() {
 	edges = connectedLocations(hv, &size,ATHENS,PLAYER_LORD_GODALMING,0,0,1,0);
         assert(size == 1);
         assert(edges[0] == ATHENS);
-        free(edges); */
+        free(edges); 
 	printf("Test for rail connection to self passed!\nNow testing random connections!\n");
     edges = connectedLocations(hv, &size,NANTES,PLAYER_LORD_GODALMING,0,0,1,0);
 	assert(size == 1);
