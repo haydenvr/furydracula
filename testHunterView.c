@@ -10,17 +10,15 @@
 
 void test1();
 void test2();
-void haydenTestFunc();
-void julianTestFunc();
+void GroupTest1();
+void GroupTest2();
 
 int main(int argc, char * argv[]) {
     test1();
     test2();
-    printf("Testing with Hayden's tests\n");
-    haydenTestFunc();
-	printf("Passed Hayden's tests!\nNow testing with Julian's tests\n");
-	julianTestFunc();
-	printf("Passed Julian's tests!\nCongrats, all tests passed!\n");
+    GroupTest1();
+	GroupTest2();
+	printf("Congrats, all tests passed!\n");
 	return 0;
 }
 
@@ -147,7 +145,7 @@ void test2() {
     disposeHunterView(hv);
 }
 
-void haydenTestFunc() {
+void GroupTest1() {
 	int i;
 	playerMessage messages[] = {};
 	printf("Testing two moves in round 0\n");
@@ -253,7 +251,7 @@ void haydenTestFunc() {
     disposeHunterView(hv);
 }
 
-void julianTestFunc() {
+void GroupTest2() {
     printf("Test teleport\n");
 	playerMessage messages[] = {};
     HunterView hv = newHunterView("GSZ.... SRO.... HSNT... MFL.... DTP..V.", messages);
@@ -284,8 +282,22 @@ void julianTestFunc() {
     disposeHunterView(hv);
     
     printf("Test dispose\n");
-    hv = newHunterView("GSZ.... SRO.... HSNT... MFL.... DHI..V.", messages);
+    hv = newHunterView("GSZD... SRO.... HSNT... MFL.... DHI..V.", messages);
     assert(hv != NULL);
     disposeHunterView(hv);
 	printf("passed test\n");
+    
+    playerMessage messages2[] = {"Hello","Rubbish","Stuff","","Mwahahah"};
+	printf("Test for dracula damage function\n");
+	hv = newHunterView("GSTD... SNA.... HZU.... MBB.... DS?....", messages2);
+	assert(getCurrentPlayer(hv) == PLAYER_LORD_GODALMING);
+	assert(getRound(hv) == 1);
+	assert(getLocation(hv, PLAYER_LORD_GODALMING) == STRASBOURG);
+	assert(getLocation(hv, PLAYER_DR_SEWARD) == NANTES);
+	assert(getLocation(hv, PLAYER_VAN_HELSING) == ZURICH);
+	assert(getLocation(hv, PLAYER_MINA_HARKER) == BAY_OF_BISCAY);
+    assert(getLocation(hv, PLAYER_DRACULA) == SEA_UNKNOWN);
+	assert(getHealth(hv,PLAYER_DRACULA) == GAME_START_BLOOD_POINTS - LIFE_LOSS_HUNTER_ENCOUNTER - LIFE_LOSS_SEA);
+	printf("passed\n");
+    disposeHunterView(hv);
 }
