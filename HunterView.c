@@ -299,7 +299,8 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
 	//conditions that need to be considered
 	
 	LocationID to_search = NUM_MAP_LOCATIONS;
-	if (!(round % 4)) rail = FALSE;
+	int moves_allowed = round % 4;
+	if (!moves_allowed) rail = FALSE;
 	if (player == PLAYER_DRACULA) rail = FALSE;
 	if (!sea) to_search = ZURICH + 1; //Zurich is the last city
 
@@ -341,8 +342,6 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
 		//now we consider being able to move further by train
 		//only do the check for the further cities if the condition of mod 4 is met
 		//check places within two moves
-		int moves_allowed = round % 4;
-		//printf("checking %d moves\n",moves_allowed);
 		LocationID connected_by_rail[NUM_MAP_LOCATIONS];
 		for (i = 0; i < NUM_MAP_LOCATIONS; i++) connected_by_rail[i] = FALSE;
 		canReachInN(g, from, RAIL, moves_allowed, connected_by_rail);
