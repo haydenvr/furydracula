@@ -291,11 +291,15 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
                               PlayerID player, Round round, int road, int rail, int sea) {
 	//this should come from graph file. 
 	//this function alters the value pointed to be the pointer numLocations
-	//TODO
+    
+    assert(road == FALSE || road == TRUE);
+    assert(rail == FALSE || rail == TRUE);
+    assert(sea == FALSE || sea == TRUE);    
+    
 	//conditions that need to be considered
 	
 	LocationID to_search = NUM_MAP_LOCATIONS;
-	if (round % 4 == FALSE) rail = FALSE;
+	if (!(round % 4)) rail = FALSE;
 	if (player == PLAYER_DRACULA) rail = FALSE;
 	if (!sea) to_search = ZURICH + 1; //Zurich is the last city
 
@@ -340,7 +344,7 @@ LocationID * connectedLocations(HunterView currentView, int * numLocations, Loca
 		int moves_allowed = round % 4;
 		//printf("checking %d moves\n",moves_allowed);
 		LocationID connected_by_rail[NUM_MAP_LOCATIONS];
-		for (i = 0; i < NUM_MAP_LOCATIONS; i++) connected_by_rail[i] = -1;
+		for (i = 0; i < NUM_MAP_LOCATIONS; i++) connected_by_rail[i] = FALSE;
 		canReachInN(g, from, RAIL, moves_allowed, connected_by_rail);
 		int j = 0;
 		while (j < NUM_MAP_LOCATIONS) {
