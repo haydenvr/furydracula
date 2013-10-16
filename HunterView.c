@@ -112,7 +112,7 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 				if (hunterView->players[player]->health > GAME_START_HUNTER_LIFE_POINTS) 
 				    hunterView->players[player]->health = GAME_START_HUNTER_LIFE_POINTS;
 			}
-			if ((z == TELEPORT) && (player == PLAYER_DRACULA)) 
+			if ((z == TELEPORT || z == CASTLE_DRACULA) && (player == PLAYER_DRACULA)) 
 			    hunterView->players[player]->health += LIFE_GAIN_CASTLE_DRACULA;
 			
 			i += 2;
