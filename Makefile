@@ -11,7 +11,7 @@ test4:
 	$(CC) $(CFLAGS) -o testHunterView4 HunterView.c testHunterView4.c Graph.c
 
 testAi:
-	$(CC) $(CFLAGS) -o testHunter HunterView.c testHunter1.c hunter.c Graph.c
+	$(CC) $(CFLAGS) -o testHunter HunterView.c testHunter.c hunter.c Graph.c
 
 graphT:
 	$(CC) $(CFLAGS) -o testGraph HunterView.c testHunterView2.c Graph.c

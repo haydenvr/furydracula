@@ -23,13 +23,13 @@ void decideMove (HunterView gameState) {
     	LocationID move = getLocation(gameState, id);
 	srand (time(NULL));
 	if (id == PLAYER_LORD_GODALMING ) {
-        	if (round == 0) move = GALWAY;
+        	move = CASTLE_DRACULA;
 	} else if (id == PLAYER_DR_SEWARD) {
-        if (round == 0) move = GALATZ;
+        if (round == 0) move = BELGRADE;
         else if (getLocation(gameState, id) == GALATZ) move = KLAUSENBURG;
         else move = GALATZ;
 	} else if (id == PLAYER_VAN_HELSING) {
-		if (round == 0) move = ATHENS;
+		if (round == 0) move = STRASBOURG;
 		else {
 			LocationID *adj = connectedLocations(gameState, &amtLocs, getLocation(gameState,id), id, round, 1, 0, 0);
 			move = adj[rand() % amtLocs];
