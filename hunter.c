@@ -41,8 +41,7 @@ void decideMove (HunterView gameState) {
     
     //continue camping if no other current campers
     if (move == CASTLE_DRACULA) {
-        if (!camper) msg = "camping";
-        else move = KLAUSENBURG;
+        if (camper) move = KLAUSENBURG;
     } else {
         if (!camper) {
             //if no camper and hunter is shortest dist to castle dracula, move towards castle dracula
@@ -53,8 +52,7 @@ void decideMove (HunterView gameState) {
                 hunterDist[i] = findShortestPath(gameState, getLocation(gameState, i), CASTLE_DRACULA, path, ANY);
                 if (hunterDist[closestHunter] > hunterDist[i] || hunterDist[closestHunter] = -1) adj = path[1];
             }
-        }
-        
+        }       
         //TODO - other moves
     }
 /*
@@ -62,6 +60,6 @@ void decideMove (HunterView gameState) {
 			LocationID *adj = connectedLocations(gameState, &amtLocs, getLocation(gameState,id), id, round, 1, 0, 0);
 			move = adj[rand() % amtLocs];
 */
-	registerBestPlay(locations[move], msg );
+	registerBestPlay(locations[move], msg);
 }
 
