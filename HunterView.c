@@ -4,7 +4,7 @@
 #include <string.h>
 #include "game.h"
 #include "HunterView.h"
-#include "graph/Graph.h"
+#include "Graph.h"
 
 #define CHARS_PER_ROUND 40
 #define CHARS_PER_TURN  8

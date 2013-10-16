@@ -1,18 +1,13 @@
 CC=gcc
 CFLAGS=-Wall -Werror -g
+OBJS=graphTest.o Graph.o Queue.o
 
-test1: 
-	$(CC) $(CFLAGS) -o testHunterView HunterView.c testHunterView.c graph/Graph.c
+graphTest : $(OBJS)
+	$(CC) -o graphTest $(OBJS)
 
-test3: 
-	$(CC) $(CFLAGS) -o testHunterView3 HunterView.c testHunterView3.c graph/Graph.c
+graphTest.o : graphTest.c Graph.h
+Graph.o : Graph.c Graph.h
+Queue.o : Queue.c Queue.h Item.h
 
-test4:
-	$(CC) $(CFLAGS) -o testHunterView4 HunterView.c testHunterView4.c graph/Graph.c
-
-graphT:
-	$(CC) $(CFLAGS) -o testGraph HunterView.c testHunterView2.c graph/Graph.c
-
-clean:
-	rm -rf testHunterView testHunterView2 testHunterView3 testGraph
-
+clean :
+	rm -f graphTest $(OBJS) core *.dSYM

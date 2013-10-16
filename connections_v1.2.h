@@ -1,4 +1,4 @@
-#include "graph/Graph.h"
+#include "Graph.h"
 
 static void makeMap(Graph g){
 
