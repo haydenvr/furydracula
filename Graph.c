@@ -20,6 +20,7 @@ struct GraphRep {
 typedef struct QueueNode {
 	Item value;
 	struct QueueNode *next;
+	Item dist;
 } QueueNode;
 
 typedef struct QueueRep {
@@ -27,6 +28,9 @@ typedef struct QueueRep {
 	QueueNode *tail;  // ptr to last node
 } QueueRep;
 
+typedef struct QueueNode *Node;
+
+static int dijkstras (Graph g,Location src, Location dest,Location path[],Transport type);
 
 Graph newGraph() { 
     int i; 
@@ -161,18 +165,62 @@ void canReachInN(Graph g, Location start, Transport type, int n, int locs[]){
     }
     st[start] = start;
     locs[start] = 1;
-    QueueJoin(q, start);
+    QueueJoin(q, start,0);
     while (!QueueIsEmpty(q)) {
-        e = QueueLeave(q);
+        e = QueueLeave(q,0);
         for (tmp = g->connections[e]; tmp != NULL; tmp = tmp->next) {
             if (st[tmp->v] == -1 && dist(st, e) < n && ((tmp->type == type || type == ANY))) {
                 st[tmp->v] = e;
-                QueueJoin(q, tmp->v);
+                QueueJoin(q, tmp->v, 0);
                 locs[tmp->v] = 1;
             }  
         }
     }
     dropQueue(q);
+}
+
+int findShortestPath(Graph g,Location src, Location dest,Location path[],Transport type){
+	int a = dijkstras(g, src, dest, path, type);
+	if (a != -1) return a;
+	//function only checks in one direction, so need to check both in the case that the normal
+	//direction doesn't work
+	Location tmp[NUM_MAP_LOCATIONS];
+	a = dijkstras (g, dest, src, tmp, type);
+	int i, b = 0;
+    for(i = a-1; i >= 0; i--){
+               path[b] = tmp[i];
+               b++;
+    }
+	return a;
+}
+	
+static int dijkstras (Graph g,Location src, Location dest,Location path[],Transport type){
+	int v, w, alt, dist[g->nV], visited[g->nV], maxWT = 9999; //st visited, wt dist //,
+	Queue q = newQueue();;
+	for (v = 0; v < g->nV; v++)
+		if (v == src) { dist[v] = 0; QueueJoin(q,v,0); visited[v] = -1; }
+		else { dist[v] = maxWT; QueueJoin(q,v,maxWT); visited[v] = -1;  }
+	while (!QueueIsEmpty(q)) {
+		// get vertex with lowest weight
+		v = QueueLeaveMin(q);
+		if (dist[v] != maxWT) {
+			for (w = 0; w < g->nV; w++) {
+				if (isAdjacent(g, v, w, type)) {
+				    //printf("hi this is adjacent %d to %d\n",v,w);
+					alt = dist[v] + 1;
+					if (alt < dist[w]) { dist[w] = alt; visited[w] = v; } //
+					//QueueJoin(q,w,dist[w]);
+				}
+				
+			}
+		}
+	}
+	v = dist[dest]; 
+	int curr = dest;
+	if (v == maxWT) return -1;
+	while (v >= 0) { path[v] = curr; curr = visited[curr]; v--; } 
+	dropQueue(q);
+	return dist[dest] + 1;
 }
 
 //
@@ -188,6 +236,52 @@ Queue newQueue()
 	q->head = NULL;
 	q->tail = NULL;
 	return q;
+}
+
+//find smallest item in Queue, remove it, and return it's value
+Item QueueLeaveMin(Queue Q) {
+	int i = 1,n = 0, currVal;
+	Node curr = Q->head;
+	currVal = curr->dist;
+	curr = curr->next;
+	while (curr != NULL) {
+		if (curr->dist < currVal) { currVal = curr->dist; n = i; }
+		i++;
+		curr = curr->next;
+	}
+	return QueueLeave(Q, n);
+}
+
+// remove nth item from front of Queue
+Item QueueLeave(Queue Q, int n)
+{
+	assert(Q != NULL);
+	assert(Q->head != NULL);
+	Item it;
+    Node old, prev;
+	if (n == 0) {
+		it = Q->head->value;
+		old = Q->head;
+		Q->head = old->next;
+		if (Q->head == NULL)
+			Q->tail = NULL;
+	} else {
+		int i = 0;
+		old = Q->head;
+        prev = NULL;
+		while ((i < n)&&(old != NULL)) {
+			prev = old;			
+			old = old->next;
+			i++;
+		}
+		if (old == NULL) return -1;
+		prev->next = old->next;
+		it = old->value;
+		if (prev->next == NULL) Q->tail = prev;
+	}
+	//printf("the valuuususus %d\n",old->dist);
+	free(old);
+	return it;
 }
 
 // free memory used by Queue
@@ -207,32 +301,19 @@ void dropQueue(Queue Q)
 }
 
 // add item at end of Queue 
-void QueueJoin(Queue Q, Item it)
+void QueueJoin(Queue Q, Item it, Item dist)
 {
 	assert(Q != NULL);
-	QueueNode *new = malloc(sizeof(QueueNode));
+	Node new = malloc(sizeof(QueueNode));
 	assert(new != NULL);
 	new->value = it;
+	new->dist = dist;
 	new->next = NULL;
 	if (Q->head == NULL)
 		Q->head = new;
 	if (Q->tail != NULL)
 		Q->tail->next = new;
 	Q->tail = new;
-}
-
-// remove item from front of Queue
-Item QueueLeave(Queue Q)
-{
-	assert(Q != NULL);
-	assert(Q->head != NULL);
-	Item it = Q->head->value;
-	QueueNode *old = Q->head;
-	Q->head = old->next;
-	if (Q->head == NULL)
-		Q->tail = NULL;
-	free(old);
-	return it;
 }
 
 // check for no items

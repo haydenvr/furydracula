@@ -46,8 +46,10 @@ void makeMap(Graph g);
 void addLink(Graph g, Location start, Location end, Transport type);
 Queue newQueue(); // create new empty queue
 void dropQueue(Queue); // free memory used by queue
-void QueueJoin(Queue,Item); // add item on queue
-Item QueueLeave(Queue); // remove item from queue
+void QueueJoin(Queue Q, Item it, Item dist); // add item on queue
+Item QueueLeave(Queue, int); // remove item from queue
 int QueueIsEmpty(Queue); // check for no items
+Item QueueLeaveMin(Queue Q); //return smallest val in queue
+int findShortestPath(Graph g,Location src, Location dest,Location path[],Transport type);
 
 #endif

@@ -1,6 +1,7 @@
 #include "game.h"
 #include "HunterView.h"
 #include "hunter.h"
+#include "Graph.h"
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
