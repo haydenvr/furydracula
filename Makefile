@@ -1,61 +1,18 @@
-|| AL || Alicante ||
-|| AM || Amsterdam ||
-|| AT || Athens ||
-|| BA || Barcelona ||
-|| BI || Bari ||
-|| BE || Belgrade ||
-|| BR || Berlin ||
-|| BO || Bordeaux ||
-|| BU || Brussels ||
-|| BC || Bucharest ||
-|| BD || Budapest ||
-|| CA || Cadiz ||
-|| CG || Cagliari ||
-|| CD || Castle Dracula ||
-|| CF || Clermont Ferrand ||
-|| CO || Cologne ||
-|| CN || Constanta ||
-|| DU || Dublin ||
-|| ED || Edinburgh ||
-|| FL || Florence ||
-|| FR || Frankfurt ||
-|| GA || Galatz ||
-|| GW || Galway ||
-|| GE || Geneva ||
-|| GO || Genoa ||
-|| GR || Granada ||
-|| HA || Hamburg ||
-|| JM || St Joseph & St Mary's ||
-|| KL || Klausenburg ||
-|| LE || Le Havre ||
-|| LI || Leipzig ||
-|| LS || Lisbon ||
-|| LV || Liverpool ||
-|| LO || London ||
-|| MA || Madrid ||
-|| MN || Manchester ||
-|| MR || Marseilles ||
-|| MI || Milan ||
-|| MU || Munich ||
-|| NA || Nantes ||
-|| NP || Naples ||
-|| NU || Nuremburg ||
-|| PA || Paris ||
-|| PL || Plymouth ||
-|| PR || Prague ||
-|| RO || Rome ||
-|| SA || Salonica ||
-|| SN || Santander ||
-|| SR || Saragossa ||
-|| SJ || Sarajevo ||
-|| SO || Sofia ||
-|| ST || Strasbourg ||
-|| SW || Swansea ||
-|| SZ || Szeged ||
-|| TO || Toulouse ||
-|| VA || Valona ||
-|| VR || Varna ||
-|| VE || Venice ||
-|| VI || Vienna ||
-|| ZA || Zagreb ||
-|| ZU || Zurich ||
+CC=gcc
+CFLAGS=-Wall -Werror -g
+
+test1: 
+	$(CC) $(CFLAGS) -o testHunterView HunterView.c testHunterView.c graph/Graph.c
+
+test3: 
+	$(CC) $(CFLAGS) -o testHunterView3 HunterView.c testHunterView3.c graph/Graph.c
+
+test4:
+	$(CC) $(CFLAGS) -o testHunterView4 HunterView.c testHunterView4.c graph/Graph.c
+
+graphT:
+	$(CC) $(CFLAGS) -o testGraph HunterView.c testHunterView2.c graph/Graph.c
+
+clean:
+	rm -rf testHunterView testHunterView2 testHunterView3 testGraph
+
