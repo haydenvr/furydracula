@@ -43,8 +43,8 @@ int moveIn(char * locs[], int size){
 }
 
 void testMovesRound1(void){
+     /*
       HunterView gameState;
-     
     {
        playerMessage messages[7] = {""};
        printf("Test: Round 1 hunter 2 moves from AT\n");
@@ -66,13 +66,13 @@ void testMovesRound1(void){
        assert(moveIn(possibleLocations,7));
        printf("Test passed\n");
    }
-
+*/
 
 }
 
 void testInitialMoves(void){
+/*
    HunterView gameState;
-
    {
        playerMessage messages[] = {};
        printf("Test 1: Round 0 hunter 0 in GW\n");   
@@ -112,6 +112,7 @@ void testInitialMoves(void){
        assert(strcmp(latestPlay,"MA") == 0);
        printf("Test passed\n");
    }
+   */
 }
 
 // Saves characters from play (and appends a terminator)
