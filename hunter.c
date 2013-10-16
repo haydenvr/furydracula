@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#define NUM_HUNTERS (NUM_PLAYERS - 1)
 
 void decideMove (HunterView gameState) {
 	char *locations[] = {
@@ -28,6 +29,17 @@ void decideMove (HunterView gameState) {
 	    else if (id == PLAYER_DR_SEWARD)  move = BELGRADE;
 	    else if (id == PLAYER_VAN_HELSING) move = STRASBOURG;
 	    else if (id == PLAYER_MINA_HARKER) move = MADRID;
+    }
+    if (move == CASTLE_DRACULA) msg = "camping";
+    else {
+        int camper = 0, i;
+        for (i = 0; i < NUM_HUNTERS; i++) if (getLocation(gameState, i) == CASTLE_DRACULA) camper = 1;
+        if (!camper) {
+            //if hunter is shortest dist to castle dracula, move towards castle dracula
+            //TODO
+        }
+        
+        //TODO - other moves
     }
 /*
 			LocationID *adj = connectedLocations(gameState, &amtLocs, getLocation(gameState,id), id, round, 1, 0, 0);
