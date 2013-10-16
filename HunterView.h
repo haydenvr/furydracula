@@ -148,8 +148,8 @@ void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_
 //Your function must take into account that dracula can't move to the hospital or travel by rail
 //but need not take into account draculas trail
 //The destination 'from' should be included.
-LocationID * connectedLocations(HunterView currentView, int * numLocations, LocationID from, 
-                              PlayerID player, Round round, int road, int rail, int sea);
+LocationID * connectedLocations(int * numLocations, LocationID from, 
+                              PlayerID player, Round round, int type);
 
 
 #endif

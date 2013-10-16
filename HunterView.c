@@ -287,14 +287,13 @@ void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_
 //Your function must take into account that dracula can't move to the hospital or travel by rail
 //but need not take into account draculas trail
 //The destination 'from' should be included.
-LocationID * connectedLocations(HunterView currentView, int * numLocations, LocationID from, 
-                              PlayerID player, Round round, int road, int rail, int sea) {
-	//this should come from graph file. 
-	//this function alters the value pointed to be the pointer numLocations
-    
-    assert(road == FALSE || road == TRUE);
-    assert(rail == FALSE || rail == TRUE);
-    assert(sea == FALSE || sea == TRUE);    
+LocationID * connectedLocations(int * numLocations, LocationID from, 
+                              PlayerID player, Round round, int type) {
+	int road = FALSE, rail = FALSE, sea FALSE;
+	if (type == 0) road = TRUE;
+	if (type == 1) rail = TRUE;
+	if (type == 2) sea = TRUE;
+	if (type == 3) { road = TRUE; rail = TRUE; sea = TRUE; }  
     
 	//conditions that need to be considered
 	

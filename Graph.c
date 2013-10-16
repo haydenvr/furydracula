@@ -195,7 +195,7 @@ int findShortestPath(Graph g,Location src, Location dest,Location path[],Transpo
 }
 	
 static int dijkstras (Graph g,Location src, Location dest,Location path[],Transport type){
-	int v, w, alt, dist[g->nV], visited[g->nV], maxWT = 9999; //st visited, wt dist //,
+	int v, w, alt, dist[g->nV], visited[g->nV], maxWT = 9999, *edges,amtConsider; //st visited, wt dist //,
 	Queue q = newQueue();;
 	for (v = 0; v < g->nV; v++)
 		if (v == src) { dist[v] = 0; QueueJoin(q,v,0); visited[v] = -1; }
@@ -204,11 +204,12 @@ static int dijkstras (Graph g,Location src, Location dest,Location path[],Transp
 		// get vertex with lowest weight
 		v = QueueLeaveMin(q);
 		if (dist[v] != maxWT) {
-			for (w = 0; w < g->nV; w++) {
-				if (isAdjacent(g, v, w, type)) {
+			edges = connectedLocations(&amtConsider, v,PLAYER_LORD_GODALMING,0,type); //note player doesn't matter
+			for (w = 0; w < amtConsider; w++) {
+				if (isAdjacent(g, v, edges[w], type)) {
 				    //printf("hi this is adjacent %d to %d\n",v,w);
 					alt = dist[v] + 1;
-					if (alt < dist[w]) { dist[w] = alt; visited[w] = v; } //
+					if (alt < dist[edges[w]]) { dist[edges[w]] = alt; visited[edges[w]] = v; } //
 					//QueueJoin(q,w,dist[w]);
 				}
 				
