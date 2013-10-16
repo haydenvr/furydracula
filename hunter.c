@@ -24,6 +24,7 @@ void decideMove (HunterView gameState) {
 	PlayerID id = getCurrentPlayer(gameState);
     LocationID move = getLocation(gameState, id);
 	srand (time(NULL));
+	int path[NUM_MAP_LOCATIONS];
 	char * msg = "";
 	if (round == 0) {
 	    if (id == PLAYER_LORD_GODALMING) {move = CASTLE_DRACULA; msg = "camping";}
@@ -37,7 +38,13 @@ void decideMove (HunterView gameState) {
         for (i = 0; i < NUM_HUNTERS; i++) if (getLocation(gameState, i) == CASTLE_DRACULA) camper = 1;
         if (!camper) {
             //if hunter is shortest dist to castle dracula, move towards castle dracula
-            //TODO
+            int hunterDist[NUM_HUNTER] = {-1,-1,-1,-1};
+            int closestHunter = PLAYER_LORD_GODALMING;
+            LocationID adj;
+            for (i = PLAYER_LORD_GODALMING; i < NUM_HUNTERS; i++) {
+                hunterDist[i] = findShortestPath(gameState, getLocation(gameState, i), CASTLE_DRACULA, path, ANY);
+                if (hunterDist[closestHunter] > hunterDist[i] || hunterDist[closestHunter] = -1) adj = path[1];
+            }
         }
         
         //TODO - other moves
