@@ -20,24 +20,32 @@ void decideMove (HunterView gameState) {
 	"ZU", "NS", "EC", "IS", "AO", "BB", "MS", "TS", "IO", "AS", 
 	"BS", "C?", "S?", "HI", "D1", "D2", "D3", "D4", "D5", "TP"
 	};
-	int round = getRound(gameState); //, amtLocs;
+	int round = getRound(gameState);
 	PlayerID id = getCurrentPlayer(gameState);
     LocationID move = getLocation(gameState, id);
 	srand (time(NULL));
 	int path[NUM_MAP_LOCATIONS];
 	char * msg = "";
+	
+	//set initial locations
 	if (round == 0) {
 	    if (id == PLAYER_LORD_GODALMING) {move = CASTLE_DRACULA; msg = "camping";}
 	    else if (id == PLAYER_DR_SEWARD)  move = BELGRADE;
 	    else if (id == PLAYER_VAN_HELSING) move = STRASBOURG;
 	    else if (id == PLAYER_MINA_HARKER) move = MADRID;
     }
-    if (move == CASTLE_DRACULA) msg = "camping";
-    else {
-        int camper = 0, i;
-        for (i = 0; i < NUM_HUNTERS; i++) if (getLocation(gameState, i) == CASTLE_DRACULA) camper = 1;
+    int camper = 0, i;
+    
+    //check for campers OTHER THAN CURRENT
+    for (i = 0; i < NUM_HUNTERS; i++) if (i != id && getLocation(gameState, i) == CASTLE_DRACULA) camper = 1;   
+    
+    //continue camping if no other current campers
+    if (move == CASTLE_DRACULA) {
+        if (!camper) msg = "camping";
+        else move = KLAUSENBURG;
+    } else {
         if (!camper) {
-            //if hunter is shortest dist to castle dracula, move towards castle dracula
+            //if no camper and hunter is shortest dist to castle dracula, move towards castle dracula
             int hunterDist[NUM_HUNTER] = {-1,-1,-1,-1};
             int closestHunter = PLAYER_LORD_GODALMING;
             LocationID adj;
@@ -50,6 +58,7 @@ void decideMove (HunterView gameState) {
         //TODO - other moves
     }
 /*
+            int amtLocs;
 			LocationID *adj = connectedLocations(gameState, &amtLocs, getLocation(gameState,id), id, round, 1, 0, 0);
 			move = adj[rand() % amtLocs];
 */
