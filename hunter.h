@@ -3,5 +3,5 @@
 // By: TeamDracula
 // Date: 1 January 2012
 // Version: 1.0
-
-void decideMove (HunterView gameState);
+     
+void decideMove (HunterView gameState);    // hunter.h
