@@ -252,6 +252,25 @@ void GroupTest1() {
 	assert(size == 7);
 	free(edges);
 	printf("Test for rail connections passed!\nCongrats, all tests passed!\n");
+
+	printf("Testing hunter history\n");
+	hv = newHunterView("GBR.... SHA.... HCD.... MLO.... DLV.... GGED...", messages);
+	assert(getLocation(hv,PLAYER_DRACULA) == LIVERPOOL);
+	assert(getHealth(hv, PLAYER_LORD_GODALMING) == 5); //faceoff with dracula
+	assert(getHealth(hv,PLAYER_DRACULA) == 30); // lost points
+	assert(getLocation(hv, PLAYER_LORD_GODALMING) == GENEVA);
+	getHistory(hv, PLAYER_DRACULA,history);
+    assert(history[0] == LIVERPOOL);
+    assert(history[1] == UNKNOWN_LOCATION);
+    getHistory(hv, PLAYER_LORD_GODALMING,history);
+    assert(history[0] == GENEVA);
+    assert(history[1] == BERLIN);
+    assert(history[2] == UNKNOWN_LOCATION);
+    getHistory(hv,PLAYER_DR_SEWARD,history);
+    assert(history[0] == HAMBURG);
+    assert(history[1] == UNKNOWN_LOCATION);
+    printf("passed\n");        
+
     disposeHunterView(hv);
 }
 
