@@ -11,6 +11,9 @@
 // vertices denoted by integers 0..N-1 
 typedef int Location;
 typedef int Transport; 
+typedef struct vNode *VList;
+typedef struct QueueRep *Queue;
+typedef int Item;
 
 typedef struct edge{
     Location start;
@@ -38,5 +41,13 @@ int isAdjacent(Graph g,Location start, Location end, Transport type);
 //in n hops or less with a given transport type
 //If a location can be reached in n hops or less locs[location] is set to 1
 void canReachInN(Graph g, Location start, Transport type, int n, int locs[]);
+
+void makeMap(Graph g);
+void addLink(Graph g, Location start, Location end, Transport type);
+Queue newQueue(); // create new empty queue
+void dropQueue(Queue); // free memory used by queue
+void QueueJoin(Queue,Item); // add item on queue
+Item QueueLeave(Queue); // remove item from queue
+int QueueIsEmpty(Queue); // check for no items
 
 #endif

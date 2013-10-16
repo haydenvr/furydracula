@@ -1,14 +1,9 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "Graph.h"
 #include "cities.h"
-
-
-
-typedef struct vNode *VList;
-typedef struct QueueRep *Queue;
-typedef int Item;
+#include "connections_v1.2.h"
+#include "Graph.h"
 
 struct vNode { 
     Location v;     //ALICANTE etc
@@ -32,15 +27,6 @@ typedef struct QueueRep {
 	QueueNode *tail;  // ptr to last node
 } QueueRep;
 
-static void makeMap(Graph g);
-static void addLink(Graph g, Location start, Location end, Transport type);
-static Queue newQueue(); // create new empty queue
-static void dropQueue(Queue); // free memory used by queue
-static void QueueJoin(Queue,Item); // add item on queue
-static Item QueueLeave(Queue); // remove item from queue
-static int QueueIsEmpty(Queue); // check for no items
-
-#include "connections_v1.2.h"
 
 Graph newGraph() { 
     int i; 
@@ -77,7 +63,7 @@ void destroyGraph(Graph g){
 }   
 
 
-static void addLink(Graph g, Location start, Location end, Transport type){
+void addLink(Graph g, Location start, Location end, Transport type){
     VList newNode = malloc(sizeof(struct vNode));
     newNode->v = end;
     newNode->type = type;
@@ -99,10 +85,6 @@ static void addLink(Graph g, Location start, Location end, Transport type){
         tmp->next = newNode;
     }
 }
-
-//static void makeMap(Graph g){
-   
-//}
 
 //Useful for debugging
 void showGraph(Graph g) { 
@@ -198,7 +180,7 @@ void canReachInN(Graph g, Location start, Transport type, int n, int locs[]){
 //
 
 // create new empty Queue
-static Queue newQueue()
+Queue newQueue()
 {
 	Queue q;
 	q = malloc(sizeof(QueueRep));
@@ -209,7 +191,7 @@ static Queue newQueue()
 }
 
 // free memory used by Queue
-static void dropQueue(Queue Q)
+void dropQueue(Queue Q)
 {
 	QueueNode *curr, *next;
 	assert(Q != NULL);
@@ -225,7 +207,7 @@ static void dropQueue(Queue Q)
 }
 
 // add item at end of Queue 
-static void QueueJoin(Queue Q, Item it)
+void QueueJoin(Queue Q, Item it)
 {
 	assert(Q != NULL);
 	QueueNode *new = malloc(sizeof(QueueNode));
@@ -240,7 +222,7 @@ static void QueueJoin(Queue Q, Item it)
 }
 
 // remove item from front of Queue
-static Item QueueLeave(Queue Q)
+Item QueueLeave(Queue Q)
 {
 	assert(Q != NULL);
 	assert(Q->head != NULL);
@@ -254,7 +236,7 @@ static Item QueueLeave(Queue Q)
 }
 
 // check for no items
-static int QueueIsEmpty(Queue Q)
+int QueueIsEmpty(Queue Q)
 {
 	return (Q->head == NULL);
 }

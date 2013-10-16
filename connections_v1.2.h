@@ -1,6 +1,6 @@
 #include "Graph.h"
 
-static void makeMap(Graph g){
+void makeMap(Graph g){
 
 	//### ROAD Connections ###
 
