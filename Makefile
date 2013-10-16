@@ -1,13 +1,61 @@
-CC=gcc
-CFLAGS=-Wall -Werror -g
-OBJS=graphTest.o Graph.o Queue.o
-
-graphTest : $(OBJS)
-	$(CC) -o graphTest $(OBJS)
-
-graphTest.o : graphTest.c Graph.h
-Graph.o : Graph.c Graph.h
-Queue.o : Queue.c Queue.h Item.h
-
-clean :
-	rm -f graphTest $(OBJS) core *.dSYM
+|| AL || Alicante ||
+|| AM || Amsterdam ||
+|| AT || Athens ||
+|| BA || Barcelona ||
+|| BI || Bari ||
+|| BE || Belgrade ||
+|| BR || Berlin ||
+|| BO || Bordeaux ||
+|| BU || Brussels ||
+|| BC || Bucharest ||
+|| BD || Budapest ||
+|| CA || Cadiz ||
+|| CG || Cagliari ||
+|| CD || Castle Dracula ||
+|| CF || Clermont Ferrand ||
+|| CO || Cologne ||
+|| CN || Constanta ||
+|| DU || Dublin ||
+|| ED || Edinburgh ||
+|| FL || Florence ||
+|| FR || Frankfurt ||
+|| GA || Galatz ||
+|| GW || Galway ||
+|| GE || Geneva ||
+|| GO || Genoa ||
+|| GR || Granada ||
+|| HA || Hamburg ||
+|| JM || St Joseph & St Mary's ||
+|| KL || Klausenburg ||
+|| LE || Le Havre ||
+|| LI || Leipzig ||
+|| LS || Lisbon ||
+|| LV || Liverpool ||
+|| LO || London ||
+|| MA || Madrid ||
+|| MN || Manchester ||
+|| MR || Marseilles ||
+|| MI || Milan ||
+|| MU || Munich ||
+|| NA || Nantes ||
+|| NP || Naples ||
+|| NU || Nuremburg ||
+|| PA || Paris ||
+|| PL || Plymouth ||
+|| PR || Prague ||
+|| RO || Rome ||
+|| SA || Salonica ||
+|| SN || Santander ||
+|| SR || Saragossa ||
+|| SJ || Sarajevo ||
+|| SO || Sofia ||
+|| ST || Strasbourg ||
+|| SW || Swansea ||
+|| SZ || Szeged ||
+|| TO || Toulouse ||
+|| VA || Valona ||
+|| VR || Varna ||
+|| VE || Venice ||
+|| VI || Vienna ||
+|| ZA || Zagreb ||
+|| ZU || Zurich ||
