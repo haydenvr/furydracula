@@ -6,6 +6,7 @@
 #define HUNTER_VIEW_H
 
 #include "cities.h"
+#include "game.h"
 
 #define FALSE 0
 #define TRUE 1

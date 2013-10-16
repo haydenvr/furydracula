@@ -289,7 +289,7 @@ void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_
 //The destination 'from' should be included.
 LocationID * connectedLocations(int * numLocations, LocationID from, 
                               PlayerID player, Round round, int type) {
-	int road = FALSE, rail = FALSE, sea FALSE;
+	int road = FALSE, rail = FALSE, sea = FALSE;
 	if (type == 0) road = TRUE;
 	if (type == 1) rail = TRUE;
 	if (type == 2) sea = TRUE;

@@ -4,6 +4,7 @@
 #include "cities.h"
 #include "connections_v1.2.h"
 #include "Graph.h"
+#include "HunterView.h"
 
 struct vNode { 
     Location v;     //ALICANTE etc
@@ -179,7 +180,8 @@ void canReachInN(Graph g, Location start, Transport type, int n, int locs[]){
     dropQueue(q);
 }
 
-int findShortestPath(Graph g,Location src, Location dest,Location path[],Transport type){
+int findShortestPath(Location src, Location dest,Location path[],Transport type){
+	Graph g = newGraph();
 	int a = dijkstras(g, src, dest, path, type);
 	if (a != -1) return a;
 	//function only checks in one direction, so need to check both in the case that the normal

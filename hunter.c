@@ -45,13 +45,14 @@ void decideMove (HunterView gameState) {
     } else {
         if (!camper) {
             //if no camper and hunter is shortest dist to castle dracula, move towards castle dracula
-            int hunterDist[NUM_HUNTER] = {-1,-1,-1,-1};
+            int hunterDist[NUM_HUNTERS] = {-1,-1,-1,-1};
             int closestHunter = PLAYER_LORD_GODALMING;
             LocationID adj;
             for (i = PLAYER_LORD_GODALMING; i < NUM_HUNTERS; i++) {
-                hunterDist[i] = findShortestPath(gameState, getLocation(gameState, i), CASTLE_DRACULA, path, ANY);
-                if (hunterDist[closestHunter] > hunterDist[i] || hunterDist[closestHunter] = -1) adj = path[1];
+                hunterDist[i] = findShortestPath(getLocation(gameState, i), CASTLE_DRACULA, path, ANY);
+                if ((hunterDist[closestHunter] > hunterDist[i]) || (hunterDist[closestHunter] == -1)) adj = path[1];
             }
+			move = adj;
         }       
         //TODO - other moves
     }
