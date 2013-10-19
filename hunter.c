@@ -52,6 +52,7 @@ void decideMove (HunterView gameState) {
                 hunterDist[i] = findShortestPath(getLocation(gameState, i), CASTLE_DRACULA, path, ANY);
                 if ((hunterDist[closestHunter] > hunterDist[i]) || (hunterDist[closestHunter] == -1)) adj = path[1];
             }
+			
 			move = adj;
         }       
         //TODO - other moves

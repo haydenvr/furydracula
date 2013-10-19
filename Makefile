@@ -1,9 +1,4 @@
-CC=gcc
-CFLAGS=-Wall -Werror -g
-
-make:
-	$(CC) $(CFLAGS) -c Graph.c HunterView.c Graph.c hunter.c -ljiansson
-
+all: HunterView.h hunter.h
+	gcc -g -o testHunter HunterView.c testHunter.c hunter.c Graph.c
 clean:
-	rm -rf testHunterView testHunterView2 testHunterView3 testGraph testHunter
-
+	rm -rf testHunter

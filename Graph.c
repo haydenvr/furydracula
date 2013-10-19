@@ -197,27 +197,37 @@ int findShortestPath(Location src, Location dest,Location path[],Transport type)
 }
 	
 static int dijkstras (Graph g,Location src, Location dest,Location path[],Transport type){
-	int v, w, alt, dist[g->nV], visited[g->nV], maxWT = 9999, *edges,amtConsider; //st visited, wt dist //,
-	Queue q = newQueue();;
-	for (v = 0; v < g->nV; v++)
-		if (v == src) { dist[v] = 0; QueueJoin(q,v,0); visited[v] = -1; }
-		else { dist[v] = maxWT; QueueJoin(q,v,maxWT); visited[v] = -1;  }
+	int v, w, alt, dist[g->nV], visited[g->nV], maxWT = 9999, *edges,amtConsider, haveVisited[g->nV]; //st visited, wt dist //,
+	Queue q = newQueue();
+	for (v = 0; v < g->nV; v++) { 
+		haveVisited[v] = -1;
+		if (v == src) { dist[v] = 0; QueueJoin(q,v,0); visited[v] = -1;  }
+		else { dist[v] = maxWT; QueueJoin(q,v,maxWT); visited[v] = -1; }
+	}
 	while (!QueueIsEmpty(q)) {
 		// get vertex with lowest weight
-		v = QueueLeaveMin(q);
+		
+		v = QueueLeaveMin(q,dist, haveVisited, g->nV);
+		haveVisited[v] = 1;
 		if (dist[v] != maxWT) {
 			edges = connectedLocations(&amtConsider, v,PLAYER_LORD_GODALMING,0,type); //note player doesn't matter
+			
 			for (w = 0; w < amtConsider; w++) {
-				if (isAdjacent(g, v, edges[w], type)) {
-				    //printf("hi this is adjacent %d to %d\n",v,w);
+				
+				if ((isAdjacent(g, v, edges[w], type))&&(v != edges[w])) {
+					
+				    
 					alt = dist[v] + 1;
 					if (alt < dist[edges[w]]) { dist[edges[w]] = alt; visited[edges[w]] = v; } //
 					//QueueJoin(q,w,dist[w]);
+					
 				}
 				
 			}
+			
 		}
 	}
+	
 	v = dist[dest]; 
 	int curr = dest;
 	if (v == maxWT) return -1;
@@ -242,21 +252,40 @@ Queue newQueue()
 }
 
 //find smallest item in Queue, remove it, and return it's value
-Item QueueLeaveMin(Queue Q) {
-	int i = 1,n = 0, currVal;
-	Node curr = Q->head;
-	currVal = curr->dist;
-	curr = curr->next;
-	while (curr != NULL) {
-		if (curr->dist < currVal) { currVal = curr->dist; n = i; }
-		i++;
-		curr = curr->next;
+Item QueueLeaveMin(Queue Q, int *dists, int *visited, int amt) {
+	int i, n = 0, currVal = 9999; 
+	Node tmp = Q->head;
+	while (tmp != NULL) {
+		i = tmp->value;
+		if ((dists[i] < currVal)&&(visited[i] == -1)) { currVal = dists[i]; n = i; }
+		tmp = tmp->next;
 	}
-	return QueueLeave(Q, n);
+	return QueueLeave(Q, n); //note need to change Queue leave for it to make the queue to leave by value not index
 }
 
 // remove nth item from front of Queue
 Item QueueLeave(Queue Q, int n)
+{
+	assert(Q != NULL);
+	assert(Q->head != NULL);
+	Item it;
+    Node old = Q->head, prev = NULL;
+	int toRet;
+	while (old->value != n) { prev = old; old = old->next; }
+	
+	if (prev == NULL) {
+		//pull out head
+		old = Q->head;
+		Q->head = old->next;
+		if (Q->head == NULL)
+			Q->tail = NULL;
+	} else {
+		prev->next = old->next;
+		if (prev->next == NULL) Q->tail = prev;
+	}
+	return n;
+}
+/*Item QueueLeave(Queue Q, int n)
 {
 	assert(Q != NULL);
 	assert(Q->head != NULL);
@@ -285,7 +314,7 @@ Item QueueLeave(Queue Q, int n)
 	//printf("the valuuususus %d\n",old->dist);
 	free(old);
 	return it;
-}
+}*/
 
 // free memory used by Queue
 void dropQueue(Queue Q)
