@@ -74,7 +74,7 @@ void decideMove (HunterView gameState) {
                 }
             }
         }
-        if (target != UNKNOWN_LOCATION) target = getLocation(gameState, id); //location unknown - move randomly
+        if (target == UNKNOWN_LOCATION) target = getLocation(gameState, id); //location unknown - move randomly
         
         LocationID *adj = findShortestPath(getLocation(gameState, i), target, path, ANY, round);
         while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs];
