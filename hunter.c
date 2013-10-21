@@ -84,7 +84,7 @@ void decideMove (HunterView gameState) {
             int amtLocs;
             LocationID *adj = connectedLocations(&amtLocs, getLocation(gameState,id), id, round, ANY, g);
             int randLoc = rand() % amtLocs;
-            target = adj[randLoc];
+            move = adj[randLoc];
         }
     }
 	registerBestPlay(locations[move], msg);
