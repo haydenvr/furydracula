@@ -11,7 +11,8 @@
 #define NUM_HUNTERS (NUM_PLAYERS - 1)
 
 void decideMove (HunterView gameState) {
-	char *locations[] = {
+	Graph g = newGraph();
+    char *locations[] = {
         "AL", "AM", "AT", "BA", "BI", "BE", "BR", "BO", "BU", "BC", 
         "BD", "CA", "CG", "CD", "CF", "CO", "CN", "DU", "ED", "FL",
         "FR", "GA", "GW", "GE", "GO", "GR", "HA", "JM", "KL", "LE",
@@ -27,6 +28,9 @@ void decideMove (HunterView gameState) {
 	srand (time(NULL));
 	int path[NUM_MAP_LOCATIONS];
 	char * msg = "";
+    int amtLocs;
+    LocationID *adj = connectedLocations(&amtLocs, getLocation(gameState, id), id, round, ANY, g);
+    LocationID target = UNKNOWN_LOCATION;
 	
 	//set initial locations
 	if (round == 0) {
@@ -51,7 +55,6 @@ void decideMove (HunterView gameState) {
         }
         move = adj;
     } else {
-        LocationID target = UNKNOWN_LOCATION;
         //Note: Dracula cannot visit any location currently in his trail - hunters should not visit target itself!
         int j;
         //set target to message history
@@ -76,13 +79,14 @@ void decideMove (HunterView gameState) {
         }
         if (target == UNKNOWN_LOCATION) target = getLocation(gameState, id); //location unknown - move randomly
         
-        LocationID *adj = findShortestPath(getLocation(gameState, i), target, path, ANY, round);
+        findShortestPath(getLocation(gameState, id), target, path, ANY, round);
+        move = path[1];
         while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs];
     }
     if (move == CASTLE_DRACULA && camper) { //don't double up campers!
         while (adj[rand() % amtLocs] == target || adj[rand() % amtLocs] == CASTLE_DRACULA) move = adj[rand() % amtLocs];
     }
-        
+    destroyGraph(g);
 	registerBestPlay(locations[move], msg);
 }
 

@@ -50,6 +50,6 @@ void QueueJoin(Queue Q, Item it, Item dist); // add item on queue
 Item QueueLeave(Queue, int); // remove item from queue
 int QueueIsEmpty(Queue); // check for no items
 Item QueueLeaveMin(Queue Q, int *dists, int *visited, int amt); //return smallest val in queue
-int findShortestPath(Location src, Location dest,Location path[],Transport type, int round);
+int findShortestPath(Location src, Location dest,Location path[],Transport type, int round); //return number of locs in path
 
 #endif
