@@ -46,6 +46,7 @@ static int doubledBack (LocationID location, HunterView hunterView);
 // You are free to ignore messages if you wish.
 HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
     HunterView hunterView = malloc(sizeof(struct hunterView));
+    //Graph g = newGraph();
 	int i, j;
 	int player;
 	hunterView->score = GAME_START_SCORE;
@@ -362,6 +363,26 @@ LocationID * connectedLocations(int * numLocations, LocationID from,
 	}
 	
 	return connected;
+}
+
+LocationID getLatestMessageLoc(HunterView currentView) {
+    int i, j;
+    char *locations[] = {
+        "AL", "AM", "AT", "BA", "BI", "BE", "BR", "BO", "BU", "BC", 
+        "BD", "CA", "CG", "CD", "CF", "CO", "CN", "DU", "ED", "FL",
+        "FR", "GA", "GW", "GE", "GO", "GR", "HA", "JM", "KL", "LE",
+        "LI", "LS", "LV", "LO", "MA", "MN", "MR", "MI", "MU", "NA",
+        "NP", "NU", "PA", "PL", "PR", "RO", "SA", "SN", "SR", "SJ",
+        "SO", "ST", "SW", "SZ", "TO", "VA", "VR", "VE", "VI", "ZA",
+        "ZU", "NS", "EC", "IS", "AO", "BB", "MS", "TS", "IO", "AS", 
+        "BS", "C?", "S?", "HI", "D1", "D2", "D3", "D4", "D5", "TP"
+	};
+    for (i = 0; i < MESSAGE_SIZE; i++) { //find latest message of location
+        if (strcmp(currentView->messages[i], "") == 0) { //location is known
+            for (j = 0; j < NUM_LOCATIONS; j++) if (locations[j] == currentView->messages[i]) return j;
+        }
+    }
+    return UNKNOWN_LOCATION;
 }
 
 static int isAtSea(LocationID location, HunterView hunterView) {

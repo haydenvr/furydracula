@@ -75,7 +75,7 @@ void testMovesRound1(void){
 }
 
 void testInitialMoves(void){
-   HunterView gameState;
+   //HunterView gameState;
 /*
    {
        playerMessage messages[] = {};

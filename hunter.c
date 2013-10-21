@@ -6,10 +6,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 #define NUM_HUNTERS (NUM_PLAYERS - 1)
 
 void decideMove (HunterView gameState) {
+    Graph g = newGraph();
 	char *locations[] = {
 	"AL", "AM", "AT", "BA", "BI", "BE", "BR", "BO", "BU", "BC", 
 	"BD", "CA", "CG", "CD", "CF", "CO", "CN", "DU", "ED", "FL",
@@ -45,23 +47,47 @@ void decideMove (HunterView gameState) {
     } else {
         if (!camper) {
             //if no camper and hunter is shortest dist to castle dracula, move towards castle dracula
-            int hunterDist[NUM_HUNTERS] = {-1,-1,-1,-1};
+            int hunterDist[NUM_HUNTERS] = {UNKNOWN_LOCATION,UNKNOWN_LOCATION,UNKNOWN_LOCATION,UNKNOWN_LOCATION};
             int closestHunter = PLAYER_LORD_GODALMING;
             LocationID adj;
             for (i = PLAYER_LORD_GODALMING; i < NUM_HUNTERS; i++) {
                 hunterDist[i] = findShortestPath(getLocation(gameState, i), CASTLE_DRACULA, path, ANY, round);
-                if ((hunterDist[closestHunter] > hunterDist[i]) || (hunterDist[closestHunter] == -1)) adj = path[1];
+                if ((hunterDist[closestHunter] > hunterDist[i]) || (hunterDist[closestHunter] == UNKNOWN_LOCATION)) adj = path[1];
             }
 			
 			move = adj;
-        }       
-        //TODO - other moves
-    }
-/*
+        } else {
+            LocationID target = UNKNOWN_LOCATION;
+            int j;
+            //set target to message history
+            for (j = 0; j < NUM_LOCATIONS; j++) if (getLatestMessageLoc(gameState) != UNKNOWN_LOCATION) target = j;
+            for (i = TRAIL_SIZE - 1; i >= 0 ; i--) { //locations newer in trail will override older ones
+                LocationID draculaLoc[TRAIL_SIZE];
+                getHistory (gameState, PLAYER_DRACULA, draculaLoc);
+                if (draculaLoc[i] != CITY_UNKNOWN && draculaLoc[i] != SEA_UNKNOWN && draculaLoc[i] != HIDE) {
+                    //Note: Dracula cannot visit any location currently in his trail - hunters should not visit target itself!
+                    if (draculaLoc[i] >= DOUBLE_BACK_1 && draculaLoc[i] <= DOUBLE_BACK_5) { //double back found
+                        int dbVal = i - (draculaLoc[i] - DOUBLE_BACK_1 + 1);
+                        if (dbVal >= 0) { //double back location still in trail; segfault prevention
+                            LocationID dbLoc = draculaLoc[dbVal];
+                            if (dbLoc != CITY_UNKNOWN && dbLoc != SEA_UNKNOWN && dbLoc != HIDE) target = dbLoc;
+                        }
+                    } else { //we found his location!
+                        msg = locations[draculaLoc[i]];
+                        target = draculaLoc[i];
+                    }
+                }
+            }
+            if (target != UNKNOWN_LOCATION) target = getLocation(gameState, id); //location unknown - move randomly
+            
+            //make move based on target, other than target
             int amtLocs;
-			LocationID *adj = connectedLocations(gameState, &amtLocs, getLocation(gameState,id), id, round, 1, 0, 0);
-			move = adj[rand() % amtLocs];
-*/
+            LocationID *adj = connectedLocations(&amtLocs, getLocation(gameState,id), id, round, ANY, g);
+            int randLoc = rand() % amtLocs;
+            target = adj[randLoc];
+        }
+    }
 	registerBestPlay(locations[move], msg);
+    destroyGraph(g);
 }
 

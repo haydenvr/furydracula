@@ -40,7 +40,6 @@
 #define LIFE_LOSS_TRAP_ENCOUNTER        2
 #define LIFE_LOSS_DRACULA_ENCOUNTER     4
 #define LIFE_GAIN_REST                  3 
-
      
 typedef struct hunterView *HunterView;
      
@@ -153,5 +152,6 @@ void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_
 LocationID * connectedLocations(int * numLocations, LocationID from, 
                               PlayerID player, Round round, int type, Graph g);
 
+LocationID getLatestMessageLoc(HunterView currentView);
 
 #endif

@@ -186,19 +186,9 @@ void canReachInN(Graph g, Location start, Transport type, int n, int locs[]){
 
 int findShortestPath(Location src, Location dest,Location path[],Transport type, int round){
 	Graph g = newGraph();
-	return dijkstras(g, src, dest, path, type, round);
-	//if (a != -1) return a;
-	/*
-	//function only checks in one direction, so need to check both in the case that the normal
-	//direction doesn't work
-	Location tmp[NUM_MAP_LOCATIONS];
-	a = dijkstras (g, dest, src, tmp, type);
-	int i, b = 0;
-    for(i = a-1; i >= 0; i--){
-               path[b] = tmp[i];
-               b++;
-    }
-    */
+    int len = dijkstras(g, src, dest, path, type, round);
+    destroyGraph(g);
+	return len;
 }
 	
 static int dijkstras (Graph g,Location src, Location dest,Location path[],Transport type, int round){
@@ -231,7 +221,6 @@ static int dijkstras (Graph g,Location src, Location dest,Location path[],Transp
 			
 		}
 	}
-	
 	v = dist[dest]; 
 	int curr = dest;
 	if (v == maxWT) return -1;
@@ -294,36 +283,6 @@ Item QueueLeave(Queue Q, int n)
 	free(old);
 	return it;
 }
-/*Item QueueLeave(Queue Q, int n)
-{
-	assert(Q != NULL);
-	assert(Q->head != NULL);
-	Item it;
-    Node old, prev;
-	if (n == 0) {
-		it = Q->head->value;
-		old = Q->head;
-		Q->head = old->next;
-		if (Q->head == NULL)
-			Q->tail = NULL;
-	} else {
-		int i = 0;
-		old = Q->head;
-        prev = NULL;
-		while ((i < n)&&(old != NULL)) {
-			prev = old;			
-			old = old->next;
-			i++;
-		}
-		if (old == NULL) return -1;
-		prev->next = old->next;
-		it = old->value;
-		if (prev->next == NULL) Q->tail = prev;
-	}
-	//printf("the valuuususus %d\n",old->dist);
-	free(old);
-	return it;
-}*/
 
 // free memory used by Queue
 void dropQueue(Queue Q)
@@ -362,4 +321,3 @@ int QueueIsEmpty(Queue Q)
 {
 	return (Q->head == NULL);
 }
-
