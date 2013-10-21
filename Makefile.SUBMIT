@@ -1,7 +1,5 @@
-CC=gcc
-CFLAGS=-Wall -Werror -g
+all:
+	gcc -c Graph.c HunterView.c Graph.c hunter.c -ljiansson
 
-all:	
-	$(CC) $(CFLAGS) -c Graph.c HunterView.c Graph.c hunter.c -ljiansson
-
-
+clean:
+	rm -rf myPlayer
