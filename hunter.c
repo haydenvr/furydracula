@@ -65,8 +65,8 @@ void decideMove (HunterView gameState) {
             for (i = TRAIL_SIZE - 1; i >= 0 ; i--) { //locations newer in trail will override older ones
                 LocationID draculaLoc[TRAIL_SIZE];
                 getHistory (gameState, PLAYER_DRACULA, draculaLoc);
+                //if we have any useful info on his location...
                 if (draculaLoc[i] != CITY_UNKNOWN && draculaLoc[i] != SEA_UNKNOWN && draculaLoc[i] != HIDE) {
-                    //Note: Dracula cannot visit any location currently in his trail - hunters should not visit target itself!
                     if (draculaLoc[i] >= DOUBLE_BACK_1 && draculaLoc[i] <= DOUBLE_BACK_5) { //double back found
                         int dbVal = i - (draculaLoc[i] - DOUBLE_BACK_1 + 1);
                         if (dbVal >= 0) { //double back location still in trail; segfault prevention
@@ -83,7 +83,8 @@ void decideMove (HunterView gameState) {
             
             int amtLocs;
             LocationID *adj = connectedLocations(&amtLocs, getLocation(gameState,id), id, round, ANY, g);
-            while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs]; //make move based on target, other than target
+            //Note: Dracula cannot visit any location currently in his trail - hunters should not visit target itself!
+            while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs];
         }
     }
 	registerBestPlay(locations[move], msg);
