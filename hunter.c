@@ -77,11 +77,16 @@ void decideMove (HunterView gameState) {
                 }
             }
         }
-        if (target == UNKNOWN_LOCATION) target = getLocation(gameState, id); //location unknown - move randomly
-        
-        findShortestPath(getLocation(gameState, id), target, path, ANY, round);
-        move = path[1];
-        while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs];
+
+		//Julian CHECK ME
+        if (target == UNKNOWN_LOCATION) target = adj[rand() % amtLocs]; //getLocation(gameState, id); //location unknown - move randomly
+        else {
+        	findShortestPath(getLocation(gameState, id), target, path, ANY, round);
+        	move = path[1];
+		}
+        //while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs];
+
+		//CHECK Up to here
     }
     if (move == CASTLE_DRACULA && camper) { //don't double up campers!
         while (adj[rand() % amtLocs] == target || adj[rand() % amtLocs] == CASTLE_DRACULA) move = adj[rand() % amtLocs];
