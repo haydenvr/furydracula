@@ -60,7 +60,8 @@ void decideMove (HunterView gameState) {
             LocationID target = UNKNOWN_LOCATION;
             int j;
             //set target to message history
-            for (j = 0; j < NUM_LOCATIONS; j++) if (getLatestMessageLoc(gameState) != UNKNOWN_LOCATION) target = j;
+            if (getLatestMessageLoc(gameState) != UNKNOWN_LOCATION) target = getLatestMessageLoc(gameState);
+            
             for (i = TRAIL_SIZE - 1; i >= 0 ; i--) { //locations newer in trail will override older ones
                 LocationID draculaLoc[TRAIL_SIZE];
                 getHistory (gameState, PLAYER_DRACULA, draculaLoc);
