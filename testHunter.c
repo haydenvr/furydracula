@@ -14,6 +14,7 @@
 #include "cities.h"
 #include "HunterView.h"
 #include "hunter.h"
+#include "Graph.h"
 
 //includes '\0'
 #define MOVE_SIZE 3
@@ -23,6 +24,7 @@ static char latestPlay[MOVE_SIZE] = "";
 void testInitialMoves(void);
 void testMovesRound1(void);
 void testAll(void);
+void testGraph(void);
 
 int main( int argc, char *argv[] ) {
     testAll();
@@ -32,6 +34,7 @@ int main( int argc, char *argv[] ) {
 void testAll(void){
     testInitialMoves();
     testMovesRound1();
+    testGraph();
 }
 
 int moveIn(char * locs[], int size){
@@ -48,8 +51,11 @@ void testMovesRound1(void){
     {
        playerMessage messages[7] = {""};
        printf("Test: Round 1 hunter 2 move. Testing his connected locs.\n");
+       printf("creating hunterview.\n");
        gameState = newHunterView("GGW.... SGA.... HAT.... MMA.... DBO.V.. GGW.... SKL....",messages);
+       printf("deciding move.\n");
        decideMove( gameState );
+       printf("disposing.\n");
        disposeHunterView( gameState );
        printf("Test passed\n");
    }
@@ -119,4 +125,21 @@ void registerBestPlay ( char *play, playerMessage message ) {
    latestPlay[MOVE_SIZE-1] = '\0';
 }
 
+void testGraph(void) {
+    printf("Testing graph 1...\n");
+    Location path[NUM_MAP_LOCATIONS];
+    int a = findShortestPath(NANTES, MARSEILLES, path, ANY,0);
+    assert(a == 3);
+    assert(path[0] == NANTES);
+    assert(path[1] == CLERMONT_FERRAND);
+    assert(path[2] == MARSEILLES);
+    printf("Test passed!\n");   
+    printf("Testing graph 2...\n");
+    a = findShortestPath(NANTES, MARSEILLES, path, ANY,0);
+    assert(a == 3);
+    assert(path[0] == NANTES);
+    assert(path[1] == CLERMONT_FERRAND);
+    assert(path[2] == MARSEILLES);
+    printf("Test passed!\n");    
+}
 

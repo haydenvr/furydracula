@@ -49,7 +49,7 @@ void decideMove (HunterView gameState) {
             int closestHunter = PLAYER_LORD_GODALMING;
             LocationID adj;
             for (i = PLAYER_LORD_GODALMING; i < NUM_HUNTERS; i++) {
-                hunterDist[i] = findShortestPath(getLocation(gameState, i), CASTLE_DRACULA, path, ANY);
+                hunterDist[i] = findShortestPath(getLocation(gameState, i), CASTLE_DRACULA, path, ANY, round);
                 if ((hunterDist[closestHunter] > hunterDist[i]) || (hunterDist[closestHunter] == -1)) adj = path[1];
             }
 			

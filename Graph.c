@@ -31,7 +31,7 @@ typedef struct QueueRep {
 
 typedef struct QueueNode *Node;
 
-static int dijkstras (Graph g,Location src, Location dest,Location path[],Transport type);
+static int dijkstras (Graph g,Location src, Location dest,Location path[],Transport type, int round);
 
 Graph newGraph() { 
     int i; 
@@ -180,10 +180,11 @@ void canReachInN(Graph g, Location start, Transport type, int n, int locs[]){
     dropQueue(q);
 }
 
-int findShortestPath(Location src, Location dest,Location path[],Transport type){
+int findShortestPath(Location src, Location dest,Location path[],Transport type, int round){
 	Graph g = newGraph();
-	int a = dijkstras(g, src, dest, path, type);
-	if (a != -1) return a;
+	int a = dijkstras(g, src, dest, path, type, round);
+	//if (a != -1) return a;
+	/*
 	//function only checks in one direction, so need to check both in the case that the normal
 	//direction doesn't work
 	Location tmp[NUM_MAP_LOCATIONS];
@@ -193,10 +194,11 @@ int findShortestPath(Location src, Location dest,Location path[],Transport type)
                path[b] = tmp[i];
                b++;
     }
+    */
 	return a;
 }
 	
-static int dijkstras (Graph g,Location src, Location dest,Location path[],Transport type){
+static int dijkstras (Graph g,Location src, Location dest,Location path[],Transport type, int round){
 	int v, w, alt, dist[g->nV], visited[g->nV], maxWT = 9999, *edges,amtConsider, haveVisited[g->nV]; //st visited, wt dist //,
 	Queue q = newQueue();
 	for (v = 0; v < g->nV; v++) { 
@@ -210,7 +212,7 @@ static int dijkstras (Graph g,Location src, Location dest,Location path[],Transp
 		v = QueueLeaveMin(q,dist, haveVisited, g->nV);
 		haveVisited[v] = 1;
 		if (dist[v] != maxWT) {
-			edges = connectedLocations(&amtConsider, v,PLAYER_LORD_GODALMING,0,type); //note player doesn't matter
+			edges = connectedLocations(&amtConsider, v,PLAYER_LORD_GODALMING,round,type); //note player doesn't matter
 			
 			for (w = 0; w < amtConsider; w++) {
 				
@@ -268,11 +270,14 @@ Item QueueLeave(Queue Q, int n)
 {
 	assert(Q != NULL);
 	assert(Q->head != NULL);
-	Item it;
+	//Item it;
     Node old = Q->head, prev = NULL;
-	int toRet;
-	while (old->value != n) { prev = old; old = old->next; }
-	
+    int i = 0;
+	for (;i < n; i++) {
+	    if (old == NULL) break;
+	    prev = old; 
+	    old = old->next;
+	}	
 	if (prev == NULL) {
 		//pull out head
 		old = Q->head;
