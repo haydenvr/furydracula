@@ -80,10 +80,9 @@ void decideMove (HunterView gameState) {
             }
             if (target != UNKNOWN_LOCATION) target = getLocation(gameState, id); //location unknown - move randomly
             
-            //make move based on target, other than target
             int amtLocs;
             LocationID *adj = connectedLocations(&amtLocs, getLocation(gameState,id), id, round, ANY, g);
-            move = adj[rand() % amtLocs];
+            while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs]; //make move based on target, other than target
         }
     }
 	registerBestPlay(locations[move], msg);
