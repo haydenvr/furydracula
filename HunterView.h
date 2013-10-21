@@ -7,6 +7,7 @@
 
 #include "cities.h"
 #include "game.h"
+#include "Graph.h"
 
 #define FALSE 0
 #define TRUE 1
@@ -150,7 +151,7 @@ void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_
 //but need not take into account draculas trail
 //The destination 'from' should be included.
 LocationID * connectedLocations(int * numLocations, LocationID from, 
-                              PlayerID player, Round round, int type);
+                              PlayerID player, Round round, int type, Graph g);
 
 
 #endif

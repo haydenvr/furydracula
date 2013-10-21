@@ -4,7 +4,6 @@
 #include <string.h>
 #include "game.h"
 #include "HunterView.h"
-#include "Graph.h"
 
 #define CHARS_PER_ROUND 40
 #define CHARS_PER_TURN  8
@@ -288,7 +287,7 @@ void getHistory (HunterView currentView, PlayerID player,LocationID trail[TRAIL_
 //but need not take into account draculas trail
 //The destination 'from' should be included.
 LocationID * connectedLocations(int * numLocations, LocationID from, 
-                              PlayerID player, Round round, int type) {
+                              PlayerID player, Round round, int type, Graph g) {
 	int road = FALSE, rail = FALSE, sea = FALSE;
 	if (type == 0) road = TRUE;
 	if (type == 1) rail = TRUE;
@@ -303,7 +302,7 @@ LocationID * connectedLocations(int * numLocations, LocationID from,
 	if (player == PLAYER_DRACULA) rail = FALSE;
 	if (!sea) to_search = ZURICH + 1; //Zurich is the last city
 
-	Graph g = newGraph(); //our graph to check
+	//Graph g = newGraph(); //our graph to check
 	int i;
 	*numLocations = 0;
 	LocationID *connected;//[NUM_MAP_LOCATIONS];
@@ -361,6 +360,7 @@ LocationID * connectedLocations(int * numLocations, LocationID from,
 		connected[*numLocations] = from;
 		(*numLocations)++; 
 	}
+	
 	return connected;
 }
 

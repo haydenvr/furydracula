@@ -140,6 +140,23 @@ void testGraph(void) {
     assert(path[0] == NANTES);
     assert(path[1] == CLERMONT_FERRAND);
     assert(path[2] == MARSEILLES);
-    printf("Test passed!\n");    
+    printf("Test passed!\n");
+	printf("Testing graph by rail...\n");
+    a = findShortestPath(MADRID, BARCELONA, path, ANY,2); 
+	assert(a == 2);
+	assert(path[0] == MADRID);
+    assert(path[1] == BARCELONA);  
+	printf("Passed by rail test\n");
+	a = findShortestPath(MARSEILLES, COLOGNE, path, ANY,3); 
+	assert(a == 2);
+	assert(path[0] == MARSEILLES);
+    assert(path[1] == COLOGNE); 
+	printf("Passed second rail test\n");
+	a = findShortestPath(MARSEILLES, AMSTERDAM, path, ANY,3); 
+	assert(a == 3);
+	assert(path[0] == MARSEILLES);
+    assert(path[1] == COLOGNE); 
+	assert(path[2] == AMSTERDAM); 
+	printf("Passed final rail test\n");
 }
 

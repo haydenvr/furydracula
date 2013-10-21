@@ -72,6 +72,7 @@ void addLink(Graph g, Location start, Location end, Transport type){
     VList newNode = malloc(sizeof(struct vNode));
     newNode->v = end;
     newNode->type = type;
+	newNode->next = NULL;
     g->nE[type]++;
     VList tmp = g->connections[start];
     if (tmp == NULL) g->connections[start] = newNode;
@@ -83,10 +84,12 @@ void addLink(Graph g, Location start, Location end, Transport type){
     newNode = malloc(sizeof(struct vNode));
     newNode->v = start;
     newNode->type = type;
+	newNode->next = NULL;
     tmp = g->connections[end];
+	int i = 0;
     if (tmp == NULL) g->connections[end] = newNode;
     else {
-        for (; tmp->next != NULL; tmp = tmp->next);
+        for (; tmp->next != NULL; tmp = tmp->next) { i++; }
         tmp->next = newNode;
     }
 }
@@ -183,7 +186,7 @@ void canReachInN(Graph g, Location start, Transport type, int n, int locs[]){
 
 int findShortestPath(Location src, Location dest,Location path[],Transport type, int round){
 	Graph g = newGraph();
-	int a = dijkstras(g, src, dest, path, type, round);
+	return dijkstras(g, src, dest, path, type, round);
 	//if (a != -1) return a;
 	/*
 	//function only checks in one direction, so need to check both in the case that the normal
@@ -196,7 +199,6 @@ int findShortestPath(Location src, Location dest,Location path[],Transport type,
                b++;
     }
     */
-	return a;
 }
 	
 static int dijkstras (Graph g,Location src, Location dest,Location path[],Transport type, int round){
@@ -213,12 +215,11 @@ static int dijkstras (Graph g,Location src, Location dest,Location path[],Transp
 		v = QueueLeaveMin(q,dist, haveVisited, g->nV);
 		haveVisited[v] = 1;
 		if (dist[v] != maxWT) {
-			edges = connectedLocations(&amtConsider, v,PLAYER_LORD_GODALMING,round,type); //note player doesn't matter
-			
+			edges = connectedLocations(&amtConsider, v,PLAYER_LORD_GODALMING,round,type,g); //note player doesn't matter
 			for (w = 0; w < amtConsider; w++) {
 				
-				if ((isAdjacent(g, v, edges[w], type))&&(v != edges[w])) {
-					
+				//if ((isAdjacent(g, v, edges[w], type))&&(v != edges[w])) {
+				if (v != edges[w]) {
 				    
 					alt = dist[v] + 1;
 					if (alt < dist[edges[w]]) { dist[edges[w]] = alt; visited[edges[w]] = v; } //
