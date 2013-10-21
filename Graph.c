@@ -143,6 +143,7 @@ int isAdjacent(Graph g, Location start, Location end, Transport type){
 
 
 static int dist(int st[], int e) {
+    assert(st[e] != -1);
     int count = 0;
     int i = e;
     while (st[i] != i) {
@@ -170,7 +171,7 @@ void canReachInN(Graph g, Location start, Transport type, int n, int locs[]){
     while (!QueueIsEmpty(q)) {
         e = QueueLeave(q,0);
         for (tmp = g->connections[e]; tmp != NULL; tmp = tmp->next) {
-            if (st[tmp->v] == -1 && dist(st, e) < n && ((tmp->type == type || type == ANY))) {
+            if (st[tmp->v] == -1 && dist(st, e) < n && (tmp->type == type || type == ANY)) {
                 st[tmp->v] = e;
                 QueueJoin(q, tmp->v, 0);
                 locs[tmp->v] = 1;
@@ -270,11 +271,11 @@ Item QueueLeave(Queue Q, int n)
 {
 	assert(Q != NULL);
 	assert(Q->head != NULL);
-	//Item it;
+	Item it;
     Node old = Q->head, prev = NULL;
     int i = 0;
 	for (;i < n; i++) {
-	    if (old == NULL) break;
+	    if (old->next == NULL) break;
 	    prev = old; 
 	    old = old->next;
 	}	
@@ -288,7 +289,9 @@ Item QueueLeave(Queue Q, int n)
 		prev->next = old->next;
 		if (prev->next == NULL) Q->tail = prev;
 	}
-	return n;
+	it = old->value;
+	free(old);
+	return it;
 }
 /*Item QueueLeave(Queue Q, int n)
 {
