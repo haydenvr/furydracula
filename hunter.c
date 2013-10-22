@@ -59,6 +59,7 @@ void decideMove (HunterView gameState) {
         move = adj;
     } else {
         //Note: Dracula cannot visit any location currently in his trail - hunters should not visit target itself!
+        
         //set target to message history
         if (getLatestMessageLoc(gameState) != UNKNOWN_LOCATION) target = getLatestMessageLoc(gameState);
         
@@ -80,7 +81,6 @@ void decideMove (HunterView gameState) {
             }
         }
 
-		//Julian CHECK ME
         if (target == UNKNOWN_LOCATION) target = adj[rand() % amtLocs]; //location unknown - move randomly
         else {
         	findShortestPath(getLocation(gameState, id), target, path, ANY, round);
@@ -88,7 +88,6 @@ void decideMove (HunterView gameState) {
 		}
         while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs];
 
-	//CHECK Up to here
     }
     if (move == CASTLE_DRACULA && camper) { //don't double up campers!
         while (adj[rand() % amtLocs] == target || adj[rand() % amtLocs] == CASTLE_DRACULA) move = adj[rand() % amtLocs];
