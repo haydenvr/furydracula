@@ -25,11 +25,12 @@ void decideMove (HunterView gameState) {
 	int round = getRound(gameState);
 	PlayerID id = getCurrentPlayer(gameState);
     LocationID move = getLocation(gameState, id);
+	
+	char * msg = "";
 	srand (time(NULL));
 	int path[NUM_MAP_LOCATIONS];
-	char * msg = "";
     int amtLocs;
-    LocationID *adj = connectedLocations(&amtLocs, getLocation(gameState, id), id, round, ANY, g);
+    //LocationID *adj = connectedLocations(&amtLocs, getLocation(gameState, id), id, round, ANY, g);
     LocationID target = UNKNOWN_LOCATION;
 	
 	//set initial locations
@@ -86,7 +87,7 @@ void decideMove (HunterView gameState) {
 		}
         //while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs];
 
-		//CHECK Up to here
+	//CHECK Up to here
     }
     if (move == CASTLE_DRACULA && camper) { //don't double up campers!
         while (adj[rand() % amtLocs] == target || adj[rand() % amtLocs] == CASTLE_DRACULA) move = adj[rand() % amtLocs];
