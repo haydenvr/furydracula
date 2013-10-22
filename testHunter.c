@@ -23,18 +23,31 @@ static char latestPlay[MOVE_SIZE] = "";
 
 void testInitialMoves(void);
 void testMovesRound1(void);
-void testAll(void);
+void testBlank(void);
 void testGraph(void);
 
 int main( int argc, char *argv[] ) {
-    testAll();
+    testInitialMoves();
+    testBlank();
+    testMovesRound1();
+    testGraph();
     return EXIT_SUCCESS;
 }
 
-void testAll(void){
-    testInitialMoves();
-    testMovesRound1();
-    testGraph();
+void testBlank(void){
+    HunterView gameState;
+     
+    {
+       playerMessage messages[1] = {""};
+       printf("Test: blank game.\n");
+       printf("creating hunterview.\n");
+       gameState = newHunterView("",messages);
+       printf("deciding move.\n");
+       decideMove( gameState );
+       printf("disposing.\n");
+       disposeHunterView( gameState );
+       printf("Test passed\n");
+   }
 }
 
 int moveIn(char * locs[], int size){

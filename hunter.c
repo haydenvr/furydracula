@@ -25,13 +25,7 @@ void decideMove (HunterView gameState) {
 	int round = getRound(gameState);
 	PlayerID id = getCurrentPlayer(gameState);
     LocationID move = getLocation(gameState, id);
-	
 	char * msg = "";
-	srand (time(NULL));
-	int path[NUM_MAP_LOCATIONS];
-    int amtLocs;
-    LocationID *adj = connectedLocations(&amtLocs, getLocation(gameState, id), id, round, ANY, g);
-    LocationID target = UNKNOWN_LOCATION;
 	
 	//set initial locations
 	if (round == 0) {
@@ -39,7 +33,15 @@ void decideMove (HunterView gameState) {
 	    else if (id == PLAYER_DR_SEWARD)  move = BELGRADE;
 	    else if (id == PLAYER_VAN_HELSING) move = STRASBOURG;
 	    else if (id == PLAYER_MINA_HARKER) move = MADRID;
+	    registerBestPlay(locations[move], msg);
+	    return;
     }
+    
+	srand (time(NULL));
+	int path[NUM_MAP_LOCATIONS];
+    int amtLocs = 0;
+    LocationID * adj = connectedLocations(&amtLocs, getLocation(gameState, id), id, round, ANY, g);
+    LocationID target = UNKNOWN_LOCATION;
     int camper = 0, i;
     
     //check for campers OTHER THAN CURRENT
