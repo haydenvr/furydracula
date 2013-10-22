@@ -30,7 +30,7 @@ void decideMove (HunterView gameState) {
 	srand (time(NULL));
 	int path[NUM_MAP_LOCATIONS];
     int amtLocs;
-    //LocationID *adj = connectedLocations(&amtLocs, getLocation(gameState, id), id, round, ANY, g);
+    LocationID *adj = connectedLocations(&amtLocs, getLocation(gameState, id), id, round, ANY, g);
     LocationID target = UNKNOWN_LOCATION;
 	
 	//set initial locations
@@ -57,7 +57,6 @@ void decideMove (HunterView gameState) {
         move = adj;
     } else {
         //Note: Dracula cannot visit any location currently in his trail - hunters should not visit target itself!
-        int j;
         //set target to message history
         if (getLatestMessageLoc(gameState) != UNKNOWN_LOCATION) target = getLatestMessageLoc(gameState);
         
@@ -80,12 +79,12 @@ void decideMove (HunterView gameState) {
         }
 
 		//Julian CHECK ME
-        if (target == UNKNOWN_LOCATION) target = adj[rand() % amtLocs]; //getLocation(gameState, id); //location unknown - move randomly
+        if (target == UNKNOWN_LOCATION) target = adj[rand() % amtLocs]; //location unknown - move randomly
         else {
         	findShortestPath(getLocation(gameState, id), target, path, ANY, round);
         	move = path[1];
 		}
-        //while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs];
+        while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs];
 
 	//CHECK Up to here
     }
