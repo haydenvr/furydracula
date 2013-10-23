@@ -1,6 +1,6 @@
 To Submit:
-give cs1927 projectHunt Makefile hunter.c HunterView.c HunterView.h cities.h connections_v1.2.h Graph.c Graph.h
+give cs1927 projectHunt Makefile hunter.c HunterView.c HunterView.h cities.h connections_v1.3.h Graph.c Graph.h
 
 To Dryrun: (always check that it compiles and runs)
-~cs1927/bin/dryrun projectHunt Makefile hunter.c HunterView.c HunterView.h cities.h connections_v1.2.h Graph.c Graph.h
+~cs1927/bin/dryrun projectHunt Makefile hunter.c HunterView.c HunterView.h cities.h connections_v1.3.h Graph.c Graph.h
 
