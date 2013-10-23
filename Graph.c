@@ -42,10 +42,10 @@ Graph newGraph() {
         g->connections[i] = NULL;  
     }
      
-    g->nE[ROAD] = 0;
-    g->nE[RAIL] = 0; 	
-	g->nE[SEA] = 0;
+    for (i = 0; i < NUM_TRANSPORT; i++) g->nE[i] = 0;
     makeMap(g);
+    for (i = 0; i < NUM_TRANSPORT; i++) g->nE[i] /= 2;
+    
     return g; 
 } 
 
@@ -78,18 +78,6 @@ void addLink(Graph g, Location start, Location end, Transport type){
     if (tmp == NULL) g->connections[start] = newNode;
     else {
         for (; tmp->next != NULL; tmp = tmp->next);
-        tmp->next = newNode;
-    }
-    
-    newNode = malloc(sizeof(struct vNode));
-    newNode->v = start;
-    newNode->type = type;
-	newNode->next = NULL;
-    tmp = g->connections[end];
-	int i = 0;
-    if (tmp == NULL) g->connections[end] = newNode;
-    else {
-        for (; tmp->next != NULL; tmp = tmp->next) { i++; }
         tmp->next = newNode;
     }
 }
