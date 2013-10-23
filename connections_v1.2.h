@@ -13,7 +13,7 @@ void makeMap(Graph g){
 	addLink(g, VALONA, SOFIA, ROAD);
 	addLink(g, VALONA, SARAJEVO, ROAD);
 
-	//SALONICA  
+	//SALONICA
 	addLink(g, SALONICA, VALONA, ROAD);
 	addLink(g, SALONICA, SOFIA, ROAD);
 
@@ -107,11 +107,11 @@ void makeMap(Graph g){
 	addLink(g, VIENNA, PRAGUE, ROAD);
 	addLink(g, VIENNA, BUDAPEST, ROAD);
 
-	//PRAGUE 
+	//PRAGUE
 	addLink(g, PRAGUE, NUREMBURG, ROAD);
 	addLink(g, PRAGUE, BERLIN, ROAD);
 	addLink(g, PRAGUE, VIENNA, ROAD);
-	
+
 	//BERLIN
 	addLink(g, BERLIN, LEIPZIG, ROAD);
 	addLink(g, BERLIN, HAMBURG, ROAD);
@@ -343,7 +343,7 @@ void makeMap(Graph g){
 
 	//LIVERPOOL
 	addLink(g, LIVERPOOL, SWANSEA, ROAD);
-	addLink(g, LIVERPOOL, EDINBURGH, ROAD);
+	addLink(g, LIVERPOOL, MANCHESTER, ROAD);
 
 	//DUBLIN
 	addLink(g, DUBLIN, GALWAY, ROAD);
@@ -388,10 +388,10 @@ void makeMap(Graph g){
 
 	//LE_HAVRE
 	addLink(g, LE_HAVRE, PARIS, RAIL);
-	
+
 	//MARSEILLES
 	addLink(g, MARSEILLES, PARIS, RAIL);
-	
+
 	//PARIS
 	addLink(g, PARIS, BORDEAUX, RAIL);
 	addLink(g, PARIS, MARSEILLES, RAIL);
@@ -422,10 +422,10 @@ void makeMap(Graph g){
 
 	//GENEVA
 	addLink(g, GENEVA, MILAN, RAIL);
-	
+
 	//GEONA
 	addLink(g, GENOA, MILAN, RAIL);
-	
+
 	//MILAN
 	addLink(g, MILAN, GENEVA, RAIL);
 	addLink(g, MILAN, FLORENCE, RAIL);
@@ -459,10 +459,10 @@ void makeMap(Graph g){
 
 	//HAMBURG
 	addLink(g, HAMBURG, BERLIN, RAIL);
-	
+
 	//MUNICH
 	addLink(g, MUNICH, NUREMBURG, RAIL);
-	
+
 	//NUREMBURG
 	addLink(g, NUREMBURG, MUNICH, RAIL);
 	addLink(g, NUREMBURG, LEIPZIG, RAIL);
@@ -529,10 +529,10 @@ void makeMap(Graph g){
 
 	//EDINBURGH
 	addLink(g, EDINBURGH, MANCHESTER, RAIL);
-	
+
 	//LIVERPOOL
 	addLink(g, LIVERPOOL, MANCHESTER, RAIL);
-	
+
 	//### SEA Connections ###
 
 	//BLACK SEA

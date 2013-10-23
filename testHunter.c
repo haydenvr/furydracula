@@ -63,7 +63,7 @@ void testMovesRound1(void){
      
     {
        playerMessage messages[7] = {""};
-       printf("Test: Round 1 hunter 2 move. Testing his connected locs.\n");
+       printf("Test1: Round 1 hunter 2 move. Testing his connected locs.\n");
        printf("creating hunterview.\n");
        gameState = newHunterView("GGW.... SGA.... HAT.... MMA.... DBO.V.. GGW.... SKL....",messages);
        printf("deciding move.\n");
@@ -71,19 +71,16 @@ void testMovesRound1(void){
        printf("disposing.\n");
        disposeHunterView( gameState );
        printf("Test passed\n");
-   }
-/*
-	{
-       playerMessage messages[7] = {""};
-       printf("Test: Round 1 hunter 3 moves from MA\n");
-       gameState = newHunterView("GGW.... SGA.... HAT.... MMA.... DBO.V.. GGW.... SKL.... HPR....",messages);
+
+       printf("Test2: Round 1 hunter 2 move. Testing his connected locs.\n");
+       printf("creating hunterview.\n");
+       gameState = newHunterView("GCD.... SBE.... HST.... MMA.... DC?.V.. GKL.... SKL.... HST....",messages);
+       printf("deciding move.\n");
        decideMove( gameState );
+       printf("disposing.\n");
        disposeHunterView( gameState );
-       char * possibleLocations[7] = {"LS","CA","GR","SR","AL","SN","MA"};
-       assert(moveIn(possibleLocations,7));
        printf("Test passed\n");
    }
-*/
 
 }
 
