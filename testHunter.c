@@ -81,7 +81,15 @@ void testMovesRound1(void){
        disposeHunterView( gameState );
        printf("Test passed\n");
    }
-
+   {
+       playerMessage messages[7] = {""};
+       printf("Testing fail round 2, hunter 2 trying to move illegally to CD\n");
+       gameState = newHunterView("GCD.... SBE.... HST.... MMA.... DKL.V.. GKLVD.. SKLD...",messages);
+       decideMove(gameState);
+       disposeHunterView(gameState);
+       printf("Test passed!\n");
+       printf("latest play is %s\n",latestPlay);
+    }
 }
 
 void testInitialMoves(void){

@@ -49,14 +49,19 @@ void decideMove (HunterView gameState) {
     
     if (!camper) {
         //if no camper and hunter is shortest dist to castle dracula, move towards castle dracula
+        printf("Hi there i'm here and move is %s\n",locations[move]);
         int hunterDist[NUM_HUNTERS] = {UNKNOWN_LOCATION,UNKNOWN_LOCATION,UNKNOWN_LOCATION,UNKNOWN_LOCATION};
         int closestHunter = PLAYER_LORD_GODALMING;
         LocationID adj;
         for (i = PLAYER_LORD_GODALMING; i < NUM_HUNTERS; i++) {
             hunterDist[i] = findShortestPath(getLocation(gameState, i), CASTLE_DRACULA, path, ANY, round);
-            if ((hunterDist[closestHunter] > hunterDist[i]) || (hunterDist[closestHunter] == UNKNOWN_LOCATION)) adj = path[1];
+            if ((hunterDist[closestHunter] > hunterDist[i]) || (hunterDist[closestHunter] == UNKNOWN_LOCATION)) {
+                 adj = path[1];
+                 closestHunter = i;
+            }
         }
-        move = adj;
+        if (closestHunter == id) move = adj;
+        printf("my move is %s\n",locations[move]);
     } else {
         //Note: Dracula cannot visit any location currently in his trail - hunters should not visit target itself!
         
