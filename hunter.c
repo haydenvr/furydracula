@@ -101,8 +101,9 @@ void decideMove (HunterView gameState) {
 
         if (target == UNKNOWN_LOCATION) target = adj[rand() % amtLocs]; //location unknown - move randomly
         else {
-        	findShortestPath(getLocation(gameState, id), target, path, ANY, round);
-        	move = path[1];
+        	int successful = findShortestPath(getLocation(gameState, id), target, path, ANY, round);//success is any number not -1
+        	if (successful != -1) move = path[1];
+            printf("hi im here and move is %d and target is %d\n",move,target);
 		}
         //while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs];
 
@@ -112,6 +113,7 @@ void decideMove (HunterView gameState) {
         while (adj[rand() % amtLocs] == target || adj[rand() % amtLocs] == CASTLE_DRACULA) move = adj[rand() % amtLocs];
     }*/
     destroyGraph(g);
+    printf("my move is %d\n",move);
 	registerBestPlay(locations[move], msg);
 }
 

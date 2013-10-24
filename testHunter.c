@@ -176,5 +176,21 @@ void testGraph(void) {
     assert(path[1] == COLOGNE); 
 	assert(path[2] == AMSTERDAM); 
 	printf("Passed final rail test\n");
+    printf("Testing fail cases\n");
+    printf("Testing Strassburg to CD\n");
+    a = findShortestPath(STRASBOURG, CASTLE_DRACULA, path, ANY, 3);
+    int i = 0;
+    int correct[5] = {51,6,10,21,13};
+    for (i = 0; i < a; i++) {
+        assert(path[i] == correct[i]);
+    }
+    printf("Passed\nNow testing same path but without rail (ie round%4==0)");
+    a = findShortestPath(STRASBOURG, CASTLE_DRACULA, path, ANY, 0);
+    //int correct[5] = {51,6,10,21,13};
+    for (i = 0; i < a; i++) {
+        printf("[%d]->",path[i]);// == correct[i]);
+    }
+    printf("\nDone\n");  
+
 }
 
