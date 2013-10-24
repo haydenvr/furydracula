@@ -37,16 +37,18 @@ void decideMove (HunterView gameState) {
 	    return;
     }
     
+    if (id == PLAYER_LORD_GODALMING) { registerBestPlay("CD","I'm camping MAN!!!"); return; }
 	srand (time(NULL));
 	int path[NUM_MAP_LOCATIONS];
     int amtLocs = 0;
     LocationID * adj = connectedLocations(&amtLocs, getLocation(gameState, id), id, round, ANY, g);
     LocationID target = UNKNOWN_LOCATION;
-    int camper = 0, i;
+    int camper = 1, i;
     
     // check for campers
     // if the current player is camping, then the player
     // will stay camping and ai will return
+    /* not necessary as LG is always camping
     for (i = 0; i < NUM_HUNTERS; i++) {
         if (getLocation(gameState, i) == CASTLE_DRACULA) {
             camper = 1;
@@ -55,7 +57,7 @@ void decideMove (HunterView gameState) {
                 return; 
             }
         }
-    }    
+    } */   
 
     if (!camper) {
         //if no camper and hunter is shortest dist to castle dracula, move towards castle dracula
