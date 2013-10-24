@@ -1,3 +1,5 @@
-all: gcc -c Graph.c HunterView.c hunter.c -ljiansson
+all:
+	gcc -c Graph.c HunterView.c Graph.c hunter.c -ljiansson
 
-clean: rm -rf myPlayer
+clean:
+	rm -rf myPlayer
