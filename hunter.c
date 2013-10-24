@@ -44,9 +44,19 @@ void decideMove (HunterView gameState) {
     LocationID target = UNKNOWN_LOCATION;
     int camper = 0, i;
     
-    //check for campers OTHER THAN CURRENT
-    for (i = 0; i < NUM_HUNTERS; i++) if (i != id && getLocation(gameState, i) == CASTLE_DRACULA) camper = 1;
-    
+    // check for campers
+    // if the current player is camping, then the player
+    // will stay camping and ai will return
+    for (i = 0; i < NUM_HUNTERS; i++) {
+        if (getLocation(gameState, i) == CASTLE_DRACULA) {
+            camper = 1;
+            if (id == i) {
+	            registerBestPlay("CD", "Staying camping");
+                return; 
+            }
+        }
+    }    
+
     if (!camper) {
         //if no camper and hunter is shortest dist to castle dracula, move towards castle dracula
         int hunterDist[NUM_HUNTERS] = {UNKNOWN_LOCATION,UNKNOWN_LOCATION,UNKNOWN_LOCATION,UNKNOWN_LOCATION};
@@ -67,10 +77,11 @@ void decideMove (HunterView gameState) {
         
         //set target to message history
         if (getLatestMessageLoc(gameState) != UNKNOWN_LOCATION) target = getLatestMessageLoc(gameState);
+        // what is the point of this line?
         
+        LocationID draculaLoc[TRAIL_SIZE];
+        getHistory (gameState, PLAYER_DRACULA, draculaLoc);
         for (i = TRAIL_SIZE - 1; i >= 0 ; i--) { //locations newer in trail will override older ones
-            LocationID draculaLoc[TRAIL_SIZE];
-            getHistory (gameState, PLAYER_DRACULA, draculaLoc);
             //if we have any useful info on his location...
             if (draculaLoc[i] != CITY_UNKNOWN && draculaLoc[i] != SEA_UNKNOWN && draculaLoc[i] != HIDE) {
                 if (draculaLoc[i] >= DOUBLE_BACK_1 && draculaLoc[i] <= DOUBLE_BACK_5) { //double back found
@@ -91,12 +102,13 @@ void decideMove (HunterView gameState) {
         	findShortestPath(getLocation(gameState, id), target, path, ANY, round);
         	move = path[1];
 		}
-        while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs];
+        //while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs];
 
     }
+    /*
     if (move == CASTLE_DRACULA && camper) { //don't double up campers!
         while (adj[rand() % amtLocs] == target || adj[rand() % amtLocs] == CASTLE_DRACULA) move = adj[rand() % amtLocs];
-    }
+    }*/
     destroyGraph(g);
 	registerBestPlay(locations[move], msg);
 }
