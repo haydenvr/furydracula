@@ -175,7 +175,6 @@ void canReachInN(Graph g, Location start, Transport type, int n, int locs[]){
 int findShortestPath(Location src, Location dest,Location path[],Transport type, int round){
 	Graph g = newGraph();
 	int a = dijkstras(g, src, dest, path, type,round);
-    printf("my a is %d\n",a);
 	/*if (a != -1) return a;
 	//function only checks in one direction, so need to check both in the case that the normal
 	//direction doesn't work
@@ -196,7 +195,8 @@ static int dijkstras (Graph g,Location src, Location dest,Location path[],Transp
 	for (v = 0; v < g->nV; v++) { 
 		haveVisited[v] = -1;
 		if (v == src) { dist[v] = 0; QueueJoin(q,v,0); visited[v] = -1;  }
-		else { dist[v] = maxWT; QueueJoin(q,v,maxWT); visited[v] = -1; }
+		else { 
+             dist[v] = maxWT; QueueJoin(q,v,maxWT); visited[v] = -1; }
 	}
 	while (!QueueIsEmpty(q)) {
 		// get vertex with lowest weight
@@ -206,16 +206,13 @@ static int dijkstras (Graph g,Location src, Location dest,Location path[],Transp
 		if (dist[v] != maxWT) {
 			edges = connectedLocations(&amtConsider, v,PLAYER_LORD_GODALMING,round,type,g); //note player doesn't matter
 			for (w = 0; w < amtConsider; w++) {
-				printf("considering now %d which is adj to %d\n",edges[w],v);
 				//if ((isAdjacent(g, v, edges[w], type))&&(v != edges[w])) {
 				if (v != edges[w]) {
 				    
 					alt = dist[v] + 1;
-                    if (edges[w] == 13) {
-                        printf("Hi i am here\n");
-                        printf("the distance calculated is %d\n",alt);
-                    }
-					if (alt < dist[edges[w]]) { dist[edges[w]] = alt; visited[edges[w]] = v; } //
+                    if (dist[edges[w]] == maxWT) QueueJoin(q,edges[w],dist[edges[w]]);
+					if (alt < dist[edges[w]]) { 
+                        dist[edges[w]] = alt; visited[edges[w]] = v; } //
 					//QueueJoin(q,w,dist[w]);
 					
 				}
