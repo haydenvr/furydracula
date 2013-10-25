@@ -99,6 +99,24 @@ void testMovesRound1(void){
         disposeHunterView(gameState);
         printf("Congrats, test should pass\n");
     }
+    {
+        playerMessage messages[13] = {""};
+        printf("Testing player 2 fail case round 5. Tried moving from Madrid -> Bordeaux\n");
+        gameState = newHunterView("GCD.... SBE.... HST.... MMA.... DGA.V.. GCD.... SBE.... HST.... MMA.... DC?T... GCD.... SKL.... HMU....", messages);
+        decideMove(gameState);
+        printf("latest play is %s\n",latestPlay);
+        disposeHunterView(gameState);
+        printf("Congrats, test should pass\n");
+    }
+    {
+        playerMessage messages[13] = {""};
+        printf("Testing player 2 fail case round 5. Player One is making segFaults! player at Vienna\n");
+        gameState = newHunterView("GCD.... SBE.... HST.... MMA.... DGA.V.. GCD.... SBE.... HST.... MMA.... DC?T... GCD.... SKL.... HMU.... MMA.... DC?T... GCD.... SGAV... HVI.... MMA.... DD1T... GCD.... SGA....",messages);
+        decideMove(gameState);
+        printf("latest play is %s\n",latestPlay);
+        disposeHunterView(gameState);
+        printf("Congrats, test should pass\n");
+    }
 }
 
 void testInitialMoves(void){
