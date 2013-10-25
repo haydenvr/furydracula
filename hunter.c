@@ -23,12 +23,13 @@ void decideMove (HunterView gameState) {
         "BS", "C?", "S?", "HI", "D1", "D2", "D3", "D4", "D5", "TP"
 	};
 	int round = getRound(gameState);
+	in
 	PlayerID id = getCurrentPlayer(gameState);
     LocationID move = getLocation(gameState, id);
 	char * msg = "";
     printf("hi there the round is %d\n",round);	
 	//set initial locations
-	if (round == 0) {
+	if (round - id == 0) {
 	    if (id == PLAYER_LORD_GODALMING) {move = CASTLE_DRACULA; msg = "camping";}
 	    else if (id == PLAYER_DR_SEWARD)  move = BELGRADE;
 	    else if (id == PLAYER_VAN_HELSING) move = STRASBOURG;
