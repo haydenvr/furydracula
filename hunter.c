@@ -26,7 +26,7 @@ void decideMove (HunterView gameState) {
 	PlayerID id = getCurrentPlayer(gameState);
     LocationID move = getLocation(gameState, id);
 	char * msg = "";
-	
+    printf("hi there the round is %d\n",round);	
 	//set initial locations
 	if (round == 0) {
 	    if (id == PLAYER_LORD_GODALMING) {move = CASTLE_DRACULA; msg = "camping";}

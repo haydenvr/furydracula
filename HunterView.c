@@ -195,7 +195,7 @@ void disposeHunterView( HunterView toBeDeleted ) {
 
 //Get the current round
 Round getRound (HunterView currentView) {
-	return currentView->round;
+	return currentView->round + getCurrentPlayer(currentView);
 }
 
 //Get the id of current player - ie whose turn is it?
