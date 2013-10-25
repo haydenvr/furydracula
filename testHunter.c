@@ -203,5 +203,26 @@ void testGraph(void) {
     assert(path[1] == COLOGNE); 
 	assert(path[2] == AMSTERDAM); 
 	printf("Passed final rail test\n");
+    printf("Testing fail cases\n");
+    printf("Testing Strassburg to CD\n");
+    a = findShortestPath(STRASBOURG, CASTLE_DRACULA, path, ANY, 3);
+    int i = 0;
+    int correct[5] = {51,6,10,21,13};
+    for (i = 0; i < a; i++) {
+        assert(path[i] == correct[i]);
+    }
+    printf("Passed\nNow testing same path but without rail (ie round%4==0)");
+    a = findShortestPath(STRASBOURG, CASTLE_DRACULA, path, ANY, 0);
+    int correct2[6] = {51,38,58,10,28,13};
+    for (i = 0; i < a; i++) {
+        assert(path[i] == correct2[i]);
+    }
+    printf("\nTest Passed\nNow to test the results of connected locs Klaus (expecting CD to be there)\n");  
+    Graph g = newGraph();
+    LocationID *b = connectedLocations(&a, KLAUSENBURG, 0, 0, ANY, g);
+    for (i=0; i<a; i++) {
+        printf("[%d]",b[i]);
+    }
+    printf("\nDone\n");
 }
 
