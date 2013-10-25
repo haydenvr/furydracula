@@ -4,3 +4,5 @@ give cs1927 projectHunt Makefile hunter.c HunterView.c HunterView.h cities.h con
 To Dryrun: (always check that it compiles and runs)
 ~cs1927/bin/dryrun projectHunt Makefile hunter.c HunterView.c HunterView.h cities.h connections_v1.3.h Graph.c Graph.h
 
+To Check Submission: (worth doing)
+1927 classrun -check projectHunt
