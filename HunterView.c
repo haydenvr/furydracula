@@ -18,6 +18,7 @@ struct hunterView {
     playerMessage messages[MESSAGE_SIZE];
     int trap[TRAIL_SIZE];
     int vampire[TRAIL_SIZE];
+    int amtMess;
 };
 
 struct player {
@@ -175,11 +176,12 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 	int amt_mess = (int) sizeof(messages)/sizeof(playerMessage);
 	for (i = 0; i < amt_mess; i++) {
 		for (j = 0; j < MESSAGE_SIZE-1; j++){
-			if (messages[i][j] == '\0') break;
+			if (messages[i][j] == '\0') { hunterView->messages[i][j] = messages[i][j]; break; }
 			hunterView->messages[i][j] = messages[i][j];
 			
 		}
 	}
+    hunterView->amtMess = amt_mess;
     return hunterView;
 }
      
@@ -377,7 +379,7 @@ LocationID getLatestMessageLoc(HunterView currentView) {
         "ZU", "NS", "EC", "IS", "AO", "BB", "MS", "TS", "IO", "AS", 
         "BS", "C?", "S?", "HI", "D1", "D2", "D3", "D4", "D5", "TP"
 	};
-    for (i = 0; i < MESSAGE_SIZE; i++) { //find latest message of location
+    for (i = 0; i < currentView->amtMess; i++) { //find latest message of location
         if (strcmp(currentView->messages[i], "") == 0) { //location is known
             for (j = 0; j < NUM_LOCATIONS; j++) if (locations[j] == currentView->messages[i]) return j;
         }

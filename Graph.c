@@ -186,6 +186,7 @@ int findShortestPath(Location src, Location dest,Location path[],Transport type,
                b++;
     }*/
     destroyGraph(g);
+    printf("the val of a is %d\n",a);
 	return a;
 }
 	

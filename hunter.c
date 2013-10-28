@@ -26,6 +26,7 @@ void decideMove (HunterView gameState) {
 	int round = getRound(gameState);
 	PlayerID id = getCurrentPlayer(gameState);
     LocationID move = getLocation(gameState, id);
+    printf("the original loc is %d\n",move);
 	char * msg = "";
     printf("initialised all variables\n"); fflush(stdout);
 	//set initial locations
@@ -108,8 +109,12 @@ void decideMove (HunterView gameState) {
 
         if (target == UNKNOWN_LOCATION) target = adj[rand() % amtLocs]; //location unknown - move randomly
         else {
+            printf("HEY THERE move is %d and target is %d\n",move,target);
         	int successful = findShortestPath(getLocation(gameState, id), target, path, ANY, round);//success is any number not -1
-        	if (successful != -1) move = path[1];
+        	if (successful == 1) { 
+                move = path[0]; 
+                printf("this was succesful %d\n",move); }
+            else if (successful != -1) { move = path[1]; printf("this wasn't succ move is %d\n",move); }
 		}
         //while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs];
 
@@ -120,7 +125,7 @@ void decideMove (HunterView gameState) {
     }*/
     printf("at end\n"); fflush(stdout);
     destroyGraph(g);
-    printf("destroyed graph\n"); fflush(stdout);
-	registerBestPlay(locations[move], msg);
+    printf("destroyed graph and move is %d\n",move); fflush(stdout);
+	registerBestPlay(locations[move], "");
 }
 
