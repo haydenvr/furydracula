@@ -190,6 +190,8 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
 // toBeDeleted. toBeDeleted should not be accessed after the call.
 void disposeHunterView( HunterView toBeDeleted ) {
     assert(toBeDeleted != NULL);
+    int i;
+    for (i = 0; i < NUM_PLAYERS; i++) free(toBeDeleted->players[i]);
     free( toBeDeleted );
 }
 
@@ -305,7 +307,6 @@ LocationID * connectedLocations(int * numLocations, LocationID from,
 	if (player == PLAYER_DRACULA) rail = FALSE;
 	if (!sea) to_search = ZURICH + 1; //Zurich is the last city
 
-	//Graph g = newGraph(); //our graph to check
 	int i;
 	*numLocations = 0;
 	LocationID *connected;//[NUM_MAP_LOCATIONS];
@@ -363,7 +364,6 @@ LocationID * connectedLocations(int * numLocations, LocationID from,
 		connected[*numLocations] = from;
 		(*numLocations)++; 
 	}
-	
 	return connected;
 }
 

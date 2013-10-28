@@ -260,6 +260,8 @@ void testGraph(void) {
     for (i=0; i<a; i++) {
         printf("[%d]",b[i]);
     }
+    free(b);
+    destroyGraph(g);
     printf("\nDone\n");
 }
 

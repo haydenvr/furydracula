@@ -11,6 +11,7 @@
 #define NUM_HUNTERS (NUM_PLAYERS - 1)
 
 int isLegalMove(HunterView gameState, PlayerID id, LocationID move, int round, Graph g);
+static void freeStuff(Graph * g, LocationID * adj);
 
 void decideMove (HunterView gameState) {
     printf("at start of code\n"); fflush(stdout);
@@ -62,7 +63,7 @@ void decideMove (HunterView gameState) {
             camper = 1;
             if (id == i) {
 	            registerBestPlay("CD", "Staying camping");
-	            destroyGraph(g);
+	            freeStuff(&g, adj);
                 return; 
             }
         }
@@ -120,9 +121,9 @@ void decideMove (HunterView gameState) {
         while (adj[rand() % amtLocs] == CASTLE_DRACULA) move = adj[rand() % amtLocs];
     }
     printf("at end\n"); fflush(stdout);
-	if (isLegalMove(gameState, id, move, round, g))registerBestPlay(locations[move], "");
+	if (isLegalMove(gameState, id, move, round, g)) registerBestPlay(locations[move], "");
 	else registerBestPlay(locations[getLocation(gameState, id)], "");
-    destroyGraph(g);
+    freeStuff(&g, adj);
     printf("destroyed graph and move is %d\n",move); fflush(stdout);
 }
 
@@ -133,6 +134,11 @@ int isLegalMove(HunterView gameState, PlayerID id, LocationID move, int round, G
     for (i = 0; i < amtLocs; i++) {
         if (adj[i] == move) legal = 1;
     }
+    free(adj);
     return legal;
 }
 
+static void freeStuff(Graph * g, LocationID * adj) {
+    destroyGraph(*g);
+    free(adj);
+}

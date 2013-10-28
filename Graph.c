@@ -69,6 +69,7 @@ void destroyGraph(Graph g){
 
 
 void addLink(Graph g, Location start, Location end, Transport type){
+    assert(g != NULL);
     VList newNode = malloc(sizeof(struct vNode));
     newNode->v = end;
     newNode->type = type;
@@ -126,6 +127,7 @@ int numE(Graph g, Transport type){
 //returns 1 if there is an edge from start to end of the given type
 //gives 0 otherwise
 int isAdjacent(Graph g, Location start, Location end, Transport type){
+    assert(g != NULL);
 	if (start == end) return 1;
     VList tmp = g->connections[start];
     for (; tmp != NULL; tmp = tmp->next) if (tmp->v == end && (tmp->type == type || type == ANY)) return 1;
@@ -150,6 +152,7 @@ static int dist(int st[], int e) {
 //otherwise it is left as 0
 void canReachInN(Graph g, Location start, Transport type, int n, int locs[]){
     Queue q = newQueue();
+    assert(g != NULL);
     int st[NUM_MAP_LOCATIONS];
     int i, e;
     VList tmp;
@@ -175,6 +178,7 @@ void canReachInN(Graph g, Location start, Transport type, int n, int locs[]){
 
 int findShortestPath(Location src, Location dest,Location path[],Transport type, int round){
 	Graph g = newGraph();
+    assert(g != NULL);
 	int a = dijkstras(g, src, dest, path, type,round);
 	/*if (a != -1) return a;
 	//function only checks in one direction, so need to check both in the case that the normal
@@ -190,9 +194,12 @@ int findShortestPath(Location src, Location dest,Location path[],Transport type,
     printf("the val of a is %d\n",a);
 	return a;
 }
+
 	
 static int dijkstras (Graph g,Location src, Location dest,Location path[],Transport type, int round){
-	int v, w, alt, dist[g->nV], visited[g->nV], maxWT = 9999, *edges,amtConsider, haveVisited[g->nV]; //st visited, wt dist //,
+    assert(g != NULL);
+	int v, w, alt, dist[g->nV], visited[g->nV], maxWT = 9999, amtConsider, haveVisited[g->nV]; //st visited, wt dist //,
+	LocationID * edges;
 	Queue q = newQueue();
 	for (v = 0; v < g->nV; v++) { 
 		haveVisited[v] = -1;
@@ -207,6 +214,7 @@ static int dijkstras (Graph g,Location src, Location dest,Location path[],Transp
 		haveVisited[v] = 1;
 		if (dist[v] != maxWT) {
 			edges = connectedLocations(&amtConsider, v,PLAYER_LORD_GODALMING,round,type,g); //note player doesn't matter
+			assert(edges != NULL);
 			for (w = 0; w < amtConsider; w++) {
 				//if ((isAdjacent(g, v, edges[w], type))&&(v != edges[w])) {
 				if (v != edges[w]) {
@@ -220,14 +228,14 @@ static int dijkstras (Graph g,Location src, Location dest,Location path[],Transp
 				}
 				
 			}
-			
+	        free(edges);
 		}
 	}
 	v = dist[dest]; 
 	int curr = dest;
+	dropQueue(q);
 	if (v == maxWT) return -1;
 	while (v >= 0) { path[v] = curr; curr = visited[curr]; v--; } 
-	dropQueue(q);
 	return dist[dest] + 1;
 }
 
