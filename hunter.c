@@ -11,7 +11,6 @@
 #define NUM_HUNTERS (NUM_PLAYERS - 1)
 
 int isLegalMove(HunterView gameState, PlayerID id, LocationID move, int round, Graph g);
-static void freeStuff(Graph * g, LocationID * adj);
 
 void decideMove (HunterView gameState) {
     printf("at start of code\n"); fflush(stdout);
@@ -63,7 +62,8 @@ void decideMove (HunterView gameState) {
             camper = 1;
             if (id == i) {
 	            registerBestPlay("CD", "Staying camping");
-	            freeStuff(&g, adj);
+                destroyGraph(g);
+                free(adj);
                 return; 
             }
         }
@@ -123,7 +123,8 @@ void decideMove (HunterView gameState) {
     printf("at end\n"); fflush(stdout);
 	if (isLegalMove(gameState, id, move, round, g)) registerBestPlay(locations[move], "");
 	else registerBestPlay(locations[getLocation(gameState, id)], "");
-    freeStuff(&g, adj);
+    destroyGraph(g);
+    free(adj);
     printf("destroyed graph and move is %d\n",move); fflush(stdout);
 }
 
@@ -138,7 +139,3 @@ int isLegalMove(HunterView gameState, PlayerID id, LocationID move, int round, G
     return legal;
 }
 
-static void freeStuff(Graph * g, LocationID * adj) {
-    destroyGraph(*g);
-    free(adj);
-}
