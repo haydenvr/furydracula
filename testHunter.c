@@ -91,9 +91,26 @@ void testMovesRound1(void){
        printf("latest play is %s\n",latestPlay);
     }
     {
-        playerMessage messages[100] = {""};
+        playerMessage messages2[] = {
+	    "camping",
+	    "",
+	    "",
+	    "",
+	    "+++Mr. Jelly! Mr. Jelly!+++",
+	    "I'm camping MAN!!!",
+	    "",
+	    "",
+	    "pn\u001a\thF\u001a\t\u0003",
+	    "+++Mr. Jelly! Mr. Jelly!+++",
+	    "I'm camping MAN!!!",
+	    "VR",
+	    "VR",
+	    "VR",
+	    "+++Oneoneoneoneoneoneone+++",
+	    "I'm camping MAN!!!"
+	  };
         printf("Testing player 2 fail case round 5. Tried moving from Liverpool -> London\n");
-        gameState = newHunterView("GCD.... SBE.... HST.... MMA.... DGA.V.. GCD.... SBE.... HST.... MMA.... DBCT... GCD.... SKL.... HMU.... MMA.... DHIT... GCD.... SGAV... HVI.... MMA.... DD1T... GCD.... SGA.... HBD.... MMA.... DCNT... GCD.... SGA.... HKL.... MMA.... DC?T... GCD.... SGA.... HGA.... MMA.... DBS.... GCD.... SGA.... HGA.... MMA.... DS?..M. GCD.... SGA.... HGA.... MMA.... DSAT.M. GCD.... SGA.... HGA.... MMA.... DD2..M. GCD.... SGA.... HCNT... MMA.... DTS.... GCD.... SGA.... HCN.... MMA.... DCGT.M. GCD.... SGA.... HBS.... MMA.... DHIT... GCD.... SGA.... HBS.... MMA.... DMS.... GCD.... SGA.... HIO.... MMA.... DS?..M. GCD.... SGA.... HIO.... MMA.... DEC.... GCD.... SGA.... HTS.... MMA.... DLOT... GCD.... SGA.... HTS.... MMA.... DD1T.M. GCD.... SGA.... HTS.... MMA.... DHIT.M. GCD.... SGA.... HMS.... MMA.... DSWT... GCD.... SGA.... HMS.... MMA.... DS?.... GCD.... SGA.... HAO.... MMA.... DLVT... GCD.... SGA.... HAO.... MMA.... DC?T.M. GCD.... SGA.... HAO.... MMA.... DD5T.M. GCD.... SGA.... HAO.... MMA.... DPLT.M. GCD.... SGA.... HIS.... MMA.... DS?..M. GCD.... SGA.... HIS.... MMA.... DC?.V.. GCD.... SGA.... HLVT... MMA.... DC?T... GCD.... SGA.... HLV.... MMA.... DC?T.M. GCD.... SGA.... HLV.... MMA.... DD1T.M. GCD.... SGA....",messages);
+        gameState = newHunterView("GCD.... SBE.... HST.... MMA.... DGA.V.. GCD.... SBE.... HST.... MMA.... DBCT... GCD.... SKL.... HMU.... MMA.... DHIT... GCD.... SGAV... HVI.... MMA.... DD1T... GCD.... SGA.... HBD.... MMA.... DCNT... GCD.... SGA.... HKL.... MMA.... DC?T... GCD.... SGA.... HGA.... MMA.... DBS.... GCD.... SGA.... HGA.... MMA.... DS?..M. GCD.... SGA.... HGA.... MMA.... DSAT.M. GCD.... SGA.... HGA.... MMA.... DD2..M. GCD.... SGA.... HCNT... MMA.... DTS.... GCD.... SGA.... HCN.... MMA.... DCGT.M. GCD.... SGA.... HBS.... MMA.... DHIT... GCD.... SGA.... HBS.... MMA.... DMS.... GCD.... SGA.... HIO.... MMA.... DS?..M. GCD.... SGA.... HIO.... MMA.... DEC.... GCD.... SGA.... HTS.... MMA.... DLOT... GCD.... SGA.... HTS.... MMA.... DD1T.M. GCD.... SGA.... HTS.... MMA.... DHIT.M. GCD.... SGA.... HMS.... MMA.... DSWT... GCD.... SGA.... HMS.... MMA.... DS?.... GCD.... SGA.... HAO.... MMA.... DLVT... GCD.... SGA.... HAO.... MMA.... DC?T.M. GCD.... SGA.... HAO.... MMA.... DD5T.M. GCD.... SGA.... HAO.... MMA.... DPLT.M. GCD.... SGA.... HIS.... MMA.... DS?..M. GCD.... SGA.... HIS.... MMA.... DC?.V.. GCD.... SGA.... HLVT... MMA.... DC?T... GCD.... SGA.... HLV.... MMA.... DC?T.M. GCD.... SGA.... HLV.... MMA.... DD1T.M. GCD.... SGA....",messages2);
         decideMove(gameState);
         printf("latest play is %s\n",latestPlay);
         disposeHunterView(gameState);
@@ -229,7 +246,11 @@ void testGraph(void) {
     for (i = 0; i < a; i++) {
         assert(path[i] == correct[i]);
     }
+<<<<<<< HEAD
+    printf("Passed\nNow testing same path but without rail (ie round rem 4 equal to 0 )");
+=======
     printf("Passed\nNow testing same path but without rail");
+>>>>>>> 37c9de4654ef770e210ed789b980f25f377cc98a
     a = findShortestPath(STRASBOURG, CASTLE_DRACULA, path, ANY, 0);
     int correct2[6] = {51,38,58,10,28,13};
     for (i = 0; i < a; i++) {

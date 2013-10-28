@@ -10,6 +10,8 @@
 
 #define NUM_HUNTERS (NUM_PLAYERS - 1)
 
+static LocationID pickAdj(PlayerID id, LocationID target, int round, Graph g);
+
 void decideMove (HunterView gameState) {
     printf("at start of code\n"); fflush(stdout);
 	Graph g = newGraph();
@@ -40,8 +42,8 @@ void decideMove (HunterView gameState) {
     }
     printf("done initial moves\n"); fflush(stdout);
 
-    
-    if (id == PLAYER_LORD_GODALMING) { registerBestPlay("CD","I'm camping MAN!!!"); return; }
+    //below code will throw errors if LG is killed
+    //if (id == PLAYER_LORD_GODALMING) { registerBestPlay("CD","I'm camping MAN!!!"); return; }
 	srand (time(NULL));
 	int path[NUM_MAP_LOCATIONS];
     int amtLocs = 0;
@@ -53,7 +55,7 @@ void decideMove (HunterView gameState) {
     // check for campers
     // if the current player is camping, then the player
     // will stay camping and ai will return
-    /* not necessary as LG is always camping
+    
     for (i = 0; i < NUM_HUNTERS; i++) {
         if (getLocation(gameState, i) == CASTLE_DRACULA) {
             camper = 1;
@@ -62,7 +64,7 @@ void decideMove (HunterView gameState) {
                 return; 
             }
         }
-    } */   
+    } 
 
     if (!camper) {
         //if no camper and hunter is shortest dist to castle dracula, move towards castle dracula
@@ -129,3 +131,8 @@ void decideMove (HunterView gameState) {
 	registerBestPlay(locations[move], "");
 }
 
+static LocationID pickAdj(PlayerID id, LocationID target, int round, Graph g) {
+    locationID currLoc = getLocation(gameState, id);
+    int amtLocs = 0;
+    LocationID * adj = connectedLocations(&amtLocs, currLoc, id, round, ANY, g);
+}
