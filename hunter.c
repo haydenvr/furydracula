@@ -82,11 +82,6 @@ void decideMove (HunterView gameState) {
         if (closestHunter == id) move = adj;
     } else {
         //Note: Dracula cannot visit any location currently in his trail - hunters should not visit target itself!
-        
-        //set target to message history
-        if (getLatestMessageLoc(gameState) != UNKNOWN_LOCATION) target = getLatestMessageLoc(gameState);
-        // what is the point of this line?
-        
         LocationID draculaLoc[TRAIL_SIZE];
         getHistory (gameState, PLAYER_DRACULA, draculaLoc);
         printf("going through trail\n"); fflush(stdout);
@@ -116,10 +111,10 @@ void decideMove (HunterView gameState) {
         //while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs];
 
     }
-    /*
+    
     if (move == CASTLE_DRACULA && camper) { //don't double up campers!
-        while (adj[rand() % amtLocs] == target || adj[rand() % amtLocs] == CASTLE_DRACULA) move = adj[rand() % amtLocs];
-    }*/
+        while (adj[rand() % amtLocs] == CASTLE_DRACULA) move = adj[rand() % amtLocs];
+    }
     printf("at end\n"); fflush(stdout);
     destroyGraph(g);
     printf("destroyed graph\n"); fflush(stdout);
