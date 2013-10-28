@@ -134,7 +134,24 @@ void testMovesRound1(void){
         disposeHunterView(gameState);
         printf("Congrats, test should pass\n");
     }
-    
+    {
+        playerMessage messages[31] = {""};
+        printf("Testing player 1 fail case from game 303 round 6\n");
+        gameState = newHunterView("GCD.... SBE.... HST.... MMA.... DCG.V.. GCD.... SBE.... HST.... MMA.... DS?.... GCD.... SSA.... HGE.... MAL.... DS?.... GCD.... SIO.... HMR.... MMS.... DC?T... GCD.... STS.... HMS.... MCGV... DC?T... GCD.... SCG.... HCG.... MCG.... DC?T... GCD....",messages);
+        decideMove(gameState);
+        printf("latest play is %s\n",latestPlay);
+        disposeHunterView(gameState);
+        printf("Congrats, this segfaulted in the game\n");
+    }
+    {
+        playerMessage messages[32] = {""};
+        printf("Testing player 2 fail case from game 303 round 6\n");
+        gameState = newHunterView("GCD.... SBE.... HST.... MMA.... DCG.V.. GCD.... SBE.... HST.... MMA.... DS?.... GCD.... SSA.... HGE.... MAL.... DS?.... GCD.... SIO.... HMR.... MMS.... DC?T... GCD.... STS.... HMS.... MCGV... DC?T... GCD.... SCG.... HCG.... MCG.... DC?T... GCD.... SCG....",messages);
+        decideMove(gameState);
+        printf("latest play is %s\n",latestPlay);
+        disposeHunterView(gameState);
+        printf("Congrats, this segfaulted in the game\n");
+    }
 }
 
 void testInitialMoves(void){
@@ -229,7 +246,11 @@ void testGraph(void) {
     for (i = 0; i < a; i++) {
         assert(path[i] == correct[i]);
     }
+<<<<<<< HEAD
     printf("Passed\nNow testing same path but without rail (ie round rem 4 equal to 0 )");
+=======
+    printf("Passed\nNow testing same path but without rail");
+>>>>>>> 37c9de4654ef770e210ed789b980f25f377cc98a
     a = findShortestPath(STRASBOURG, CASTLE_DRACULA, path, ANY, 0);
     int correct2[6] = {51,38,58,10,28,13};
     for (i = 0; i < a; i++) {
