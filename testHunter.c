@@ -246,11 +246,8 @@ void testGraph(void) {
     for (i = 0; i < a; i++) {
         assert(path[i] == correct[i]);
     }
-<<<<<<< HEAD
     printf("Passed\nNow testing same path but without rail (ie round rem 4 equal to 0 )");
-=======
     printf("Passed\nNow testing same path but without rail");
->>>>>>> 37c9de4654ef770e210ed789b980f25f377cc98a
     a = findShortestPath(STRASBOURG, CASTLE_DRACULA, path, ANY, 0);
     int correct2[6] = {51,38,58,10,28,13};
     for (i = 0; i < a; i++) {
