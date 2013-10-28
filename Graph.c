@@ -162,6 +162,7 @@ void canReachInN(Graph g, Location start, Transport type, int n, int locs[]){
     while (!QueueIsEmpty(q)) {
         e = QueueLeave(q,0);
         for (tmp = g->connections[e]; tmp != NULL; tmp = tmp->next) {
+            //printf("%d -> %d\n", e, tmp->v);
             if (st[tmp->v] == -1 && dist(st, e) < n && (tmp->type == type || type == ANY)) {
                 st[tmp->v] = e;
                 QueueJoin(q, tmp->v, 0);

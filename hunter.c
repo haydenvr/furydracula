@@ -120,10 +120,10 @@ void decideMove (HunterView gameState) {
         while (adj[rand() % amtLocs] == CASTLE_DRACULA) move = adj[rand() % amtLocs];
     }
     printf("at end\n"); fflush(stdout);
-    destroyGraph(g);
-    printf("destroyed graph and move is %d\n",move); fflush(stdout);
 	if (isLegalMove(gameState, id, move, round, g))registerBestPlay(locations[move], "");
 	else registerBestPlay(locations[getLocation(gameState, id)], "");
+    destroyGraph(g);
+    printf("destroyed graph and move is %d\n",move); fflush(stdout);
 }
 
 int isLegalMove(HunterView gameState, PlayerID id, LocationID move, int round, Graph g) {
