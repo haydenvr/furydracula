@@ -135,4 +135,4 @@ static LocationID pickAdj(PlayerID id, LocationID target, int round, Graph g) {
     locationID currLoc = getLocation(gameState, id);
     int amtLocs = 0;
     LocationID * adj = connectedLocations(&amtLocs, currLoc, id, round, ANY, g);
-}
+} 

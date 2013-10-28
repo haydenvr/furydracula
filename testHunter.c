@@ -90,6 +90,7 @@ void testMovesRound1(void){
        printf("Test passed!\n");
        printf("latest play is %s\n",latestPlay);
     }
+    /*
     {
         playerMessage messages2[] = {
 	    "camping",
@@ -115,7 +116,7 @@ void testMovesRound1(void){
         printf("latest play is %s\n",latestPlay);
         disposeHunterView(gameState);
         printf("Congrats, test should pass\n");
-    }
+    } */
     {
         playerMessage messages[13] = {""};
         printf("Testing player 2 fail case round 5. Tried moving from Madrid -> Bordeaux\n");
