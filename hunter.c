@@ -10,7 +10,7 @@
 
 #define NUM_HUNTERS (NUM_PLAYERS - 1)
 
-static LocationID pickAdj(PlayerID id, LocationID target, int round, Graph g);
+static int isLegal(PlayerID id, LocationID target, int round, Graph g);
 
 void decideMove (HunterView gameState) {
     printf("at start of code\n"); fflush(stdout);
@@ -38,6 +38,7 @@ void decideMove (HunterView gameState) {
 	    else if (id == PLAYER_VAN_HELSING) move = STRASBOURG;
 	    else if (id == PLAYER_MINA_HARKER) move = MADRID;
 	    registerBestPlay(locations[move], msg);
+	    destroyGraph(g);
 	    return;
     }
     printf("done initial moves\n"); fflush(stdout);
@@ -49,7 +50,7 @@ void decideMove (HunterView gameState) {
     int amtLocs = 0;
     LocationID * adj = connectedLocations(&amtLocs, getLocation(gameState, id), id, round, ANY, g);
     LocationID target = UNKNOWN_LOCATION;
-    int camper = 1, i;
+    int camper = 0, i;
     printf("setting up connected locs etc\n"); fflush(stdout);
 
     // check for campers
@@ -61,6 +62,7 @@ void decideMove (HunterView gameState) {
             camper = 1;
             if (id == i) {
 	            registerBestPlay("CD", "Staying camping");
+	            destroyGraph(g);
                 return; 
             }
         }
@@ -83,11 +85,6 @@ void decideMove (HunterView gameState) {
         if (closestHunter == id) move = adj;
     } else {
         //Note: Dracula cannot visit any location currently in his trail - hunters should not visit target itself!
-        
-        //set target to message history
-        if (getLatestMessageLoc(gameState) != UNKNOWN_LOCATION) target = getLatestMessageLoc(gameState);
-        // what is the point of this line?
-        
         LocationID draculaLoc[TRAIL_SIZE];
         getHistory (gameState, PLAYER_DRACULA, draculaLoc);
         printf("going through trail\n"); fflush(stdout);
@@ -112,27 +109,27 @@ void decideMove (HunterView gameState) {
         if (target == UNKNOWN_LOCATION) target = adj[rand() % amtLocs]; //location unknown - move randomly
         else {
             printf("HEY THERE move is %d and target is %d\n",move,target);
-        	int successful = findShortestPath(getLocation(gameState, id), target, path, ANY, round);//success is any number not -1
-        	if (successful == 1) { 
-                move = path[0]; 
-                printf("this was succesful %d\n",move); }
-            else if (successful != -1) { move = path[1]; printf("this wasn't succ move is %d\n",move); }
+        	if (getLocation(gameState, id) != target) { 
+                int pathLen = findShortestPath(getLocation(gameState, id), target, path, ANY, round); //success is any number not -1
+                if (pathLen != -1) move = path[1]; //move successful
+            else move = target;
 		}
-        //while (adj[rand() % amtLocs] == target) move = adj[rand() % amtLocs];
-
     }
-    /*
+    
     if (move == CASTLE_DRACULA && camper) { //don't double up campers!
-        while (adj[rand() % amtLocs] == target || adj[rand() % amtLocs] == CASTLE_DRACULA) move = adj[rand() % amtLocs];
-    }*/
+        while (adj[rand() % amtLocs] == CASTLE_DRACULA) move = adj[rand() % amtLocs];
+    }
     printf("at end\n"); fflush(stdout);
     destroyGraph(g);
     printf("destroyed graph and move is %d\n",move); fflush(stdout);
-	registerBestPlay(locations[move], "");
+	if (isLegal(id, move, round, g))registerBestPlay(locations[move], "");
+	else registerBestPlay(locations[getLocation(gameState, id)], "");
 }
 
-static LocationID pickAdj(PlayerID id, LocationID target, int round, Graph g) {
+static int isLegal(PlayerID id, LocationID move, int round, Graph g) {
     locationID currLoc = getLocation(gameState, id);
-    int amtLocs = 0;
+    int amtLocs = 0, legal = 0, i;
     LocationID * adj = connectedLocations(&amtLocs, currLoc, id, round, ANY, g);
-} 
+    for (i = 0; i < amtLocs, i++) if (adj[i] == move) legal = 1;
+    return legal;
+}
