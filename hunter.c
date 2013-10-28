@@ -10,7 +10,7 @@
 
 #define NUM_HUNTERS (NUM_PLAYERS - 1)
 
-static int isLegal(PlayerID id, LocationID target, int round, Graph g);
+int isLegalMove(HunterView gameState, PlayerID id, LocationID move, int round, Graph g);
 
 void decideMove (HunterView gameState) {
     printf("at start of code\n"); fflush(stdout);
@@ -112,7 +112,7 @@ void decideMove (HunterView gameState) {
         	if (getLocation(gameState, id) != target) { 
                 int pathLen = findShortestPath(getLocation(gameState, id), target, path, ANY, round); //success is any number not -1
                 if (pathLen != -1) move = path[1]; //move successful
-            else move = target;
+            } else move = target;
 		}
     }
     
@@ -122,14 +122,17 @@ void decideMove (HunterView gameState) {
     printf("at end\n"); fflush(stdout);
     destroyGraph(g);
     printf("destroyed graph and move is %d\n",move); fflush(stdout);
-	if (isLegal(id, move, round, g))registerBestPlay(locations[move], "");
+	if (isLegalMove(gameState, id, move, round, g))registerBestPlay(locations[move], "");
 	else registerBestPlay(locations[getLocation(gameState, id)], "");
 }
 
-static int isLegal(PlayerID id, LocationID move, int round, Graph g) {
-    locationID currLoc = getLocation(gameState, id);
+int isLegalMove(HunterView gameState, PlayerID id, LocationID move, int round, Graph g) {
+    LocationID currLoc = getLocation(gameState, id);
     int amtLocs = 0, legal = 0, i;
     LocationID * adj = connectedLocations(&amtLocs, currLoc, id, round, ANY, g);
-    for (i = 0; i < amtLocs, i++) if (adj[i] == move) legal = 1;
+    for (i = 0; i < amtLocs; i++) {
+        if (adj[i] == move) legal = 1;
+    }
     return legal;
 }
+
