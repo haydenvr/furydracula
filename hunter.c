@@ -23,7 +23,6 @@ void decideMove (HunterView gameState) {
         "BS", "C?", "S?", "HI", "D1", "D2", "D3", "D4", "D5", "TP"
 	};
 	int round = getRound(gameState);
-	in
 	PlayerID id = getCurrentPlayer(gameState);
     LocationID move = getLocation(gameState, id);
 	char * msg = "";
