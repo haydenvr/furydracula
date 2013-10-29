@@ -28,7 +28,7 @@ void decideMove (HunterView gameState) {
 	int round = getRound(gameState);
 	PlayerID id = getCurrentPlayer(gameState);
     LocationID move = getLocation(gameState, id);
-    printf("the original loc is %d\n",move);
+    printf("the original loc is %d and health %d\n",move,getHealth(gameState,id));
 	char * msg = "";
     printf("initialised all variables\n"); fflush(stdout);
 	//set initial locations

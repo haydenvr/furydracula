@@ -153,6 +153,14 @@ void testMovesRound1(void){
         disposeHunterView(gameState);
         printf("Congrats, this segfaulted in the game\n");
     }
+	{
+		playerMessage messages[26] = {""};
+    	printf("Testing player 1 fail case from game 39 round 9. player making illegal move from Constanta (but was (TD) so health would be -3)\n");
+        gameState = newHunterView("GCD.... SBE.... HST.... MMA.... DBS.... GCD.... SBE.... HST.... MMA.... DCNT... GCD.... SCNTD.. HMU.... MAL.... DC?T... GCD.... SCN.... HZA.... MMS.... DD2T... GCD.... SCNTD.. HSZ.... MTS.... DC?T... GCD....",messages);
+		decideMove(gameState);
+        printf("HIS LATEST PLAY IS %s\n",latestPlay);
+        disposeHunterView(gameState);
+	}
 }
 
 void testInitialMoves(void){

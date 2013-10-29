@@ -107,12 +107,15 @@ HunterView newHunterView( char *pastPlays, playerMessage messages[] ) {
             //remove hospital state
             if (hunterView->players[player]->hospital) hunterView->players[player]->hospital = FALSE;
             
+			/********THING TO MOVE*********/
 			if ((z == hunterView->players[player]->location[1]) && 
 			(player != PLAYER_DRACULA) && isInCity(player,hunterView)) {
 				hunterView->players[player]->health += LIFE_GAIN_REST;
 				if (hunterView->players[player]->health > GAME_START_HUNTER_LIFE_POINTS) 
 				    hunterView->players[player]->health = GAME_START_HUNTER_LIFE_POINTS;
-			}
+			} 
+			/********THING TO MOVE*********/
+
 			if ((z == TELEPORT || z == CASTLE_DRACULA) && (player == PLAYER_DRACULA)) 
 			    hunterView->players[player]->health += LIFE_GAIN_CASTLE_DRACULA;
 			
