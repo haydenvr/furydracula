@@ -198,6 +198,8 @@ int findShortestPath(Location src, Location dest,Location path[],Transport type,
 	
 static int dijkstras (Graph g,Location src, Location dest,Location path[],Transport type, int round){
     assert(g != NULL);
+	if (dest < 0 || dest > 70) return -1;
+	if (src < 0 || dest > 70) return -1;
 	int v, w, alt, dist[g->nV], visited[g->nV], maxWT = 9999, amtConsider, haveVisited[g->nV]; //st visited, wt dist //,
 	LocationID * edges;
 	Queue q = newQueue();

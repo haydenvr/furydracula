@@ -161,6 +161,30 @@ void testMovesRound1(void){
         printf("HIS LATEST PLAY IS %s\n",latestPlay);
         disposeHunterView(gameState);
 	}
+	{
+		playerMessage messages[152] = {""};
+    	printf("Testing player 2 fail case from game 199. player returning \"\" for move. Player in Tyrrhehian Sea.\n");
+        gameState = newHunterView("GCD.... SBE.... HST.... MMA.... DAL.V.. GCD.... SBE.... HST.... MMA.... DC?T... GCD.... SSA.... HGE.... MALV... DSNT... GCD.... SIO.... HMR.... MAL.... DS?.... GCD.... STS.... HMS.... MAL.... DNAT... GCD.... SMS.... HAL.... MAL.... DHIT... GCD.... SAL.... HAL.... MAL.... DCFT... GCD.... SAL.... HAL.... MAL.... DTOT.M. GCD.... SMA.... HSNT... MSN.... DD1T... GCD.... SMA.... HSN.... MSN.... DBAT... GCD.... SBO.... HBB.... MBB.... DSRT.M. GCD.... SBO.... HBB.... MBB.... DHIT.M. GCD.... SCFT... HBO.... MBO.... DMAT... GCD.... SCF.... HBO.... MBO.... DC?.VM. GCD.... SCF.... HBO.... MBO.... DCAT.M. GCD.... STO.... HSRTT.. MSR.... DD1T.M. GCD.... SSR.... HSR.... MSR.... DAO.... GCD.... SSR.... HSR.... MSR.... DS?.... GCD.... SMAT... HMA.... MMA.... DCGT... GCD.... SMA.... HMA.... MMA.... DHIT.V. GCD.... SCATT.. HCA.... MCA.... DTS.... GCD.... SCA.... HCA.... MCA.... DROT... GCD.... SAO.... HAO.... MAO.... DD1T... GCD.... SAO.... HAO.... MAO.... DBIT... GCD.... SMS.... HMS.... MMS.... DNPT.M. GCD.... SMS.... HMS.... MMS.... DC?T.M. GCD.... STS.... HTS.... MTS.... DTP.V.. GCDVD.. STS.... HTS.... MTS.... DC?T.M. GCD.... STS.... HTS.... MTS.... DC?T.M. GCD.... STS.... HTS.... MTS.... DD1T.M. GCD.... STS....",messages);
+		decideMove(gameState);
+        printf("HIS LATEST PLAY IS (%s)\n",latestPlay);
+        disposeHunterView(gameState);
+	}
+	{
+		playerMessage messages[149] = {""};
+    	printf("Testing player 3 fail case from game 199. player seg faulting. Player in Tyrrhehian Sea.\n");
+        gameState = newHunterView("GCD.... SBE.... HST.... MMA.... DAL.V.. GCD.... SBE.... HST.... MMA.... DC?T... GCD.... SSA.... HGE.... MALV... DSNT... GCD.... SIO.... HMR.... MAL.... DS?.... GCD.... STS.... HMS.... MAL.... DNAT... GCD.... SMS.... HAL.... MAL.... DHIT... GCD.... SAL.... HAL.... MAL.... DCFT... GCD.... SAL.... HAL.... MAL.... DTOT.M. GCD.... SMA.... HSNT... MSN.... DD1T... GCD.... SMA.... HSN.... MSN.... DBAT... GCD.... SBO.... HBB.... MBB.... DSRT.M. GCD.... SBO.... HBB.... MBB.... DHIT.M. GCD.... SCFT... HBO.... MBO.... DMAT... GCD.... SCF.... HBO.... MBO.... DC?.VM. GCD.... SCF.... HBO.... MBO.... DCAT.M. GCD.... STO.... HSRTT.. MSR.... DD1T.M. GCD.... SSR.... HSR.... MSR.... DAO.... GCD.... SSR.... HSR.... MSR.... DS?.... GCD.... SMAT... HMA.... MMA.... DCGT... GCD.... SMA.... HMA.... MMA.... DHIT.V. GCD.... SCATT.. HCA.... MCA.... DTS.... GCD.... SCA.... HCA.... MCA.... DROT... GCD.... SAO.... HAO.... MAO.... DD1T... GCD.... SAO.... HAO.... MAO.... DBIT... GCD.... SMS.... HMS.... MMS.... DC?T.M. GCD.... SMS.... HMS.... MMS.... DC?T.M. GCD.... STS.... HTS.... MTS.... DTP.V.. GCDVD.. STS.... HTS.... MTS.... DC?T.M. GCD.... STS.... HTS.... MTS.... DC?T.M. GCD.... STS.... HTS....",messages);
+		decideMove(gameState);
+        printf("HIS LATEST PLAY IS (%s)\n",latestPlay);
+        disposeHunterView(gameState);
+	}
+	{
+		playerMessage messages[140] = {""};
+    	printf("Testing player 1 fail case from game 199. player seg faulting. Player in Tyrrhehian Sea.\n");
+        gameState = newHunterView("GCD.... SBE.... HST.... MMA.... DAL.V.. GCD.... SBE.... HST.... MMA.... DC?T... GCD.... SSA.... HGE.... MALV... DSNT... GCD.... SIO.... HMR.... MAL.... DS?.... GCD.... STS.... HMS.... MAL.... DNAT... GCD.... SMS.... HAL.... MAL.... DHIT... GCD.... SAL.... HAL.... MAL.... DCFT... GCD.... SAL.... HAL.... MAL.... DTOT.M. GCD.... SMA.... HSNT... MSN.... DD1T... GCD.... SMA.... HSN.... MSN.... DBAT... GCD.... SBO.... HBB.... MBB.... DSRT.M. GCD.... SBO.... HBB.... MBB.... DHIT.M. GCD.... SCFT... HBO.... MBO.... DMAT... GCD.... SCF.... HBO.... MBO.... DC?.VM. GCD.... SCF.... HBO.... MBO.... DCAT.M. GCD.... STO.... HSRTT.. MSR.... DD1T.M. GCD.... SSR.... HSR.... MSR.... DAO.... GCD.... SSR.... HSR.... MSR.... DS?.... GCD.... SMAT... HMA.... MMA.... DCGT... GCD.... SMA.... HMA.... MMA.... DHIT.V. GCD.... SCATT.. HCA.... MCA.... DTS.... GCD.... SCA.... HCA.... MCA.... DC?T... GCD.... SAO.... HAO.... MAO.... DD1T... GCD.... SAO.... HAO.... MAO.... DC?T... GCD.... SMS.... HMS.... MMS.... DC?T.M. GCD.... SMS.... HMS.... MMS.... DC?T.M. GCD.... STS.... HTS.... MTS.... DTP.V.. GCDVD..",messages);
+		decideMove(gameState);
+        printf("HIS LATEST PLAY IS (%s)\n",latestPlay);
+        disposeHunterView(gameState);
+	}
 }
 
 void testInitialMoves(void){

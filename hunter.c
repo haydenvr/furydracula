@@ -111,6 +111,7 @@ void decideMove (HunterView gameState) {
         else {
             printf("HEY THERE move is %d and target is %d\n",move,target);
         	if (getLocation(gameState, id) != target) { 
+				if (target == TELEPORT) target = CASTLE_DRACULA;
                 int pathLen = findShortestPath(getLocation(gameState, id), target, path, ANY, round); //success is any number not -1
                 if (pathLen != -1) move = path[1]; //move successful
             } else move = target;
