@@ -85,7 +85,7 @@ void decideMove (HunterView gameState) {
 
         for (i = TRAIL_SIZE - 1; i >= 0 ; i--) { //locations newer in trail will override older ones
             //we have any useful info on his location...
-            if (target == TELEPORT) target = CASTLE_DRACULA;
+            if (draculaLoc[i] == TELEPORT) target = CASTLE_DRACULA;
             else if (draculaLoc[i] != CITY_UNKNOWN && draculaLoc[i] != SEA_UNKNOWN && draculaLoc[i] != HIDE) {
                 if (draculaLoc[i] >= DOUBLE_BACK_1 && draculaLoc[i] <= DOUBLE_BACK_5) { //double back found
                     int dbVal = i - (draculaLoc[i] - DOUBLE_BACK_1 + 1);
