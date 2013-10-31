@@ -50,7 +50,7 @@ void decideMove (HunterView gameState) {
     int amtLocs = 0;
     LocationID * adj = connectedLocations(&amtLocs, getLocation(gameState, id), id, round, ANY, g);
     LocationID target = UNKNOWN_LOCATION;
-    int camper = 0, i, j, trailed = 0;
+    int camper = 0, i, j;
     printf("setting up connected locs etc\n"); fflush(stdout);
 
     // check for campers
@@ -73,22 +73,16 @@ void decideMove (HunterView gameState) {
         //if no camper and hunter is shortest dist to castle dracula, move towards castle dracula
         int hunterDist[NUM_HUNTERS] = {UNKNOWN_LOCATION,UNKNOWN_LOCATION,UNKNOWN_LOCATION,UNKNOWN_LOCATION};
         int closestHunter = PLAYER_LORD_GODALMING;
-        LocationID adj;
         for (i = PLAYER_LORD_GODALMING; i < NUM_HUNTERS; i++) {
             hunterDist[i] = findShortestPath(getLocation(gameState, i), CASTLE_DRACULA, path, ANY, round);
             if (hunterDist[i] == -1) hunterDist[i] = 1000; //-1 is when there is no path, so don't want him to be shortest
-
-            if ((hunterDist[closestHunter] > hunterDist[i]) || (hunterDist[closestHunter] == UNKNOWN_LOCATION)) {
-                 adj = path[1];
-                 closestHunter = i;
-            }
+            if ((hunterDist[closestHunter] > hunterDist[i]) || (hunterDist[closestHunter] == UNKNOWN_LOCATION)) closestHunter = i;
         }
-        if (closestHunter == id) move = adj;
+        if (closestHunter == id) move = path[1];
     } else {
         //Note: Dracula cannot visit any location currently in his trail - hunters should not visit target itself!
         LocationID draculaLoc[TRAIL_SIZE];
-        getHistory (gameState, PLAYER_DRACULA, draculaLoc);
-        printf("going through trail\n"); fflush(stdout);
+        //getHistory (gameState, PLAYER_DRACULA, draculaLoc); //not being used atm
 
         for (i = TRAIL_SIZE - 1; i >= 0 ; i--) { //locations newer in trail will override older ones
             trailed = 1; //we have any useful info on his location...
@@ -107,32 +101,33 @@ void decideMove (HunterView gameState) {
             } 
         }
 
-        if (target == UNKNOWN_LOCATION) target = adj[rand() % amtLocs]; //location unknown - move randomly
-        else {
+        if (target != UNKNOWN_LOCATION) {
             printf("Target is %d\n", target);
         	if (getLocation(gameState, id) != target) { 
                 int pathLen = findShortestPath(getLocation(gameState, id), target, path, ANY, round); //success is any number not -1
                 if (pathLen != -1) move = path[1]; //move successful
             } else move = target;
-		}
-    }
-    
-    //prevents doubling up of hunters, if not trailed
-    int occupied = 0, newLoc = UNKNOWN_LOCATION;
-    if (!trailed) {
-        for (j = 0; j < NUM_HUNTERS; j++) if (move == getLocation(gameState, j)) occupied = 1;
-        if (occupied) { 
-            for (i = 0; i < amtLocs; i++) { 
-                occupied = 0;
-                for (j = 0; j < NUM_HUNTERS; j++) if (adj[i] == getLocation(gameState, j)) occupied = 1;
-                if (!occupied) {newLoc = i; break;}
+		} else { //prevents doubling up of hunters when making a random move, since Dracula 404
+            int occupied = 0, newLoc = UNKNOWN_LOCATION;
+            move = adj[rand() % amtLocs];
+            for (j = 0; j < NUM_HUNTERS; j++) if (move == getLocation(gameState, j)) occupied = 1;
+            if (occupied) { 
+                for (i = 0; i < amtLocs; i++) { 
+                    occupied = 0;
+                    for (j = 0; j < NUM_HUNTERS; j++) if (adj[i] == getLocation(gameState, j)) occupied = 1;
+                    if (!occupied) {newLoc = i; break;}
+                }
             }
+            if (newLoc != UNKNOWN_LOCATION) move = adj[newLoc]; 
         }
-        if (newLoc != UNKNOWN_LOCATION) move = adj[newLoc]; 
-    }
+    } 
     
 	if (isLegalMove(gameState, id, move, round, g)) registerBestPlay(locations[move], "");
-	else registerBestPlay(locations[getLocation(gameState, id)], "");
+	else {
+        printf("ERROR: Location is invalid! Registering default rest move...");
+        registerBestPlay(locations[getLocation(gameState, id)], "");
+    }
+    
     destroyGraph(g);
     free(adj);
 }
@@ -140,11 +135,13 @@ void decideMove (HunterView gameState) {
 int isLegalMove(HunterView gameState, PlayerID id, LocationID move, int round, Graph g) {
     LocationID currLoc = getLocation(gameState, id);
     int amtLocs = 0, legal = 0, i;
-    LocationID * adj = connectedLocations(&amtLocs, currLoc, id, round, ANY, g);
-    for (i = 0; i < amtLocs; i++) {
-        if (adj[i] == move) legal = 1;
+    if (currLoc >= 0 && currLoc < NUM_MAP_LOCATIONS) {
+        LocationID * adj = connectedLocations(&amtLocs, currLoc, id, round, ANY, g);
+        for (i = 0; i < amtLocs; i++) {
+            if (adj[i] == move) legal = 1;
+        }
+        free(adj);
     }
-    free(adj);
     return legal;
 }
 
