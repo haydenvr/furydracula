@@ -50,7 +50,7 @@ void decideMove (HunterView gameState) {
     int amtLocs = 0;
     LocationID * adj = connectedLocations(&amtLocs, getLocation(gameState, id), id, round, ANY, g);
     LocationID target = UNKNOWN_LOCATION;
-    int camper = 0, i, j;
+    int camper = 0, i, j, trailed = 0;
     printf("setting up connected locs etc\n"); fflush(stdout);
 
     // check for campers
@@ -91,7 +91,7 @@ void decideMove (HunterView gameState) {
         printf("going through trail\n"); fflush(stdout);
 
         for (i = TRAIL_SIZE - 1; i >= 0 ; i--) { //locations newer in trail will override older ones
-            //if we have any useful info on his location...
+            trailed = 1; //we have any useful info on his location...
             if (target == TELEPORT) target = CASTLE_DRACULA;
             else if (draculaLoc[i] != CITY_UNKNOWN && draculaLoc[i] != SEA_UNKNOWN && draculaLoc[i] != HIDE) {
                 if (draculaLoc[i] >= DOUBLE_BACK_1 && draculaLoc[i] <= DOUBLE_BACK_5) { //double back found
@@ -117,17 +117,19 @@ void decideMove (HunterView gameState) {
 		}
     }
     
-    //prevents doubling up of hunters
+    //prevents doubling up of hunters, if not trailed
     int occupied = 0, newLoc = UNKNOWN_LOCATION;
-    for (j = 0; j < NUM_HUNTERS; j++) if (move == getLocation(gameState, j)) occupied = 1;
-    if (occupied) { 
-        for (i = 0; i < amtLocs; i++) { 
-            occupied = 0;
-            for (j = 0; j < NUM_HUNTERS; j++) if (adj[i] == getLocation(gameState, j)) occupied = 1;
-            if (!occupied) {newLoc = i; break;}
+    if (!trailed) {
+        for (j = 0; j < NUM_HUNTERS; j++) if (move == getLocation(gameState, j)) occupied = 1;
+        if (occupied) { 
+            for (i = 0; i < amtLocs; i++) { 
+                occupied = 0;
+                for (j = 0; j < NUM_HUNTERS; j++) if (adj[i] == getLocation(gameState, j)) occupied = 1;
+                if (!occupied) {newLoc = i; break;}
+            }
         }
+        if (newLoc != UNKNOWN_LOCATION) move = adj[newLoc]; 
     }
-    if (newLoc != UNKNOWN_LOCATION) move = adj[newLoc]; 
     
 	if (isLegalMove(gameState, id, move, round, g)) registerBestPlay(locations[move], "");
 	else registerBestPlay(locations[getLocation(gameState, id)], "");
