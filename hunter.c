@@ -11,6 +11,7 @@
 #define NUM_HUNTERS (NUM_PLAYERS - 1)
 
 int isLegalMove(HunterView gameState, PlayerID id, LocationID move, int round, Graph g);
+LocationID dracTarget (LocationID * draculaLoc, int i);
 
 void decideMove (HunterView gameState) {
     printf("at start of code\n"); fflush(stdout);
@@ -81,34 +82,19 @@ void decideMove (HunterView gameState) {
         if (closestHunter == id) move = path[1];
     } else {
         LocationID draculaLoc[TRAIL_SIZE];
-        getHistory (gameState, PLAYER_DRACULA, draculaLoc); //not being used atm
+        getHistory (gameState, PLAYER_DRACULA, draculaLoc); //updates Dracula trail
 
-        for (i = TRAIL_SIZE - 1; i >= 0 ; i--) { //locations newer in trail will override older ones
-            //we have any useful info on his location...
-            if (draculaLoc[i] == TELEPORT) target = CASTLE_DRACULA;
-            else if (draculaLoc[i] != CITY_UNKNOWN && draculaLoc[i] != SEA_UNKNOWN && draculaLoc[i] != HIDE) {
-                if (draculaLoc[i] >= DOUBLE_BACK_1 && draculaLoc[i] <= DOUBLE_BACK_5) { //double back found
-                    int dbVal = i - (draculaLoc[i] - DOUBLE_BACK_1 + 1);
-                    if (dbVal >= 0) { //double back location still in trail; segfault prevention
-                        LocationID dbLoc = draculaLoc[dbVal];
-                        if (dbLoc != CITY_UNKNOWN && dbLoc != SEA_UNKNOWN && dbLoc != HIDE) target = dbLoc;
-                    }
-                } else { //we found his location!
-                    msg = locations[draculaLoc[i]];
-                    target = draculaLoc[i];
-                }
-            } 
-        }
+        for (i = TRAIL_SIZE - 1; i >= 0 ; i--) //locations newer in trail will override older ones
+            target = dracTarget(draculaLoc, i); //we have any useful info on his location...
 
         if (target != UNKNOWN_LOCATION) {
             //Note: Dracula cannot visit any location currently in his trail - hunters should not visit target itself!
-        	if (getLocation(gameState, id) != target) { 
-                int pathLen = findShortestPath(getLocation(gameState, id), target, path, ANY, round); //success is any number not -1
-                if (pathLen != -1) { //move successful
-                    if (path[1] != target) move = path[1]; 
-                    else move = adj[rand() % amtLocs]; //don't move into Dracula's trail (see note above)
-                } else move = adj[rand() % amtLocs]; //just move somewhere!
-            } else move = adj[rand() % amtLocs]; //currently on Drac's trail, move away (see note above)
+            int pathLen = findShortestPath(getLocation(gameState, id), target, path, ANY, round); //success is any number not -1
+        	if (getLocation(gameState, id) != target && pathLen != -1) { //path found, and not at rest on target (Drac's trail)
+                if (path[1] != target) move = path[1]; 
+                else move = adj[rand() % amtLocs]; //don't move into Dracula's trail (see note above)
+                for (i = TRAIL_SIZE - 1; i >= 0 ; i--) if (path[1] == dracTarget (draculaLoc, i)) move = adj[rand() % amtLocs];
+            } else move = adj[rand() % amtLocs];
 		} else { //prevents doubling up of hunters when making a random move, since Dracula 404
             int occupied = 0, newLoc = UNKNOWN_LOCATION;
             move = adj[rand() % amtLocs];
@@ -148,3 +134,19 @@ int isLegalMove(HunterView gameState, PlayerID id, LocationID move, int round, G
     return legal;
 }
 
+LocationID dracTarget (LocationID * draculaLoc, int i) {
+    if (draculaLoc[i] == TELEPORT) return CASTLE_DRACULA;
+    else if (draculaLoc[i] != CITY_UNKNOWN && draculaLoc[i] != SEA_UNKNOWN && draculaLoc[i] != HIDE) {
+        if (draculaLoc[i] >= DOUBLE_BACK_1 && draculaLoc[i] <= DOUBLE_BACK_5) { //double back found
+            int dbVal = i - (draculaLoc[i] - DOUBLE_BACK_1 + 1);
+            if (dbVal >= 0) { //double back location still in trail; segfault prevention
+                LocationID dbLoc = draculaLoc[dbVal];
+                if (dbLoc != CITY_UNKNOWN && dbLoc != SEA_UNKNOWN && dbLoc != HIDE) return dbLoc;
+            }
+        } else { //we found his location!
+            //msg = locations[draculaLoc[i]];
+            return draculaLoc[i];
+        }
+    } 
+    return UNKNOWN_LOCATION;
+}
