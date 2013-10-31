@@ -70,8 +70,7 @@ void decideMove (HunterView gameState) {
         }
     } 
 
-    if (!camper) {
-        //if no camper and hunter is shortest dist to castle dracula, move towards castle dracula
+    if (!camper) { //if no camper and hunter is shortest dist to castle dracula, move towards castle dracula
         int hunterDist[NUM_HUNTERS] = {UNKNOWN_LOCATION,UNKNOWN_LOCATION,UNKNOWN_LOCATION,UNKNOWN_LOCATION};
         int closestHunter = PLAYER_LORD_GODALMING;
         for (i = PLAYER_LORD_GODALMING; i < NUM_HUNTERS; i++) {
@@ -92,8 +91,9 @@ void decideMove (HunterView gameState) {
             int pathLen = findShortestPath(getLocation(gameState, id), target, path, ANY, round); //success is any number not -1
         	if (getLocation(gameState, id) != target && pathLen != -1) { //path found, and not at rest on target (Drac's trail)
                 if (path[1] != target) move = path[1]; 
-                else move = adj[rand() % amtLocs]; //don't move into Dracula's trail (see note above)
-                for (i = TRAIL_SIZE - 1; i >= 0 ; i--) if (path[1] == dracTarget (draculaLoc, i)) move = adj[rand() % amtLocs];
+                //don't move into Dracula's trail (see note above)
+                else move = adj[rand() % amtLocs];
+                for (i = 0; i < TRAIL_SIZE ; i++) if (path[1] == dracTarget(draculaLoc, i)) move = adj[rand() % amtLocs];
             } else move = adj[rand() % amtLocs];
 		} else { //prevents doubling up of hunters when making a random move, since Dracula 404
             int occupied = 0, newLoc = UNKNOWN_LOCATION;
