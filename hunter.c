@@ -80,12 +80,11 @@ void decideMove (HunterView gameState) {
         }
         if (closestHunter == id) move = path[1];
     } else {
-        //Note: Dracula cannot visit any location currently in his trail - hunters should not visit target itself!
         LocationID draculaLoc[TRAIL_SIZE];
         //getHistory (gameState, PLAYER_DRACULA, draculaLoc); //not being used atm
 
         for (i = TRAIL_SIZE - 1; i >= 0 ; i--) { //locations newer in trail will override older ones
-            trailed = 1; //we have any useful info on his location...
+            //we have any useful info on his location...
             if (target == TELEPORT) target = CASTLE_DRACULA;
             else if (draculaLoc[i] != CITY_UNKNOWN && draculaLoc[i] != SEA_UNKNOWN && draculaLoc[i] != HIDE) {
                 if (draculaLoc[i] >= DOUBLE_BACK_1 && draculaLoc[i] <= DOUBLE_BACK_5) { //double back found
@@ -103,10 +102,14 @@ void decideMove (HunterView gameState) {
 
         if (target != UNKNOWN_LOCATION) {
             printf("Target is %d\n", target);
+            //Note: Dracula cannot visit any location currently in his trail - hunters should not visit target itself!
         	if (getLocation(gameState, id) != target) { 
                 int pathLen = findShortestPath(getLocation(gameState, id), target, path, ANY, round); //success is any number not -1
-                if (pathLen != -1) move = path[1]; //move successful
-            } else move = target;
+                if (pathLen != -1) { //move successful
+                    if (path[1] != target) move = path[1]; 
+                    else move = adj[rand() % amtLocs]; //don't move into Dracula's trail (see note above)
+                } else move = adj[rand() % amtLocs]; //just move somewhere!
+            } else move = adj[rand() % amtLocs]; //currently on Drac's trail, move away (see note above)
 		} else { //prevents doubling up of hunters when making a random move, since Dracula 404
             int occupied = 0, newLoc = UNKNOWN_LOCATION;
             move = adj[rand() % amtLocs];
