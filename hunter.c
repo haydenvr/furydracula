@@ -81,7 +81,7 @@ void decideMove (HunterView gameState) {
         if (closestHunter == id) move = path[1];
     } else {
         LocationID draculaLoc[TRAIL_SIZE];
-        //getHistory (gameState, PLAYER_DRACULA, draculaLoc); //not being used atm
+        getHistory (gameState, PLAYER_DRACULA, draculaLoc); //not being used atm
 
         for (i = TRAIL_SIZE - 1; i >= 0 ; i--) { //locations newer in trail will override older ones
             //we have any useful info on his location...
@@ -101,7 +101,6 @@ void decideMove (HunterView gameState) {
         }
 
         if (target != UNKNOWN_LOCATION) {
-            printf("Target is %d\n", target);
             //Note: Dracula cannot visit any location currently in his trail - hunters should not visit target itself!
         	if (getLocation(gameState, id) != target) { 
                 int pathLen = findShortestPath(getLocation(gameState, id), target, path, ANY, round); //success is any number not -1
@@ -124,13 +123,14 @@ void decideMove (HunterView gameState) {
             if (newLoc != UNKNOWN_LOCATION) move = adj[newLoc]; 
         }
     } 
+    if (target != UNKNOWN_LOCATION) printf("*Moving from %s (%d) to target %s (%d) via %s (%d)*\n", locations[getLocation(gameState, id)], getLocation(gameState, id), locations[target], target, locations[move], move);
+    else printf("*No target - moving from %s (%d) to %s (%d)*\n", locations[getLocation(gameState, id)], getLocation(gameState, id), locations[move], move);
     
 	if (isLegalMove(gameState, id, move, round, g)) registerBestPlay(locations[move], "");
 	else {
         printf("ERROR: Location is invalid! Registering default rest move...");
         registerBestPlay(locations[getLocation(gameState, id)], "");
     }
-    
     destroyGraph(g);
     free(adj);
 }
