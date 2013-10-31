@@ -116,16 +116,19 @@ void decideMove (HunterView gameState) {
             } else move = target;
 		}
     }
-    int occupied = 0, newLoc = -1;
+    
+    //prevents doubling up of hunters
+    int occupied = 0, newLoc = UNKNOWN_LOCATION;
     for (j = 0; j < NUM_HUNTERS; j++) if (move == getLocation(gameState, j)) occupied = 1;
-    if (occupied) { //don't double up hunters!
+    if (occupied) { 
         for (i = 0; i < amtLocs; i++) { 
             if (occupied) occupied = 0;
             else {newLoc = i; break;}
             for (j = 0; j < NUM_HUNTERS; j++) if (move == getLocation(gameState, j)) occupied = 1;
         }
     }
-    if (newLoc != -1) move = adj[newLoc];
+    if (newLoc != UNKNOWN_LOCATION) move = adj[newLoc]; 
+    
 	if (isLegalMove(gameState, id, move, round, g)) registerBestPlay(locations[move], "");
 	else registerBestPlay(locations[getLocation(gameState, id)], "");
     destroyGraph(g);
