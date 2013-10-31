@@ -122,9 +122,9 @@ void decideMove (HunterView gameState) {
     for (j = 0; j < NUM_HUNTERS; j++) if (move == getLocation(gameState, j)) occupied = 1;
     if (occupied) { 
         for (i = 0; i < amtLocs; i++) { 
-            if (occupied) occupied = 0;
-            else {newLoc = i; break;}
-            for (j = 0; j < NUM_HUNTERS; j++) if (move == getLocation(gameState, j)) occupied = 1;
+            occupied = 0;
+            for (j = 0; j < NUM_HUNTERS; j++) if (adj[i] == getLocation(gameState, j)) occupied = 1;
+            if (!occupied) {newLoc = i; break;}
         }
     }
     if (newLoc != UNKNOWN_LOCATION) move = adj[newLoc]; 
