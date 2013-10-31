@@ -50,7 +50,7 @@ void decideMove (HunterView gameState) {
     int amtLocs = 0;
     LocationID * adj = connectedLocations(&amtLocs, getLocation(gameState, id), id, round, ANY, g);
     LocationID target = UNKNOWN_LOCATION;
-    int camper = 0, i;
+    int camper = 0, i, j;
     printf("setting up connected locs etc\n"); fflush(stdout);
 
     // check for campers
@@ -92,7 +92,8 @@ void decideMove (HunterView gameState) {
 
         for (i = TRAIL_SIZE - 1; i >= 0 ; i--) { //locations newer in trail will override older ones
             //if we have any useful info on his location...
-            if (draculaLoc[i] != CITY_UNKNOWN && draculaLoc[i] != SEA_UNKNOWN && draculaLoc[i] != HIDE) {
+            if (target == TELEPORT) target = CASTLE_DRACULA;
+            else if (draculaLoc[i] != CITY_UNKNOWN && draculaLoc[i] != SEA_UNKNOWN && draculaLoc[i] != HIDE) {
                 if (draculaLoc[i] >= DOUBLE_BACK_1 && draculaLoc[i] <= DOUBLE_BACK_5) { //double back found
                     int dbVal = i - (draculaLoc[i] - DOUBLE_BACK_1 + 1);
                     if (dbVal >= 0) { //double back location still in trail; segfault prevention
@@ -103,30 +104,32 @@ void decideMove (HunterView gameState) {
                     msg = locations[draculaLoc[i]];
                     target = draculaLoc[i];
                 }
-            }
+            } 
         }
-        printf("gotten through target\n"); fflush(stdout);
 
         if (target == UNKNOWN_LOCATION) target = adj[rand() % amtLocs]; //location unknown - move randomly
         else {
-            printf("HEY THERE move is %d and target is %d\n",move,target);
+            printf("Target is %d\n", target);
         	if (getLocation(gameState, id) != target) { 
-				if (target == TELEPORT) target = CASTLE_DRACULA;
                 int pathLen = findShortestPath(getLocation(gameState, id), target, path, ANY, round); //success is any number not -1
                 if (pathLen != -1) move = path[1]; //move successful
             } else move = target;
 		}
     }
-    
-    if (move == CASTLE_DRACULA && camper) { //don't double up campers!
-        while (adj[rand() % amtLocs] == CASTLE_DRACULA) move = adj[rand() % amtLocs];
+    int occupied = 0, newLoc = -1;
+    for (j = 0; j < NUM_HUNTERS; j++) if (move == getLocation(gameState, j)) occupied = 1;
+    if (occupied) { //don't double up hunters!
+        for (i = 0; i < amtLocs; i++) { 
+            if (occupied) occupied = 0;
+            else {newLoc = i; break;}
+            for (j = 0; j < NUM_HUNTERS; j++) if (move == getLocation(gameState, j)) occupied = 1;
+        }
     }
-    printf("at end\n"); fflush(stdout);
+    if (newLoc != -1) move = adj[newLoc];
 	if (isLegalMove(gameState, id, move, round, g)) registerBestPlay(locations[move], "");
 	else registerBestPlay(locations[getLocation(gameState, id)], "");
     destroyGraph(g);
     free(adj);
-    printf("destroyed graph and move is %d\n",move); fflush(stdout);
 }
 
 int isLegalMove(HunterView gameState, PlayerID id, LocationID move, int round, Graph g) {
